@@ -8,12 +8,24 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Grass extends Base
 {
-    /**
-     * Act - do whatever the Grass wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    private GreenfootImage baseImage;
+    private int targetWidth = 75;
+    
+    public Grass() {
+        baseImage = new GreenfootImage("images/grassBlock.png");
+
+        int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
+        baseImage.scale(targetWidth, targetHeight);
+
+        setImage(new GreenfootImage(baseImage));
+    }
+    
     public void act()
     {
         // Add your action code here.
+    }
+    
+    public int getTargetWidth() {
+        return targetWidth;
     }
 }
