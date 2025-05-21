@@ -1,94 +1,88 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
-
 /**
  * A Label class that allows you to display a textual value on screen.
+ * A customizable Label with optional shadow and styled text.
  * 
  * The Label is an actor, so you will need to create it, and then add it to the world
  * in Greenfoot.  If you keep a reference to the Label then you can change the text it
  * displays.  
  *
- * @author Amjad Altadmri 
- * @version 1.1
+ * @author Amjad Altadmri and Saiful Shaik
+ * @version 1.2
+ * Author: Amjad Altadmri + polished By Saiful Shaik
  */
-public class Label extends Actor
-{
+public class Label extends Actor {
     private String value;
     private int fontSize;
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.WHITE;
-    
-    private static final Color transparent = new Color(0,0,0,0);
+    private boolean shadowEnabled = true;
+    private Color shadowColor = new Color(50, 50, 50, 180);
+    private int shadowOffsetX = 2;
+    private int shadowOffsetY = 2;
 
-    
-    /**
-     * Create a new label, initialise it with the int value to be shown and the font size 
-     */
-    public Label(int value, int fontSize)
-    {
-        this(Integer.toString(value), fontSize);
-    }
-    
-    /**
-     * Create a new label, initialise it with the needed text and the font size 
-     */
-    public Label(String value, int fontSize)
-    {
+    private static final Color transparent = new Color(0, 0, 0, 0);
+
+    public Label(String value, int fontSize) {
         this.value = value;
         this.fontSize = fontSize;
         updateImage();
     }
 
-    /**
-     * Sets the value  as text
-     * 
-     * @param value the text to be show
-     */
-    public void setValue(String value)
-    {
+    public Label(int value, int fontSize) {
+        this(Integer.toString(value), fontSize);
+    }
+
+    public void setValue(String value) {
         this.value = value;
         updateImage();
     }
-    
-    /**
-     * Sets the value as integer
-     * 
-     * @param value the value to be show
-     */
-    public void setValue(int value)
-    {
+
+    public void setValue(int value) {
         this.value = Integer.toString(value);
         updateImage();
     }
-    
-    /**
-     * Sets the line color of the text
-     * 
-     * @param lineColor the line color of the text
-     */
-    public void setLineColor(Color lineColor)
-    {
+
+    public void setLineColor(Color lineColor) {
         this.lineColor = lineColor;
         updateImage();
     }
-    
-    /**
-     * Sets the fill color of the text
-     * 
-     * @param fillColor the fill color of the text
-     */
-    public void setFillColor(Color fillColor)
-    {
+
+    public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
         updateImage();
     }
-    
 
-    /**
-     * Update the image on screen to show the current value.
-     */
-    private void updateImage()
-    {
-        setImage(new GreenfootImage(value, fontSize, fillColor, transparent, lineColor));
+    public void setShadow(boolean enabled) {
+        shadowEnabled = enabled;
+        updateImage();
+    }
+
+    public void setShadowColor(Color color) {
+        shadowColor = color;
+        updateImage();
+    }
+
+    public void setShadowOffset(int x, int y) {
+        shadowOffsetX = x;
+        shadowOffsetY = y;
+        updateImage();
+    }
+
+    private void updateImage() {
+        GreenfootImage textImage = new GreenfootImage(value, fontSize, fillColor, transparent, lineColor);
+        int width = textImage.getWidth() + shadowOffsetX;
+        int height = textImage.getHeight() + shadowOffsetY;
+
+        GreenfootImage finalImage = new GreenfootImage(width, height);
+        
+        if (shadowEnabled) {
+            GreenfootImage shadow = new GreenfootImage(value, fontSize, shadowColor, transparent);
+            finalImage.drawImage(shadow, shadowOffsetX, shadowOffsetY);
+        }
+
+        finalImage.drawImage(textImage, 0, 0);
+        setImage(finalImage);
     }
 }
