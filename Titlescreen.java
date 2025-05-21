@@ -13,7 +13,6 @@ public class Titlescreen extends World {
     private static int fontSize = 20;
     private static int titleSize = 80;
     private static int titleSpacing = 10;
-    private static String titleFont = "TimesRoman";
 
     private Label titleTop = new Label("The Hollow", titleSize);
     private Label titleBottom = new Label("Quest", titleSize);

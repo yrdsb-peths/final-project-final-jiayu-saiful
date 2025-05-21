@@ -1,19 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Grass here.
+ * Write a description of class Trees here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Grass extends Base
+public class Trees extends Base
 {
     private GreenfootImage baseImage;
-    private static final int targetWidth = 75;
     
-    public Grass() {
-        baseImage = new GreenfootImage("images/grassTiles/00.png");
-
+    public Trees(String directory, int treeSize) {
+        baseImage = new GreenfootImage(directory);
+        
+        int targetWidth = treeSize;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
@@ -23,9 +23,5 @@ public class Grass extends Base
     public void act()
     {
         // Add your action code here.
-    }
-    
-    public int getTargetWidth() {
-        return targetWidth;
     }
 }

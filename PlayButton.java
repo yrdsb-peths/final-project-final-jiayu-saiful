@@ -36,7 +36,7 @@ public class PlayButton extends Actor {
 
         if (Greenfoot.mouseClicked(this)) {
             Titlescreen titlescreen = (Titlescreen) getWorld();
-            Greenfoot.setWorld(new level0(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
+            Greenfoot.setWorld(new Level0(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
         }
     }
 
