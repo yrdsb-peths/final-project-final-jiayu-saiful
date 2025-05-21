@@ -69,4 +69,12 @@ public class Titlescreen extends World {
         styleMenuLabel(label);
         addObject(label, getWidth() / 2, y);
     }
+    
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+    
+    public int getScreenHeight() {
+        return screenHeight;
+    }
 }

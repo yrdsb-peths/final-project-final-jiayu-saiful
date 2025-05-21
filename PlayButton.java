@@ -35,7 +35,8 @@ public class PlayButton extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
-            // Load Main game.
+            Titlescreen titlescreen = (Titlescreen) getWorld();
+            Greenfoot.setWorld(new level0(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
         }
     }
 
