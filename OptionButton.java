@@ -15,8 +15,8 @@ public class OptionButton extends Actor {
     public OptionButton() {
         baseImage = new GreenfootImage("images/buttonImages/button0.png");
 
-        int targetWidth = 200;
-        int targetHeight = (int)(baseImage.getHeight() * (200.0 / baseImage.getWidth()));
+        int targetWidth = 180;
+        int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
         setImage(new GreenfootImage(baseImage));

@@ -3,16 +3,17 @@ import greenfoot.*;
 /**
  * Write a description of class Titlescreen here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Saiful Shaik 
+ * @version May, 21, 2025
  */
 public class Titlescreen extends World {
-    Label playTitle = new Label("Play Game", 30);
-    Label optionTitle = new Label("Options", 30);
-    Label helpTitle = new Label("Help", 30);
-    Label quitTitle = new Label("Quit", 30);
+    private static int fontSize = 25;
+    Label playTitle = new Label("Play Game", fontSize);
+    Label optionTitle = new Label("Options", fontSize);
+    Label helpTitle = new Label("Help", fontSize);
+    Label quitTitle = new Label("Quit", fontSize);
     
-    private int buttonOffset = 80;
+    private int buttonOffset = 75;
     private int verticalOffset = 10;
     public Titlescreen() {    
         super(960, 540, 1);
