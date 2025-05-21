@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.awt.Font;
 
 /**
  * A Label class that allows you to display a textual value on screen.
@@ -15,6 +16,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Label extends Actor {
     private String value;
     private int fontSize;
+    private int fontStyle = Font.PLAIN;
     private Color lineColor = Color.BLACK;
     private Color fillColor = Color.WHITE;
     private boolean shadowEnabled = true;
