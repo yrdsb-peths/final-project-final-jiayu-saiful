@@ -12,6 +12,7 @@ public class level0 extends World {
     public level0(int width, int height) {
         super(width, height, 1);
         
-        
+        Player hero = new Player();
+        addObject(hero, 300, 300);
     }
 }
