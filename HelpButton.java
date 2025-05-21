@@ -15,7 +15,7 @@ public class HelpButton extends Actor {
     public HelpButton() {
         baseImage = new GreenfootImage("images/buttonImages/button0.png");
 
-        int targetWidth = 180;
+        int targetWidth = 150;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
