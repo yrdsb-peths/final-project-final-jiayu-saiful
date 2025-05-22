@@ -16,7 +16,7 @@ public class Player extends Actor {
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     private final int MOVE_SPEED = 3;
-    private final int JUMP_STRENGTH = -10;
+    private final int JUMP_STRENGTH = -15;
     private final int PLAYER_BOTTOM_OFFSET = 32;
 
     private int vSpeed = 0;
