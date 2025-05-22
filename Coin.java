@@ -13,26 +13,15 @@ public class Coin extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private GreenfootImage currentImage;
+    Player player = new Player();
     GreenfootImage[] coinAnimation = new GreenfootImage[4];
     public Coin() {
-        int targetWidth = 500;
-        
-        // Load coin animation frames
-        for (int i = 0; i < coinAnimation.length; i++) {
-            coinAnimation[i] = new GreenfootImage("images/coin_an/0" + i + ".png");
-            scaleImage(coinAnimation[i], targetWidth);
-        }
-        
-        setImage(currentImage);
+        setImage("images/coin_an/00.png");
+        player.scaleImage(new GreenfootImage("images/coin_an/00.png"), 10);
     }
     
     public void act()
     {
         // Add your action code here.
-    }
-    
-    private void scaleImage(GreenfootImage img, int targetWidth) {
-        int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
-        img.scale(targetWidth, targetHeight);
     }
 }
