@@ -1,47 +1,139 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Player here.
- * 
- * @author (your name) Jiayu
- * @version (a version number or a date) 05/22/25
+ * Player character that scrolls the world and plays animations
+ * @author Jiayu
+ * @Modified By Saiful Shaik
+ * @version May 22, 2025
  */
-public class Player extends Actor
-{
-    private GreenfootImage baseImage;
-    private int vSpeed = 0;  // Vertical speed
-     private boolean onGround = false;  // Flag to indicate if the player is on the ground
-    private final int jumpStrength = -28; // Initial jump force
-    private final int acceleration = 2; // Acceleration due to gravity
+
+public class Player extends Actor {
+    private GreenfootImage[] walkImages;
+    private GreenfootImage[] idleImages;
+    private GreenfootImage[] jumpImages;
+    private GreenfootImage currentImage;
+
+    private final int GRAVITY = 1;
+    private final int MAX_FALL_SPEED = 10;
+    private final int MOVE_SPEED = 3;
+    private final int JUMP_STRENGTH = -10;
+
+    private int vSpeed = 0;
+    private boolean onGround = false;
+
+    private int animationFrame = 0;
+    private int jumpAnimationFrame = 0;
+    private int animationTimer = 0;
+    private final int ANIMATION_SPEED = 6;
+
     public Player() {
-        baseImage = new GreenfootImage("images/knight.png");
+        int targetWidth = 150;
 
-        int targetWidth = 75;
-        int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
-        baseImage.scale(targetWidth, targetHeight);
+        // Load walk animation frames
+        walkImages = new GreenfootImage[7]; // Adjust to your actual frame count
+        for (int i = 0; i < walkImages.length; i++) {
+            walkImages[i] = new GreenfootImage("images/knight/knightAnimations/walk/0" + i + ".png");
+            scaleImage(walkImages[i], targetWidth);
+        }
 
-        setImage(new GreenfootImage(baseImage));
+        // Load idle animation frames
+        idleImages = new GreenfootImage[6]; // Adjust to your actual frame count
+        for (int i = 0; i < idleImages.length; i++) {
+            idleImages[i] = new GreenfootImage("images/knight/knightAnimations/idle/0" + i + ".png");
+            scaleImage(idleImages[i], targetWidth);
+        }
+
+        // Load jump animation frames
+        jumpImages = new GreenfootImage[4]; // Adjust to your actual frame count
+        for (int i = 0; i < jumpImages.length; i++) {
+            jumpImages[i] = new GreenfootImage("images/knight/knightAnimations/jump/0" + i + ".png");
+            scaleImage(jumpImages[i], targetWidth);
+        }
+
+        currentImage = idleImages[0];
+        setImage(currentImage);
+    }
+
+    public void act() {
+        handleInput();
+        applyGravity();
+        checkGroundCollision();
+        updateAnimationState();
+    }
+
+    private void handleInput() {
+        if (Greenfoot.isKeyDown("right")) {
+            ((Level0)getWorld()).scrollWorld(-MOVE_SPEED); // Scroll terrain left
+        }
+
+        if (Greenfoot.isKeyDown("left")) {
+            ((Level0)getWorld()).scrollWorld(MOVE_SPEED); // Scroll terrain right
+        }
+
+        if (onGround && Greenfoot.isKeyDown("up")) {
+            vSpeed = JUMP_STRENGTH;
+            onGround = false;
+        }
     }
     
-    public void act()
-    {
-        // Add your action code here.
-        if (Greenfoot.isKeyDown("left")) {
-            move(-3);
-        } else if (Greenfoot.isKeyDown("right")) {
-            move(3);
-        } else if (onGround && Greenfoot.isKeyDown("up")) {
-            vSpeed = jumpStrength;
-            onGround = false; // Player is no longer on the ground
-        }
-        if (!onGround) {
-            vSpeed += acceleration; // Add gravity
-        }
-        setLocation(getX(), getY() + vSpeed); // Move based on vertical speed
-        if (isTouching(Grass.class)) { // Ground detection - adjust as needed
-            setLocation(getX(), getY() - vSpeed); // Move back up to ground
-            vSpeed = 0;
-            onGround = true; // Set onGround to true
-        }
-}
+    private void loadWalkAnimation() {
+    
     }
+
+    private void updateAnimationState() {
+        boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right");
+
+        animationTimer++;
+
+        if (!onGround) {
+            if (animationTimer >= ANIMATION_SPEED) {
+                animationTimer = 0;
+                jumpAnimationFrame = (jumpAnimationFrame + 1) % jumpImages.length;
+                setImage(jumpImages[jumpAnimationFrame]);
+            }
+            return;
+        }
+
+        // Reset jump animation when landing
+        jumpAnimationFrame = 0;
+
+        if (moving) {
+            if (animationTimer >= ANIMATION_SPEED) {
+                animationTimer = 0;
+                animationFrame = (animationFrame + 1) % walkImages.length;
+                setImage(walkImages[animationFrame]);
+            }
+        } else {
+            if (animationTimer >= ANIMATION_SPEED) {
+                animationTimer = 0;
+                animationFrame = (animationFrame + 1) % idleImages.length;
+                setImage(idleImages[animationFrame]);
+            }
+        }
+    }
+
+    private void applyGravity() {
+        if (!onGround) {
+            vSpeed = Math.min(vSpeed + GRAVITY, MAX_FALL_SPEED);
+            setLocation(getX(), getY() + vSpeed);
+        }
+    }
+
+    private void checkGroundCollision() {
+        Actor ground = getOneIntersectingObject(Grass.class);
+        if (ground != null && vSpeed >= 0) {
+            while (isTouching(Grass.class)) {
+                setLocation(getX(), getY() - 1);
+            }
+            vSpeed = 0;
+            onGround = true;
+        } else {
+            onGround = false;
+        }
+    }
+
+    private void scaleImage(GreenfootImage img, int targetWidth) {
+        int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
+        img.scale(targetWidth, targetHeight);
+    }
+}

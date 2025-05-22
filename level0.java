@@ -3,10 +3,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class level0 here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Saiful Shaik
+ * @version May, 22,2025
  */
-public class level0 extends World {
+public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
@@ -14,16 +14,15 @@ public class level0 extends World {
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
     
-    private final int groundY = getHeight() - 20;
+    private final int groundY = getHeight() - 10;
+    Player player;
 
-    public level0(int width, int height) {
+    public Level0(int width, int height) {
         super(width, height, 1);
         
         setupBackground(width, height);
-        addTrees("00.png", 100, getWidth()-75);
-        addTrees("02.png", 300, getWidth()/6);
+        addTrees("03.png", 250, getWidth()/6);
         
-        // Main Front Actors
         addPlayer();
         addGroundTiles();
     }
@@ -65,4 +64,13 @@ public class level0 extends World {
         int treeY = grassTopY - (treeHeight / 2);
         addObject(tree, x, treeY);
     }
+    
+    public void scrollWorld(int dx) {
+    for (Object obj : getObjects(null)) {
+        if (obj != player) {
+            Actor actor = (Actor)obj;
+            actor.setLocation(actor.getX() + dx, actor.getY());
+        }
+    }
+}
 }
