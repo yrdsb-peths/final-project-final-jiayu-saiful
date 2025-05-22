@@ -2,8 +2,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * Player character that scrolls the world and plays animations
- * @author Jiayu
- * @Modified By Saiful Shaik
+ * @author Jiayu Chen
+ * @Modified By Saiful Shaik & Jiayu Chen
  * @version May 22, 2025
  */
 
@@ -11,6 +11,7 @@ public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
     private GreenfootImage[] jumpImagesRight, jumpImagesLeft;
+    private GreenfootImage[] attackAImagesRight, attackAImagesLeft;
     private GreenfootImage currentImage;
 
     private final int GRAVITY = 1;
@@ -54,6 +55,14 @@ public class Player extends Actor {
             scaleImage(jumpImagesRight[i], targetWidth);
         }
         jumpImagesLeft = flipImagesHorizontally(jumpImagesRight);
+        
+        // Load attack animation frames
+        attackAImagesRight = new GreenfootImage[6];
+        for (int i = 0; i < attackAImagesRight.length; i++) {
+            jumpImagesRight[i] = new GreenfootImage("images/knight/knightAnimations/attack1/0" + i + ".png");
+            scaleImage(attackAImagesRight[i], targetWidth);
+        }
+        attackAImagesLeft = flipImagesHorizontally(attackAImagesRight);
 
         currentImage = idleImagesRight[0];
         setImage(currentImage);
@@ -76,18 +85,23 @@ public class Player extends Actor {
             ((Level0)getWorld()).scrollWorld(MOVE_SPEED);
             facingRight = false;
         }
-
+        
+        if (Greenfoot.isKeyDown("a")) {
+            attackAnimation();
+        }
+        
         if (onGround && Greenfoot.isKeyDown("up")) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
         }
+        
     }
 
     private void updateAnimationState() {
         boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right");
 
         animationTimer++;
-
+        
         // Jump animation
         if (!onGround) {
             if (animationTimer >= ANIMATION_SPEED) {
@@ -114,7 +128,18 @@ public class Player extends Actor {
             setImage(facingRight ? idleImagesRight[animationFrame] : idleImagesLeft[animationFrame]);
         }
     }
-
+    
+    private void attackAnimation() {
+        // Cycle through attack animation images
+        int frame = 0;
+        frame++; 
+        if (frame <= 5) { 
+            setImage("images/knight/knightAnimations/attack1/0" + frame + ".png");
+        } else {
+            frame = 0; // Reset the frame counter
+        }
+    }
+    
     private void applyGravity() {
         if (!onGround) {
             vSpeed = Math.min(vSpeed + GRAVITY, MAX_FALL_SPEED);
