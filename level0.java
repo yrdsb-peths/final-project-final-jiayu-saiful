@@ -25,6 +25,9 @@ public class Level0 extends World {
         
         addPlayer();
         addGroundTiles();
+        
+        Coin coin = new Coin();
+        addObject(coin, 200, 200);
     }
 
     private void setupBackground(int width, int height) {

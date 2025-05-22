@@ -145,7 +145,7 @@ public class Player extends Actor {
         return flipped;
     }
 
-    private void scaleImage(GreenfootImage img, int targetWidth) {
+    public void scaleImage(GreenfootImage img, int targetWidth) {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
     }
