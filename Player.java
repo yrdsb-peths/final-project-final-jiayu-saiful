@@ -9,7 +9,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Player extends Actor
 {
     private GreenfootImage baseImage;
-    
+    private int vSpeed = 3;
+    private int acceleration = 1;
     public Player() {
         baseImage = new GreenfootImage("images/knight.png");
 
@@ -27,6 +28,34 @@ public class Player extends Actor
             move(-3);
         } else if (Greenfoot.isKeyDown("right")) {
             move(3);
+        } else if (Greenfoot.isKeyDown("up")) {
+            move(2);
+        }
+        
+        if (!onGround()) {
+            fall();
+        }
+    }
+    
+    public boolean onGround()
+    {
+        Object under = getOneObjectAtOffset(0, getImage().getHeight()/2 + 2, Grass.class);
+        return under != null;
+    }
+    
+    public void fall()
+    {
+        setLocation(getX(), getY() + vSpeed);
+        vSpeed += acceleration;
+    }
+    
+    public void checkFall()
+    {
+        if (onGround()) {
+            vSpeed = 0;
+        }
+        else {
+            fall();
         }
     }
 }
