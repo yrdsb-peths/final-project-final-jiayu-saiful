@@ -17,6 +17,7 @@ public class Player extends Actor {
     private final int MAX_FALL_SPEED = 10;
     private final int MOVE_SPEED = 3;
     private final int JUMP_STRENGTH = -10;
+    private final int PLAYER_BOTTOM_OFFSET = 32;
 
     private int vSpeed = 0;
     private boolean onGround = false;
@@ -85,6 +86,7 @@ public class Player extends Actor {
 
         animationTimer++;
 
+        // Jump Animations
         if (!onGround) {
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
@@ -120,11 +122,12 @@ public class Player extends Actor {
     }
 
     private void checkGroundCollision() {
-        Actor ground = getOneIntersectingObject(Grass.class);
+        Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
+    
         if (ground != null && vSpeed >= 0) {
-            while (isTouching(Grass.class)) {
-                setLocation(getX(), getY() - 1);
-            }
+            int groundY = ground.getY() - ground.getImage().getHeight() / 2;
+            int playerHeight = getImage().getHeight();
+            setLocation(getX(), groundY - playerHeight / 2 + PLAYER_BOTTOM_OFFSET);
             vSpeed = 0;
             onGround = true;
         } else {
