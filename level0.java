@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Level0 extends World {
+public class level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
@@ -16,7 +16,7 @@ public class Level0 extends World {
     
     private final int groundY = getHeight() - 20;
 
-    public Level0(int width, int height) {
+    public level0(int width, int height) {
         super(width, height, 1);
         
         setupBackground(width, height);
