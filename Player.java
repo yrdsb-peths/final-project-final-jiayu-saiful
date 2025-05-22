@@ -8,9 +8,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 
 public class Player extends Actor {
-    private GreenfootImage[] walkImages;
-    private GreenfootImage[] idleImages;
-    private GreenfootImage[] jumpImages;
+    private GreenfootImage[] walkImagesRight, walkImagesLeft;
+    private GreenfootImage[] idleImagesRight, idleImagesLeft;
+    private GreenfootImage[] jumpImagesRight, jumpImagesLeft;
     private GreenfootImage currentImage;
 
     private final int GRAVITY = 1;
@@ -21,6 +21,7 @@ public class Player extends Actor {
 
     private int vSpeed = 0;
     private boolean onGround = false;
+    private boolean facingRight = true;
 
     private int animationFrame = 0;
     private int jumpAnimationFrame = 0;
@@ -31,27 +32,30 @@ public class Player extends Actor {
         int targetWidth = 150;
 
         // Load walk animation frames
-        walkImages = new GreenfootImage[7]; // Adjust to your actual frame count
-        for (int i = 0; i < walkImages.length; i++) {
-            walkImages[i] = new GreenfootImage("images/knight/knightAnimations/walk/0" + i + ".png");
-            scaleImage(walkImages[i], targetWidth);
+        walkImagesRight = new GreenfootImage[7];
+        for (int i = 0; i < walkImagesRight.length; i++) {
+            walkImagesRight[i] = new GreenfootImage("images/knight/knightAnimations/walk/0" + i + ".png");
+            scaleImage(walkImagesRight[i], targetWidth);
         }
+        walkImagesLeft = flipImagesHorizontally(walkImagesRight);
 
         // Load idle animation frames
-        idleImages = new GreenfootImage[6]; // Adjust to your actual frame count
-        for (int i = 0; i < idleImages.length; i++) {
-            idleImages[i] = new GreenfootImage("images/knight/knightAnimations/idle/0" + i + ".png");
-            scaleImage(idleImages[i], targetWidth);
+        idleImagesRight = new GreenfootImage[6];
+        for (int i = 0; i < idleImagesRight.length; i++) {
+            idleImagesRight[i] = new GreenfootImage("images/knight/knightAnimations/idle/0" + i + ".png");
+            scaleImage(idleImagesRight[i], targetWidth);
         }
+        idleImagesLeft = flipImagesHorizontally(idleImagesRight);
 
         // Load jump animation frames
-        jumpImages = new GreenfootImage[4]; // Adjust to your actual frame count
-        for (int i = 0; i < jumpImages.length; i++) {
-            jumpImages[i] = new GreenfootImage("images/knight/knightAnimations/jump/0" + i + ".png");
-            scaleImage(jumpImages[i], targetWidth);
+        jumpImagesRight = new GreenfootImage[4];
+        for (int i = 0; i < jumpImagesRight.length; i++) {
+            jumpImagesRight[i] = new GreenfootImage("images/knight/knightAnimations/jump/0" + i + ".png");
+            scaleImage(jumpImagesRight[i], targetWidth);
         }
+        jumpImagesLeft = flipImagesHorizontally(jumpImagesRight);
 
-        currentImage = idleImages[0];
+        currentImage = idleImagesRight[0];
         setImage(currentImage);
     }
 
@@ -64,11 +68,13 @@ public class Player extends Actor {
 
     private void handleInput() {
         if (Greenfoot.isKeyDown("right")) {
-            ((Level0)getWorld()).scrollWorld(-MOVE_SPEED); // Scroll terrain left
+            ((Level0)getWorld()).scrollWorld(-MOVE_SPEED);
+            facingRight = true;
         }
 
         if (Greenfoot.isKeyDown("left")) {
-            ((Level0)getWorld()).scrollWorld(MOVE_SPEED); // Scroll terrain right
+            ((Level0)getWorld()).scrollWorld(MOVE_SPEED);
+            facingRight = false;
         }
 
         if (onGround && Greenfoot.isKeyDown("up")) {
@@ -76,41 +82,36 @@ public class Player extends Actor {
             onGround = false;
         }
     }
-    
-    private void loadWalkAnimation() {
-    
-    }
 
     private void updateAnimationState() {
         boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right");
 
         animationTimer++;
 
-        // Jump Animations
+        // Jump animation
         if (!onGround) {
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
-                jumpAnimationFrame = (jumpAnimationFrame + 1) % jumpImages.length;
-                setImage(jumpImages[jumpAnimationFrame]);
+                jumpAnimationFrame = (jumpAnimationFrame + 1) % jumpImagesRight.length;
             }
+            setImage(facingRight ? jumpImagesRight[jumpAnimationFrame] : jumpImagesLeft[jumpAnimationFrame]);
             return;
         }
 
-        // Reset jump animation when landing
+        // Reset jump frame on landing
         jumpAnimationFrame = 0;
 
+        if (animationTimer >= ANIMATION_SPEED) {
+            animationTimer = 0;
+            animationFrame++;
+        }
+
         if (moving) {
-            if (animationTimer >= ANIMATION_SPEED) {
-                animationTimer = 0;
-                animationFrame = (animationFrame + 1) % walkImages.length;
-                setImage(walkImages[animationFrame]);
-            }
+            animationFrame %= walkImagesRight.length;
+            setImage(facingRight ? walkImagesRight[animationFrame] : walkImagesLeft[animationFrame]);
         } else {
-            if (animationTimer >= ANIMATION_SPEED) {
-                animationTimer = 0;
-                animationFrame = (animationFrame + 1) % idleImages.length;
-                setImage(idleImages[animationFrame]);
-            }
+            animationFrame %= idleImagesRight.length;
+            setImage(facingRight ? idleImagesRight[animationFrame] : idleImagesLeft[animationFrame]);
         }
     }
 
@@ -123,7 +124,7 @@ public class Player extends Actor {
 
     private void checkGroundCollision() {
         Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
-    
+
         if (ground != null && vSpeed >= 0) {
             int groundY = ground.getY() - ground.getImage().getHeight() / 2;
             int playerHeight = getImage().getHeight();
@@ -133,6 +134,15 @@ public class Player extends Actor {
         } else {
             onGround = false;
         }
+    }
+
+    private GreenfootImage[] flipImagesHorizontally(GreenfootImage[] originals) {
+        GreenfootImage[] flipped = new GreenfootImage[originals.length];
+        for (int i = 0; i < originals.length; i++) {
+            flipped[i] = new GreenfootImage(originals[i]);
+            flipped[i].mirrorHorizontally();
+        }
+        return flipped;
     }
 
     private void scaleImage(GreenfootImage img, int targetWidth) {
