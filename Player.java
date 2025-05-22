@@ -4,13 +4,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * Write a description of class Player here.
  * 
  * @author (your name) Jiayu
- * @version (a version number or a date) 05/21/25
+ * @version (a version number or a date) 05/22/25
  */
 public class Player extends Actor
 {
     private GreenfootImage baseImage;
-    private int vSpeed = 3;
-    private int acceleration = 1;
+    private int vSpeed = 0;  // Vertical speed
+     private boolean onGround = false;  // Flag to indicate if the player is on the ground
+    private final int jumpStrength = -28; // Initial jump force
+    private final int acceleration = 2; // Acceleration due to gravity
     public Player() {
         baseImage = new GreenfootImage("images/knight.png");
 
@@ -28,34 +30,18 @@ public class Player extends Actor
             move(-3);
         } else if (Greenfoot.isKeyDown("right")) {
             move(3);
-        } else if (Greenfoot.isKeyDown("up")) {
-            move(2);
+        } else if (onGround && Greenfoot.isKeyDown("up")) {
+            vSpeed = jumpStrength;
+            onGround = false; // Player is no longer on the ground
         }
-        
-        if (!onGround()) {
-            fall();
+        if (!onGround) {
+            vSpeed += acceleration; // Add gravity
         }
-    }
-    
-    public boolean onGround()
-    {
-        Object under = getOneObjectAtOffset(0, getImage().getHeight()/2 + 2, Grass.class);
-        return under != null;
-    }
-    
-    public void fall()
-    {
-        setLocation(getX(), getY() + vSpeed);
-        vSpeed += acceleration;
-    }
-    
-    public void checkFall()
-    {
-        if (onGround()) {
+        setLocation(getX(), getY() + vSpeed); // Move based on vertical speed
+        if (isTouching(Grass.class)) { // Ground detection - adjust as needed
+            setLocation(getX(), getY() - vSpeed); // Move back up to ground
             vSpeed = 0;
+            onGround = true; // Set onGround to true
         }
-        else {
-            fall();
-        }
-    }
 }
+    }
