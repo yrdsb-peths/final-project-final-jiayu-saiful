@@ -78,12 +78,12 @@ public class Player extends Actor {
 
     private void handleInput() {
         if (Greenfoot.isKeyDown("right")) {
-            ((Level0) getWorld()).scrollWorld(-MOVE_SPEED);
+            ((level0) getWorld()).scrollWorld(-MOVE_SPEED);
             facingRight = true;
         }
 
         if (Greenfoot.isKeyDown("left")) {
-            ((Level0) getWorld()).scrollWorld(MOVE_SPEED);
+            ((level0) getWorld()).scrollWorld(MOVE_SPEED);
             facingRight = false;
         }
 
