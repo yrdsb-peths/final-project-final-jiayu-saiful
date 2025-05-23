@@ -14,6 +14,7 @@ public class Level0 extends World {
     private static final int PLAYER_START_X = 450-15;
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
+    private static final boolean BOUNDED = false;
 
     private final int groundY = getHeight() - 10;
 
@@ -21,7 +22,7 @@ public class Level0 extends World {
 
     public Level0(int width, int height) {
         // BUG: Sets fixed boundaries. Collision and ScrollWorld still have problems
-        super(width, height, 1);
+        super(width, height, 1, BOUNDED);
         
         setupBackground(width, height);
         addGroundTiles();
