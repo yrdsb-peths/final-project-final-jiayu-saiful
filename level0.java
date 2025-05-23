@@ -20,7 +20,9 @@ public class Level0 extends World {
     private Player player;
 
     public Level0(int width, int height) {
+        // BUG: Sets fixed boundaries. Collision and ScrollWorld still have problems
         super(width, height, 1);
+        
         setupBackground(width, height);
         addPlayer();
         addGroundTiles();

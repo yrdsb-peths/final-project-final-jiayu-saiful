@@ -8,6 +8,16 @@ import java.util.Random;
  * @version May 22, 2025
  */
 
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.Random;
+
+/**
+ * Player character that scrolls the world and plays animations
+ * @author Jiayu
+ * @Modified By Saiful Shaik
+ * @version May 22, 2025
+ */
+
 public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -27,6 +37,7 @@ public class Player extends Actor {
     private boolean facingRight = true;
     private boolean isAttacking = false;
     private boolean isDefending = false;
+    public boolean isHit = false;  // You should set this externally when player gets hit
 
     private int animationFrame = 0;
     private int jumpAnimationFrame = 0;
@@ -61,7 +72,7 @@ public class Player extends Actor {
         attackImagesRight[2] = loadAnimation("attack3", 5, targetWidth);
         attackImagesLeft[2] = flipImagesHorizontally(attackImagesRight[2]);
 
-        defendImagesRight = loadAnimation("defend", 3, targetWidth);
+        defendImagesRight = loadAnimation("defend", 5, targetWidth);
         defendImagesLeft = flipImagesHorizontally(defendImagesRight);
 
         currentImage = idleImagesRight[0];
@@ -86,7 +97,7 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown("a") && !isAttacking) {
+        if (Greenfoot.isKeyDown("x") && !isAttacking) {
             isAttacking = true;
             attackType = random.nextInt(3);
             attackFrame = 0;
@@ -123,11 +134,16 @@ public class Player extends Actor {
         }
 
         if (isDefending) {
-            if (animationTimer >= ANIMATION_SPEED) {
-                animationTimer = 0;
-                GreenfootImage[] defendSet = facingRight ? defendImagesRight : defendImagesLeft;
-                animationFrame = (animationFrame + 1) % defendSet.length;
-                setImage(defendSet[animationFrame]);
+            if (isHit) {
+                if (animationTimer >= ANIMATION_SPEED) {
+                    animationTimer = 0;
+                    GreenfootImage[] defendSet = facingRight ? defendImagesRight : defendImagesLeft;
+                    animationFrame = (animationFrame + 1) % defendSet.length;
+                    setImage(defendSet[animationFrame]);
+                }
+            } else {
+                GreenfootImage defendFrame = facingRight ? defendImagesRight[1] : defendImagesLeft[1];
+                setImage(defendFrame);
             }
             return;
         }
