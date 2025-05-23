@@ -11,7 +11,7 @@ public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
-    private static final int PLAYER_START_X = 300;
+    private static final int PLAYER_START_X = 450-15;
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
 
