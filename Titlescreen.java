@@ -27,6 +27,11 @@ public class Titlescreen extends World {
 
     public Titlescreen() {    
         super(screenWidth, screenHeight, 1);
+        
+        GreenfootImage bg = new GreenfootImage("images/titlescreen.png");
+        bg.drawImage(bg, 0, 0);
+        setBackground(bg);
+        
 
         // Style and place the main title
         styleTitleLabel(titleTop);
