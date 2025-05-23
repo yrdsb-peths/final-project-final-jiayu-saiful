@@ -3,25 +3,39 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class Coin here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Saiful Shaik 
+ * @version May, 22, 2025.
  */
+
 public class Coin extends Actor
 {
-    /**
-     * Act - do whatever the Coin wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    private GreenfootImage currentImage;
-    Player player = new Player();
-    GreenfootImage[] coinAnimation = new GreenfootImage[4];
+    private GreenfootImage[] coinAnimation = new GreenfootImage[4];
+    private int animationFrame = 0;
+    private int animationTimer = 0;
+    private final int ANIMATION_SPEED = 6;
+    private final int TARGET_WIDTH = 25;
+
     public Coin() {
-        setImage("images/coin_an/00.png");
-        player.scaleImage(new GreenfootImage("images/coin_an/00.png"), 10);
+        for (int i = 0; i < 4; i++) {
+            GreenfootImage img = new GreenfootImage("images/coin_an/0" + i + ".png");
+            scaleImage(img, TARGET_WIDTH);
+            coinAnimation[i] = img;
+        }
+        setImage(coinAnimation[0]);
     }
     
     public void act()
     {
-        // Add your action code here.
+        animationTimer++;
+        if (animationTimer >= ANIMATION_SPEED) {
+            animationTimer = 0;
+            animationFrame = (animationFrame + 1) % coinAnimation.length;
+            setImage(coinAnimation[animationFrame]);
+        }
+    }
+    
+    private void scaleImage(GreenfootImage img, int targetWidth) {
+        int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
+        img.scale(targetWidth, targetHeight);
     }
 }

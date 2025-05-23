@@ -24,11 +24,16 @@ public class Level0 extends World {
         super(width, height, 1);
         
         setupBackground(width, height);
-        addPlayer();
         addGroundTiles();
         addTrees("03.png", 250, getWidth() / 6);
         Coin coin = new Coin();
-        addObject(coin, 200, 200);
+        int coinX = 200;
+        int coinY = groundY - (new Grass().getImage().getHeight() / 2) - (coin.getImage().getHeight() / 2);
+        addObject(coin, coinX, coinY);
+        
+        
+        // Player has to be on top of everything
+        addPlayer();
     }
 
     private void setupBackground(int width, int height) {

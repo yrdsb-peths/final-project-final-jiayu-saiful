@@ -8,16 +8,6 @@ import java.util.Random;
  * @version May 22, 2025
  */
 
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.Random;
-
-/**
- * Player character that scrolls the world and plays animations
- * @author Jiayu
- * @Modified By Saiful Shaik
- * @version May 22, 2025
- */
-
 public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -212,7 +202,7 @@ public class Player extends Actor {
         return flipped;
     }
 
-    public void scaleImage(GreenfootImage img, int targetWidth) {
+    private void scaleImage(GreenfootImage img, int targetWidth) {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
     }
