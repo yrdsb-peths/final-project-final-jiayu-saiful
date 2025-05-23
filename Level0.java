@@ -7,7 +7,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Saiful Shaik
  * @version May 22, 2025
  */
-public class level0 extends World {
+public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
@@ -19,7 +19,7 @@ public class level0 extends World {
 
     private Player player;
 
-    public level0(int width, int height) {
+    public Level0(int width, int height) {
         // BUG: Sets fixed boundaries. Collision and ScrollWorld still have problems
         super(width, height, 1);
         
