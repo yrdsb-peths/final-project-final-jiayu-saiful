@@ -1,11 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class level0 here.
+ * Level0: Side-scrolling world with parallax background and terrain.
+ *
  * 
  * @author Saiful Shaik
- * @version May, 22,2025
+ * @version May 22, 2025
  */
+
 public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
@@ -13,37 +15,33 @@ public class Level0 extends World {
     private static final int PLAYER_START_X = 300;
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
-    
+
     private final int groundY = getHeight() - 10;
-    Player player;
+
+    private Player player;
 
     public Level0(int width, int height) {
         super(width, height, 1);
-        
         setupBackground(width, height);
-        addTrees("03.png", 250, getWidth()/6);
-        
         addPlayer();
         addGroundTiles();
-        
+        addTrees("03.png", 250, getWidth() / 6);
         Coin coin = new Coin();
         addObject(coin, 200, 200);
     }
 
     private void setupBackground(int width, int height) {
         GreenfootImage background = new GreenfootImage(width, height);
-
         for (int i = 0; i < NUM_BACKGROUND_LAYERS; i++) {
             GreenfootImage layer = new GreenfootImage("background/background0/" + i + ".png");
             layer.scale(width, height);
             background.drawImage(layer, 0, 0);
         }
-
         setBackground(background);
     }
 
     private void addPlayer() {
-        Player player = new Player();
+        player = new Player();
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
 
@@ -52,13 +50,12 @@ public class Level0 extends World {
         int tileWidth = sampleGrass.getTargetWidth() - IMAGE_OVERLAP;
         int worldWidth = getWidth();
         int tileCount = (worldWidth - STARTING_X) / tileWidth + 2;
-
         for (int i = 0; i < tileCount; i++) {
             int x = STARTING_X + i * tileWidth;
             addObject(new Grass(), x, groundY);
         }
     }
-    
+
     private void addTrees(String fileName, int treeSize, int x) {
         Trees tree = new Trees("images/trees/" + fileName, treeSize);
         int treeHeight = tree.getImage().getHeight();
@@ -67,13 +64,13 @@ public class Level0 extends World {
         int treeY = grassTopY - (treeHeight / 2);
         addObject(tree, x, treeY);
     }
-    
+
     public void scrollWorld(int dx) {
-    for (Object obj : getObjects(null)) {
-        if (obj != player) {
-            Actor actor = (Actor)obj;
-            actor.setLocation(actor.getX() + dx, actor.getY());
+        for (Object obj : getObjects(null)) {
+            if (obj != player) {
+                Actor actor = (Actor) obj;
+                actor.setLocation(actor.getX() + dx, actor.getY());
+            }
         }
     }
-}
 }
