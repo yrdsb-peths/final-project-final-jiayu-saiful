@@ -12,23 +12,15 @@ public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
     private GreenfootImage[] jumpImagesRight, jumpImagesLeft;
-<<<<<<< Updated upstream
-=======
     private GreenfootImage[][] attackImagesRight, attackImagesLeft;
     private GreenfootImage[] defendImagesRight, defendImagesLeft;
->>>>>>> Stashed changes
     private GreenfootImage currentImage;
 
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     private final int MOVE_SPEED = 3;
-<<<<<<< Updated upstream
-    private final int JUMP_STRENGTH = -10;
+    private final int JUMP_STRENGTH = -15;
     private final int PLAYER_BOTTOM_OFFSET = 32;
-=======
-    private final int JUMP_STRENGTH = -13;
-    private final int PLAYER_BOTTOM_OFFSET = 34;
->>>>>>> Stashed changes
 
     private int vSpeed = 0;
     private boolean onGround = false;
@@ -59,8 +51,6 @@ public class Player extends Actor {
 
         jumpImagesRight = loadAnimation("jump", 4, targetWidth);
         jumpImagesLeft = flipImagesHorizontally(jumpImagesRight);
-<<<<<<< Updated upstream
-=======
 
         attackImagesRight = new GreenfootImage[3][];
         attackImagesLeft = new GreenfootImage[3][];
@@ -73,7 +63,6 @@ public class Player extends Actor {
 
         defendImagesRight = loadAnimation("defend", 3, targetWidth);
         defendImagesLeft = flipImagesHorizontally(defendImagesRight);
->>>>>>> Stashed changes
 
         currentImage = idleImagesRight[0];
         setImage(currentImage);
@@ -97,8 +86,6 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-<<<<<<< Updated upstream
-=======
         if (Greenfoot.isKeyDown("a") && !isAttacking) {
             isAttacking = true;
             attackType = random.nextInt(3);
@@ -112,7 +99,6 @@ public class Player extends Actor {
             isDefending = false;
         }
 
->>>>>>> Stashed changes
         if (onGround && Greenfoot.isKeyDown("up")) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
@@ -123,9 +109,6 @@ public class Player extends Actor {
         boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right");
         animationTimer++;
 
-<<<<<<< Updated upstream
-        // Jump animation
-=======
         if (isAttacking) {
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
@@ -149,7 +132,6 @@ public class Player extends Actor {
             return;
         }
 
->>>>>>> Stashed changes
         if (!onGround) {
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;

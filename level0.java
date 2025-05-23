@@ -2,12 +2,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * Level0: Side-scrolling world with parallax background and terrain.
- *
+ * Player stays centered while the world scrolls.
  * 
  * @author Saiful Shaik
  * @version May 22, 2025
  */
-
 public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
