@@ -7,13 +7,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version May, 22, 2025.
  */
 
-public class Coin extends Actor
+public class Coin extends Base
 {
     private GreenfootImage[] coinAnimation = new GreenfootImage[4];
     private int animationFrame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
-    private final int TARGET_WIDTH = 25;
+    private final int TARGET_WIDTH = 23;
 
     public Coin() {
         for (int i = 0; i < 4; i++) {

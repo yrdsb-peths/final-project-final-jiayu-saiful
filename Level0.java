@@ -71,7 +71,7 @@ public class Level0 extends World {
 
         for (int i = 0; i < count; i++) {
             int coinX = startX + i * spacing;
-            addObject(new Coin(), coinX, coinY);
+            addObject(new Coin(), coinX, coinY - 4);
         }
     }
 
