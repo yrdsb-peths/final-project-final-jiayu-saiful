@@ -96,7 +96,7 @@ public class Level0 extends World {
         // Calculate how many tiles are needed to fill the screen, including a buffer on both ends
         // Think of how you can make the grass tiles extended to the right.
         //It doesnt matter how long it is, make sure it is long enough to add multiple houses and a npc. 
-        int tileCount = (worldWidth - STARTING_X) / tileWidth + 2;
+        int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2;
     
         // Add each Grass tile at the correct horizontal position
         for (int i = 0; i < tileCount; i++) {
@@ -140,7 +140,14 @@ public class Level0 extends World {
      *  AMAZING WORK SO FAR, KEEP IT UP. ;)
      */
     
-    
+    private void addNPCs(String fileName, int NPCSize, int x) {
+        Trees tree = new Trees("images/trees/" + fileName, NPCSize);
+        int treeHeight = tree.getImage().getHeight();
+        int grassHeight = new Grass().getImage().getHeight();
+        int grassTopY = groundY - (grassHeight / 2);
+        int treeY = grassTopY - (treeHeight / 2);
+        addObject(tree, x, treeY);
+    }
     
     
     
