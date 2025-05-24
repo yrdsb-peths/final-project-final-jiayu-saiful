@@ -11,29 +11,22 @@ public class Level0 extends World {
 
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
-    private static final int PLAYER_START_X = 450-15;
+    private static final int PLAYER_START_X = 450 - 15;
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
     private static final boolean BOUNDED = false;
 
     private final int groundY = getHeight() - 10;
+    private final int coinOffset = 20;
 
     private Player player;
 
     public Level0(int width, int height) {
-        // BUG: Sets fixed boundaries. Collision and ScrollWorld still have problems
         super(width, height, 1, BOUNDED);
-        
         setupBackground(width, height);
         addGroundTiles();
         addTrees("03.png", 250, getWidth() / 6);
-        Coin coin = new Coin();
-        int coinX = 200;
-        int coinY = groundY - (new Grass().getImage().getHeight() / 2) - (coin.getImage().getHeight() / 2);
-        addObject(coin, coinX, coinY);
-        
-        
-        // Player has to be on top of everything
+        addCoinsOnGround(200, 5, 80);
         addPlayer();
     }
 
@@ -72,6 +65,16 @@ public class Level0 extends World {
         addObject(tree, x, treeY);
     }
 
+    private void addCoinsOnGround(int startX, int count, int spacing) {
+        int grassHeight = new Grass().getImage().getHeight();
+        int coinY = groundY - (grassHeight / 2) - (new Coin().getImage().getHeight() / 2);
+
+        for (int i = 0; i < count; i++) {
+            int coinX = startX + i * spacing;
+            addObject(new Coin(), coinX, coinY);
+        }
+    }
+
     public void scrollWorld(int dx) {
         for (Object obj : getObjects(null)) {
             if (obj != player) {
@@ -80,4 +83,4 @@ public class Level0 extends World {
             }
         }
     }
-}
+} 
