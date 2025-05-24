@@ -8,12 +8,33 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class NPC extends Base
 {
-    /**
-     * Act - do whatever the NPC wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    private GreenfootImage[] npcAnimation = new GreenfootImage[4];
+    private int animationFrame = 0;
+    private int animationTimer = 0;
+    private final int ANIMATION_SPEED = 6;
+    private final int TARGET_WIDTH = 80;
+    
+    public NPC(String directory, int npcSize) {
+        for (int i = 0; i < 4; i++) {
+            GreenfootImage img = new GreenfootImage("images/npc/0" + i + ".png");
+            scaleImage(img, TARGET_WIDTH);
+            npcAnimation[i] = img;
+        }
+        setImage(npcAnimation[0]);
+    }
+    
     public void act()
     {
-        // Add your action code here.
+        animationTimer++;
+        if (animationTimer >= ANIMATION_SPEED) {
+            animationTimer = 0;
+            animationFrame = (animationFrame + 1) % npcAnimation.length;
+            setImage(npcAnimation[animationFrame]);
+        }
+    }
+    
+    private void scaleImage(GreenfootImage img, int targetWidth) {
+        int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
+        img.scale(targetWidth, targetHeight);
     }
 }
