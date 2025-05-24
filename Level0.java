@@ -29,7 +29,7 @@ public class Level0 extends World {
         addGroundTiles();
         
         // Trees
-        // REFER TO THIS LINE OF CODE IF YOU NEED AN EXAMPLE --> (FOR TASK 3) <--
+        // REFER TO THIS LINE OF CODE IF YOU NEED AN EXAMPLE --> (FOR TASK 2 & 3) <--
         addTrees("03.png", 250, getWidth() / 6);
         
         
