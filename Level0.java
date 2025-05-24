@@ -8,22 +8,33 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version May 22, 2025
  */
 public class Level0 extends World {
-
+    public static int screenWidth = 0;
+    public static int screenHeight = 0;
+    private static final boolean BOUNDED = false;
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
     private static final int PLAYER_START_X = 450 - 15;
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
-    private static final boolean BOUNDED = false;
 
     private final int groundY = getHeight() - 10;
     private final int coinOffset = 20;
+    
+    // UI
+    private int uibgSize = 150;
 
     private Player player;
 
     public Level0(int width, int height) {
         super(width, height, 1, BOUNDED);
+        
+        // Set dimentions for other classes to grab
+        Level0.screenWidth = width;
+        Level0.screenHeight = height;
+        
+        // Background
         setupBackground(width, height);
+        
         
         // Ground Tiles
         addGroundTiles();
@@ -41,6 +52,12 @@ public class Level0 extends World {
         
         // Plater
         addPlayer();
+        
+        
+        //UI bar
+        UIBackground UIbg = new UIBackground(uibgSize);
+        addObject(UIbg, screenWidth/2, 0);
+        
     }
 
     private void setupBackground(int width, int height) {
@@ -141,10 +158,11 @@ public class Level0 extends World {
 
     public void scrollWorld(int dx) {
         for (Object obj : getObjects(null)) {
-            if (obj != player) {
+            if (!(obj instanceof Player) && !(obj instanceof UI)) {
                 Actor actor = (Actor) obj;
                 actor.setLocation(actor.getX() + dx, actor.getY());
             }
         }
     }
+    
 } 
