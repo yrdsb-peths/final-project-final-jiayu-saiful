@@ -27,7 +27,7 @@ public class Player extends Actor {
     private boolean facingRight = true;
     private boolean isAttacking = false;
     private boolean isDefending = false;
-    public boolean isHit = false;  // You should set this externally when player gets hit
+    public boolean isHit = false;  // Should be set externally when player gets hit
 
     private int animationFrame = 0;
     private int jumpAnimationFrame = 0;
@@ -36,7 +36,6 @@ public class Player extends Actor {
 
     private int attackType = 0;
     private int attackFrame = 0;
-
     private final int[] attackFrameCounts = {5, 4, 5};
 
     private Random random = new Random();
@@ -77,37 +76,37 @@ public class Player extends Actor {
     }
 
     private void handleInput() {
-        if (Greenfoot.isKeyDown("right")) {
+        if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
             ((Level0) getWorld()).scrollWorld(-MOVE_SPEED);
             facingRight = true;
         }
 
-        if (Greenfoot.isKeyDown("left")) {
+        if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
             ((Level0) getWorld()).scrollWorld(MOVE_SPEED);
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown("x") && !isAttacking) {
+        if (Greenfoot.isKeyDown("v") && !isAttacking) {
             isAttacking = true;
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
 
-        if (Greenfoot.isKeyDown("d") && !isDefending) {
+        if (Greenfoot.isKeyDown("c")) {
             isDefending = true;
             animationFrame = 0;
-        } else if (!Greenfoot.isKeyDown("d")) {
+        } else {
             isDefending = false;
         }
 
-        if (onGround && Greenfoot.isKeyDown("up")) {
+        if (onGround && (Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space"))) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
         }
     }
 
     private void updateAnimationState() {
-        boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right");
+        boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("d");
         animationTimer++;
 
         if (isAttacking) {
@@ -132,7 +131,8 @@ public class Player extends Actor {
                     setImage(defendSet[animationFrame]);
                 }
             } else {
-                GreenfootImage defendFrame = facingRight ? defendImagesRight[1] : defendImagesLeft[1];
+                int staticFrame = Math.min(1, defendImagesRight.length - 1);
+                GreenfootImage defendFrame = facingRight ? defendImagesRight[staticFrame] : defendImagesLeft[staticFrame];
                 setImage(defendFrame);
             }
             return;
@@ -187,8 +187,13 @@ public class Player extends Actor {
     private GreenfootImage[] loadAnimation(String folderName, int frameCount, int targetWidth) {
         GreenfootImage[] images = new GreenfootImage[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            images[i] = new GreenfootImage("images/knight/knightAnimations/" + folderName + "/0" + i + ".png");
-            scaleImage(images[i], targetWidth);
+            String path = "images/knight/knightAnimations/" + folderName + "/0" + i + ".png";
+            GreenfootImage img = new GreenfootImage(path);
+            if (img == null) {
+                System.out.println("Missing image: " + path);
+            }
+            scaleImage(img, targetWidth);
+            images[i] = img;
         }
         return images;
     }
