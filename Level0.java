@@ -77,18 +77,13 @@ public class Level0 extends World {
     }
     
     private void addGroundTiles() {
-        // This creates a sample Grass object to determine the width of each tile
         Grass sampleGrass = new Grass();
-        int tileWidth = sampleGrass.getTargetWidth() - IMAGE_OVERLAP;  // Adjust for overlap between tiles
-    
-        int worldWidth = getWidth();  // Get the total width of the world
-    
+        int tileWidth = sampleGrass.getTargetWidth() - IMAGE_OVERLAP;
+        int worldWidth = getWidth();
         int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2;
-    
-        // Add each Grass tile at the correct horizontal position
         for (int i = 0; i < tileCount; i++) {
-            int x = STARTING_X + i * tileWidth;  // Calculate the x position of the tile
-            addObject(new Grass(), x, groundY);  // Add the Grass tile at the calculated position and ground level
+            int x = STARTING_X + i * tileWidth;
+            addObject(new Grass(), x, groundY);
         }
     }
     
