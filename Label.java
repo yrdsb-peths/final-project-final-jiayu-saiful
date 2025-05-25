@@ -76,14 +76,14 @@ public class Label extends Actor {
         GreenfootImage textImage = new GreenfootImage(value, fontSize, fillColor, transparent, lineColor);
         int width = textImage.getWidth() + shadowOffsetX;
         int height = textImage.getHeight() + shadowOffsetY;
-
+    
         GreenfootImage finalImage = new GreenfootImage(width, height);
-        
+    
         if (shadowEnabled) {
             GreenfootImage shadow = new GreenfootImage(value, fontSize, shadowColor, transparent);
             finalImage.drawImage(shadow, shadowOffsetX, shadowOffsetY);
         }
-
+    
         finalImage.drawImage(textImage, 0, 0);
         setImage(finalImage);
     }

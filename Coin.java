@@ -1,14 +1,14 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Coin here.
+ * Coin class handles animation and collection logic.
+ * Coins are collected when the player is within a certain range.
  * 
  * @author Saiful Shaik 
- * @version May, 22, 2025.
+ * @version May 25, 2025
  */
 
-public class Coin extends Base
-{
+public class Coin extends Base {
     private GreenfootImage[] coinAnimation = new GreenfootImage[4];
     private int animationFrame = 0;
     private int animationTimer = 0;
@@ -23,9 +23,24 @@ public class Coin extends Base
         }
         setImage(coinAnimation[0]);
     }
-    
-    public void act()
-    {
+
+    public void act() {
+        animateCoin();
+
+        Player player = (Player) getOneIntersectingObject(Player.class);
+        if (player != null && isCloseTo(player, 30)) {
+            World world = getWorld();
+            if (world instanceof Level0) {
+                Level0 level = (Level0) world;
+                if (level.ui != null) {
+                    level.ui.incrementGoldCounter();
+                }
+            }
+            world.removeObject(this);
+        }
+    }
+
+    private void animateCoin() {
         animationTimer++;
         if (animationTimer >= ANIMATION_SPEED) {
             animationTimer = 0;
@@ -33,9 +48,15 @@ public class Coin extends Base
             setImage(coinAnimation[animationFrame]);
         }
     }
-    
+
     private void scaleImage(GreenfootImage img, int targetWidth) {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
+    }
+
+    private boolean isCloseTo(Actor actor, int range) {
+        int dx = getX() - actor.getX();
+        int dy = getY() - actor.getY();
+        return dx * dx + dy * dy <= range * range;
     }
 }

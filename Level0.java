@@ -21,46 +21,50 @@ public class Level0 extends World {
     private final int coinOffset = 20;
     
     // UI
-    private int uibgSize = 150;
+    private int uibgSize = 70;
 
     private Player player;
+    public UI ui;
 
     public Level0(int width, int height) {
         super(width, height, 1, BOUNDED);
-        
-        // Set dimentions for other classes to grab
+    
+        // Set dimensions for other classes to grab
         Level0.screenWidth = width;
         Level0.screenHeight = height;
-        
+    
         // Background
         setupBackground(width, height);
-        
+    
         // Ground Tiles
         addGroundTiles();
-        
+    
         // Trees
         addTrees("03.png", 250, getWidth() / 6);
-        
+    
         // NPC
         addNPC("00.png", 100, 950, "left");
-        
+    
         // Coins
         addCoinsOnGround(200, 5, 80);
-        
+    
         // House
         addHouse("house.png", 350, 700);
         addHouse("house.png", 350, 1100);
         addHouse("house.png", 350, 1500);
-        
+    
         // Player
         addPlayer();
-                
-        //UI bar
-        UIBackground UIbg = new UIBackground(uibgSize);
-        addObject(UIbg, screenWidth/2, 0);
-        
+    
+        // UI Background
+        UIBackground UIbg = new UIBackground(this, screenWidth, uibgSize);
+        addObject(UIbg, screenWidth / 2, uibgSize - 35);
+    
+        // UI Labels - instantiate UI but DO NOT add UI as an Actor
+        ui = new UI(this);
     }
 
+    
     private void setupBackground(int width, int height) {
         GreenfootImage background = new GreenfootImage(width, height);
         for (int i = 0; i < NUM_BACKGROUND_LAYERS; i++) {
@@ -126,11 +130,10 @@ public class Level0 extends World {
     
     public void scrollWorld(int dx) {
         for (Object obj : getObjects(null)) {
-            if (!(obj instanceof Player) && !(obj instanceof UI)) {
-                Actor actor = (Actor) obj;
-                actor.setLocation(actor.getX() + dx, actor.getY());
+            if (obj instanceof Base) {
+                Base base = (Base) obj;
+                base.setLocation(base.getX() + dx, base.getY());
             }
         }
     }
-    
-} 
+}
