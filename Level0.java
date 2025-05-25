@@ -35,14 +35,11 @@ public class Level0 extends World {
         // Background
         setupBackground(width, height);
         
-        
         // Ground Tiles
         addGroundTiles();
         
         // Trees
-        // REFER TO THIS LINE OF CODE IF YOU NEED AN EXAMPLE --> (FOR TASK 2 & 3) <--
         addTrees("03.png", 250, getWidth() / 6);
-        
         
         // NPC
         addNPC("00.png", 100, 950, "left");
@@ -50,12 +47,14 @@ public class Level0 extends World {
         // Coins
         addCoinsOnGround(200, 5, 80);
         
+        // House
+        addHouse("house.png", 350, 700);
+        addHouse("house.png", 350, 1100);
+        addHouse("house.png", 350, 1500);
         
-        
-        // Plater
+        // Player
         addPlayer();
-        
-        
+                
         //UI bar
         UIBackground UIbg = new UIBackground(uibgSize);
         addObject(UIbg, screenWidth/2, 0);
@@ -77,17 +76,6 @@ public class Level0 extends World {
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
     
-    
-    
-    /**
-     * 1) Comment by Saiful: Add more ground tiles by extending to the right the length of the variable --> tileCount <-- to add objects on top.
-     *  ONLY CHANGE THE VARIABLE LISTED
-     *  I PUT COMMENTS FOR YOU TO UNDERSTAND HOW THIS METHOD WORKS.
-     *  TEXT ME IF YOU NEED HELP FOR ANYTHING!!!
-     *  GOOD LUCK! :)
-     */
-    
-
     private void addGroundTiles() {
         // This creates a sample Grass object to determine the width of each tile
         Grass sampleGrass = new Grass();
@@ -95,9 +83,6 @@ public class Level0 extends World {
     
         int worldWidth = getWidth();  // Get the total width of the world
     
-        // Calculate how many tiles are needed to fill the screen, including a buffer on both ends
-        // Think of how you can make the grass tiles extended to the right.
-        //It doesnt matter how long it is, make sure it is long enough to add multiple houses and a npc. 
         int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2;
     
         // Add each Grass tile at the correct horizontal position
@@ -107,8 +92,6 @@ public class Level0 extends World {
         }
     }
     
-    
-    // REFER TO THIS CODE IF YOU NEED HELP --> (FOR TASK 2) <--
     private void addTrees(String fileName, int treeSize, int x) {
         Trees tree = new Trees("images/trees/" + fileName, treeSize);
         int treeHeight = tree.getImage().getHeight();
@@ -118,8 +101,6 @@ public class Level0 extends World {
         addObject(tree, x, treeY);
     }
     
-    
-
     private void addCoinsOnGround(int startX, int count, int spacing) {
         int grassHeight = new Grass().getImage().getHeight();
         int coinY = groundY - (grassHeight / 2) - (new Coin().getImage().getHeight() / 2);
@@ -130,18 +111,6 @@ public class Level0 extends World {
         }
     }
     
-    
-    /**
-     *  2) Comment by Saiful: Make a method BELOW that adds NPC's on the Map when calling in the constructor class
-     *  REMEMBER to add an Actor class exactly named --> NPC <-- under the Base class. Take a look at the class
-     *  Coin.java to understand how the animations work for the NPC.
-     *  
-     *  FOLLOW THE METHOD --> ADDTREES() <-- IF YOU NEED HELP. --> DO NOT LOOK AT OTHER METHODS IT WILL CONFUSE YOU <--
-     *  
-     *  Hints: Make sure the method has mutliple reasonable parameters to spawn any npc that we call from the constructor.
-     *  AMAZING WORK SO FAR, KEEP IT UP. ;)
-     */
-    
     private void addNPC(String fileName, int npcSize, int x, String facing) {
         NPC npc = new NPC("images/npc/" + fileName, npcSize, facing);
         int npcHeight = npc.getImage().getHeight();
@@ -150,8 +119,6 @@ public class Level0 extends World {
         int npcY = grassTopY - (npcHeight / 2);
         addObject(npc, x, npcY);
     }
-    
-    
     
     /**
      *  3) Comment by Saiful: Make a method BELOW that adds any Houses on the Map when calling in the constructor class
@@ -164,7 +131,15 @@ public class Level0 extends World {
      *  THIS IS YOUR FINAL TASK. WONDERFUL JOB FOR COMPLETING THESE 3 TASKS. :)
      */
     
-
+    private void addHouse(String fileName, int houseSize, int x) {
+        House house = new House(fileName, houseSize);
+        int houseHeight = house.getImage().getHeight() + 30;
+        int grassHeight = new Grass().getImage().getHeight();
+        int grassTopY = groundY - (grassHeight / 2);
+        int houseY = grassTopY - (houseHeight / 3);
+        addObject(house, x, houseY);
+    }
+    
     public void scrollWorld(int dx) {
         for (Object obj : getObjects(null)) {
             if (!(obj instanceof Player) && !(obj instanceof UI)) {
