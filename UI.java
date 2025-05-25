@@ -72,7 +72,6 @@ public class UI extends Actor {
     public void incrementGoldCounter() {
         goldCoinsCounter++;
         goldCounter.setValue(goldCoinsCounter);
-        System.out.println("Gold updated to: " + goldCoinsCounter);
     }
     
 }
