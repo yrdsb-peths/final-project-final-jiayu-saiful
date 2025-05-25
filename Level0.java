@@ -45,7 +45,7 @@ public class Level0 extends World {
         
         
         // NPC
-        addNPC("00.png", 100, 900);
+        addNPC("00.png", 100, 950, "left");
         
         // Coins
         addCoinsOnGround(200, 5, 80);
@@ -142,8 +142,8 @@ public class Level0 extends World {
      *  AMAZING WORK SO FAR, KEEP IT UP. ;)
      */
     
-    private void addNPC(String fileName, int npcSize, int x) {
-        NPC npc = new NPC("images/npc/" + fileName, npcSize);
+    private void addNPC(String fileName, int npcSize, int x, String facing) {
+        NPC npc = new NPC("images/npc/" + fileName, npcSize, facing);
         int npcHeight = npc.getImage().getHeight();
         int grassHeight = new Grass().getImage().getHeight();
         int grassTopY = groundY - (grassHeight / 2);

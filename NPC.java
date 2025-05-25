@@ -1,25 +1,34 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class NPC here.
+ * NPC class - Animated non-player character with left/right facing.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Jiayu Chen
+ * @version May 24, 2025
  */
 public class NPC extends Base
 {
     private GreenfootImage[] npcAnimation = new GreenfootImage[4];
     private int animationFrame = 0;
     private int animationTimer = 0;
-    private final int ANIMATION_SPEED = 6;
+    private final int ANIMATION_SPEED = 10;
     private final int TARGET_WIDTH = 80;
-    
-    public NPC(String directory, int npcSize) {
+    private String facing;
+
+    public NPC(String directory, int npcSize, String facing) {
+        this.facing = facing;
+        
         for (int i = 0; i < 4; i++) {
             GreenfootImage img = new GreenfootImage("images/npc/0" + i + ".png");
             scaleImage(img, TARGET_WIDTH);
+            
+            if (facing.equals("left")) {
+                img.mirrorHorizontally();
+            }
+
             npcAnimation[i] = img;
         }
+        
         setImage(npcAnimation[0]);
     }
     
