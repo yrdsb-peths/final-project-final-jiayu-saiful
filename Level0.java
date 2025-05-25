@@ -120,17 +120,6 @@ public class Level0 extends World {
         addObject(npc, x, npcY);
     }
     
-    /**
-     *  3) Comment by Saiful: Make a method BELOW that adds any Houses on the Map when calling in the constructor class
-     *  REMEMBER to add an actor class for this too under the Base class.
-     *  This time the houses do not need animations so refer to class Trees.java for help.
-     *  
-     *  FOLLOW THE METHOD YOU MADE IN TASK 2.
-     *  --> NO HINTS GIVEN THIS TIME. <--
-     *  
-     *  THIS IS YOUR FINAL TASK. WONDERFUL JOB FOR COMPLETING THESE 3 TASKS. :)
-     */
-    
     private void addHouse(String fileName, int houseSize, int x) {
         House house = new House(fileName, houseSize);
         int houseHeight = house.getImage().getHeight() + 30;
