@@ -17,6 +17,7 @@ public class UI extends Actor {
 
     private final int fixedUILabelSize = 23;
     private final int fixedUILabelHeight = 18;
+    private final int goldImgSize = 30;
 
     private int goldCoinsCounter = 0;
     private int playerLives = 5;
@@ -31,7 +32,7 @@ public class UI extends Actor {
     
         // Gold image icon
         GreenfootImage goldImg = new GreenfootImage("images/coin_an/00.png");
-        goldImg.scale(20, 20);
+        goldImg.scale(goldImgSize, goldImgSize);
         goldIcon = new UIimage(goldImg);
     
         // Add UI elements to world
