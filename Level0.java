@@ -135,8 +135,8 @@ public class Level0 extends World {
     }
     
     private void addSpeech(String directory, int speechSize, String text, int textSize) {
-        Speech speech = new Speech(directory, speechSize, text, textSize);
-        addObject(speech, 100, 100);
+        // Speech speech = new Speech(directory, speechSize, text, textSize);
+        // addObject(speech, 100, 100);
     }
     
     public void scrollWorld(int dx) {
