@@ -19,9 +19,13 @@ public class Level0 extends World {
 
     private final int groundY = getHeight() - 10;
     private final int coinOffset = 20;
+    public final int npcX = 950;
+    public int npcYPos;
+    public final int npcY = npcYPos;
     
     // UI
     private int uibgSize = 70;
+    
 
     private Player player;
     public UI ui;
@@ -43,7 +47,10 @@ public class Level0 extends World {
         addTrees("03.png", 250, getWidth() / 6);
     
         // NPC
-        addNPC("00.png", 100, 950, "left");
+        addNPC("00.png", 100, npcX, "left");
+        
+        // Speech
+        addSpeech("00.png", 150, "Greeting Sir Knight.", 15);
     
         // Coins
         addCoinsOnGround(200, 5, 80);
@@ -114,8 +121,8 @@ public class Level0 extends World {
         int npcHeight = npc.getImage().getHeight();
         int grassHeight = new Grass().getImage().getHeight();
         int grassTopY = groundY - (grassHeight / 2);
-        int npcY = grassTopY - (npcHeight / 2);
-        addObject(npc, x, npcY);
+        int npcYPos = grassTopY - (npcHeight / 2);
+        addObject(npc, x, npcYPos);
     }
     
     private void addHouse(String fileName, int houseSize, int x) {
@@ -125,6 +132,11 @@ public class Level0 extends World {
         int grassTopY = groundY - (grassHeight / 2);
         int houseY = grassTopY - (houseHeight / 3);
         addObject(house, x, houseY);
+    }
+    
+    private void addSpeech(String directory, int speechSize, String text, int textSize) {
+        Speech speech = new Speech(directory, speechSize, text, textSize);
+        addObject(speech, 100, 100);
     }
     
     public void scrollWorld(int dx) {
