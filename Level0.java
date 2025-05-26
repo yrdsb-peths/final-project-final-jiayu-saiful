@@ -51,7 +51,6 @@ public class Level0 extends World {
         // House
         addHouse("house.png", 350, 700);
         addHouse("house.png", 350, 1100);
-        addHouse("house.png", 350, 1500);
     
         // Player
         addPlayer();
