@@ -76,29 +76,38 @@ public class Player extends Actor {
     }
 
     private void handleInput() {
-        if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
-            ((Level0) getWorld()).scrollWorld(-MOVE_SPEED);
+        World world = getWorld();
+    
+        if ((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && world instanceof Level0) {
+            ((Level0) world).scrollWorld(-MOVE_SPEED);
+            facingRight = true;
+        } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+            setLocation(getX() + MOVE_SPEED, getY());
             facingRight = true;
         }
-
-        if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
-            ((Level0) getWorld()).scrollWorld(MOVE_SPEED);
+    
+        if ((Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) && world instanceof Level0) {
+            ((Level0) world).scrollWorld(MOVE_SPEED);
+            facingRight = false;
+        } else if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+            // Move player left directly in Level1 (if needed)
+            setLocation(getX() - MOVE_SPEED, getY());
             facingRight = false;
         }
-
+    
         if (Greenfoot.isKeyDown("v") && !isAttacking) {
             isAttacking = true;
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
-
+    
         if (Greenfoot.isKeyDown("c")) {
             isDefending = true;
             animationFrame = 0;
         } else {
             isDefending = false;
         }
-
+    
         if (onGround && (Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space"))) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
@@ -171,7 +180,11 @@ public class Player extends Actor {
     }
 
     private void checkGroundCollision() {
+        // Check both Grass and Stone beneath player
         Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
+        if (ground == null) {
+            ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Stone.class);
+        }
 
         if (ground != null && vSpeed >= 0) {
             int groundY = ground.getY() - ground.getImage().getHeight() / 2;

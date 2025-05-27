@@ -18,59 +18,49 @@ public class Level0 extends World {
     private static final int NUM_BACKGROUND_LAYERS = 4;
 
     private final int groundY = getHeight() - 10;
-    private final int coinOffset = 20;
+
     public final int npcX = 950;
-    public int npcYPos;
-    public final int npcY = npcYPos;
-    
-    // UI
-    private int uibgSize = 70;
-    
+    public int npcY;
 
     private Player player;
     public UI ui;
 
     public Level0(int width, int height) {
         super(width, height, 1, BOUNDED);
-    
-        // Set dimensions for other classes to grab
+
         Level0.screenWidth = width;
         Level0.screenHeight = height;
-    
+
         // Background
         setupBackground(width, height);
-    
+
         // Ground Tiles
         addGroundTiles();
-    
+
         // Trees
         addTrees("03.png", 250, getWidth() / 6);
-    
-        // NPC
-        addNPC("00.png", 100, npcX, "left");
-        
-        // Speech
-        addSpeech("00.png", 150, "Greeting Sir Knight.", 15);
-    
+
         // Coins
         addCoinsOnGround(200, 5, 80);
-    
+
         // House
         addHouse("house.png", 350, 700);
-        addHouse("house.png", 350, 1100);
-    
+        
+        // NPC and Speech
+        addNPC("00.png", 100, npcX, "left");
+        addSpeech();
+
         // Player
         addPlayer();
-    
+
         // UI Background
-        UIBackground UIbg = new UIBackground(this, screenWidth, uibgSize);
-        addObject(UIbg, screenWidth / 2, uibgSize - 35);
-    
-        // UI Labels - instantiate UI but DO NOT add UI as an Actor
+        UIBackground UIbg = new UIBackground(this, screenWidth, 70);
+        addObject(UIbg, screenWidth / 2, 35);
+
+        // UI (hearts, gold, labels, etc.)
         ui = new UI(this);
     }
 
-    
     private void setupBackground(int width, int height) {
         GreenfootImage background = new GreenfootImage(width, height);
         for (int i = 0; i < NUM_BACKGROUND_LAYERS; i++) {
@@ -85,18 +75,19 @@ public class Level0 extends World {
         player = new Player();
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
-    
+
     private void addGroundTiles() {
         Grass sampleGrass = new Grass();
         int tileWidth = sampleGrass.getTargetWidth() - IMAGE_OVERLAP;
         int worldWidth = getWidth();
         int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2;
+
         for (int i = 0; i < tileCount; i++) {
             int x = STARTING_X + i * tileWidth;
             addObject(new Grass(), x, groundY);
         }
     }
-    
+
     private void addTrees(String fileName, int treeSize, int x) {
         Trees tree = new Trees("images/trees/" + fileName, treeSize);
         int treeHeight = tree.getImage().getHeight();
@@ -105,7 +96,7 @@ public class Level0 extends World {
         int treeY = grassTopY - (treeHeight / 2);
         addObject(tree, x, treeY);
     }
-    
+
     private void addCoinsOnGround(int startX, int count, int spacing) {
         int grassHeight = new Grass().getImage().getHeight();
         int coinY = groundY - (grassHeight / 2) - (new Coin().getImage().getHeight() / 2);
@@ -115,16 +106,16 @@ public class Level0 extends World {
             addObject(new Coin(), coinX, coinY - 4);
         }
     }
-    
+
     private void addNPC(String fileName, int npcSize, int x, String facing) {
         NPC npc = new NPC("images/npc/" + fileName, npcSize, facing);
         int npcHeight = npc.getImage().getHeight();
         int grassHeight = new Grass().getImage().getHeight();
         int grassTopY = groundY - (grassHeight / 2);
-        int npcYPos = grassTopY - (npcHeight / 2);
-        addObject(npc, x, npcYPos);
+        npcY = grassTopY - (npcHeight / 2);
+        addObject(npc, x, npcY);
     }
-    
+
     private void addHouse(String fileName, int houseSize, int x) {
         House house = new House(fileName, houseSize);
         int houseHeight = house.getImage().getHeight() + 30;
@@ -133,12 +124,12 @@ public class Level0 extends World {
         int houseY = grassTopY - (houseHeight / 3);
         addObject(house, x, houseY);
     }
-    
-    private void addSpeech(String directory, int speechSize, String text, int textSize) {
-        // Speech speech = new Speech(directory, speechSize, text, textSize);
-        // addObject(speech, 100, 100);
+
+    private void addSpeech() {
+        Speech speech = new Speech();
+        addObject(speech, npcX + 80, npcY - 80);
     }
-    
+
     public void scrollWorld(int dx) {
         for (Object obj : getObjects(null)) {
             if (obj instanceof Base) {

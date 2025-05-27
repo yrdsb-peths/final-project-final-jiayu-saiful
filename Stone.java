@@ -6,11 +6,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Stone extends Base
-{
+public class Stone extends Base {
     private GreenfootImage baseImage;
-    private static final int targetWidth = 30;
-    
+    private static final int targetWidth = 200;
+
     public Stone() {
         baseImage = new GreenfootImage("images/stoneTiles.png");
 
@@ -19,12 +18,7 @@ public class Stone extends Base
 
         setImage(new GreenfootImage(baseImage));
     }
-    
-    public void act()
-    {
-        // Add your action code here.
-    }
-    
+
     public int getTargetWidth() {
         return targetWidth;
     }
