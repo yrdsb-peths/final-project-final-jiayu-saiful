@@ -21,7 +21,7 @@ public class Level1 extends World {
         addStoneTiles();
         addPlayer();
         
-        setBackground("images/background/level1bg");
+        setBackground("images/level1bg.png");
     }
     
     private void addStoneTiles() {
