@@ -20,8 +20,10 @@ public class Level1 extends World {
 
         addStoneTiles();
         addPlayer();
+        
+        setBackground("images/background/level1bg");
     }
-
+    
     private void addStoneTiles() {
         Stone sampleStone = new Stone();
         int tileWidth = sampleStone.getTargetWidth() - IMAGE_OVERLAP;
