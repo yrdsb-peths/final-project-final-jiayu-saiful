@@ -39,12 +39,12 @@ public class Level0 extends World {
 
         // Trees
         addTrees("03.png", 250, getWidth() / 6);
-
-        // Coins
-        addCoinsOnGround(200, 5, 80);
-
+        
         // House
         addHouse("house.png", 350, 700);
+        
+        // Coins
+        addCoinsOnGround(485, 7, 70);
         
         // NPC and Speech
         addNPC("00.png", 100, npcX, "left");

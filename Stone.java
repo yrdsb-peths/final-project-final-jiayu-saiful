@@ -11,7 +11,7 @@ public class Stone extends Base {
     private static final int targetWidth = 200;
 
     public Stone() {
-        baseImage = new GreenfootImage("images/stoneTiles.png");
+        baseImage = new GreenfootImage("images/stoneTiles2.png");
 
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
