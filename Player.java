@@ -3,8 +3,7 @@ import java.util.Random;
 
 /**
  * Player character that scrolls the world and plays animations
- * @author Jiayu
- * @Modified By Saiful Shaik
+ * @author By Saiful Shaik
  * @version May 22, 2025
  */
 
@@ -25,9 +24,10 @@ public class Player extends Actor {
     private int vSpeed = 0;
     private boolean onGround = false;
     private boolean facingRight = true;
-    private boolean isAttacking = false;
+    public boolean isAttacking = false;
+    private boolean attackHitRegistered = false;  // NEW: Track if attack hit this cycle
     private boolean isDefending = false;
-    public boolean isHit = false;  // Should be set externally when player gets hit
+    public boolean isHit = false;
 
     private int animationFrame = 0;
     private int jumpAnimationFrame = 0;
@@ -77,7 +77,7 @@ public class Player extends Actor {
 
     private void handleInput() {
         World world = getWorld();
-    
+
         if ((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && world instanceof Level0) {
             ((Level0) world).scrollWorld(-MOVE_SPEED);
             facingRight = true;
@@ -85,29 +85,29 @@ public class Player extends Actor {
             setLocation(getX() + MOVE_SPEED, getY());
             facingRight = true;
         }
-    
+
         if ((Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) && world instanceof Level0) {
             ((Level0) world).scrollWorld(MOVE_SPEED);
             facingRight = false;
         } else if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
-            // Move player left directly in Level1 (if needed)
             setLocation(getX() - MOVE_SPEED, getY());
             facingRight = false;
         }
-    
+
         if (Greenfoot.isKeyDown("v") && !isAttacking) {
             isAttacking = true;
+            attackHitRegistered = false;  // RESET hit flag on new attack
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
-    
+
         if (Greenfoot.isKeyDown("c")) {
             isDefending = true;
             animationFrame = 0;
         } else {
             isDefending = false;
         }
-    
+
         if (onGround && (Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space"))) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
@@ -123,9 +123,20 @@ public class Player extends Actor {
                 animationTimer = 0;
                 GreenfootImage[] attackSet = facingRight ? attackImagesRight[attackType] : attackImagesLeft[attackType];
                 setImage(attackSet[attackFrame]);
+
+                // NEW: On the "hit" frame, deal damage once
+                if (attackFrame == 2 && !attackHitRegistered) {  // frame 2 is example hit frame
+                    Enemy enemy = (Enemy) getOneIntersectingObject(Enemy.class);
+                    if (enemy != null) {
+                        enemy.takeDamage();
+                        attackHitRegistered = true;
+                    }
+                }
+
                 attackFrame++;
                 if (attackFrame >= attackSet.length) {
                     isAttacking = false;
+                    attackHitRegistered = false;
                 }
             }
             return;
@@ -180,7 +191,6 @@ public class Player extends Actor {
     }
 
     private void checkGroundCollision() {
-        // Check both Grass and Stone beneath player
         Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
         if (ground == null) {
             ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Stone.class);
@@ -223,5 +233,9 @@ public class Player extends Actor {
     private void scaleImage(GreenfootImage img, int targetWidth) {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
+    }
+
+    public boolean isAttacking() {
+        return isAttacking && attackFrame < attackFrameCounts[attackType];
     }
 }
