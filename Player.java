@@ -4,9 +4,8 @@ import java.util.Random;
 /**
  * Player character that scrolls the world and plays animations
  * @author By Saiful Shaik
- * @version May 22, 2025
+ * @version May 28, 2025
  */
-
 public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -25,7 +24,7 @@ public class Player extends Actor {
     private boolean onGround = false;
     private boolean facingRight = true;
     public boolean isAttacking = false;
-    private boolean attackHitRegistered = false;  // NEW: Track if attack hit this cycle
+    private boolean attackHitRegistered = false;
     private boolean isDefending = false;
     public boolean isHit = false;
 
@@ -96,7 +95,7 @@ public class Player extends Actor {
 
         if (Greenfoot.isKeyDown("v") && !isAttacking) {
             isAttacking = true;
-            attackHitRegistered = false;  // RESET hit flag on new attack
+            attackHitRegistered = false;
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
@@ -124,8 +123,7 @@ public class Player extends Actor {
                 GreenfootImage[] attackSet = facingRight ? attackImagesRight[attackType] : attackImagesLeft[attackType];
                 setImage(attackSet[attackFrame]);
 
-                // NEW: On the "hit" frame, deal damage once
-                if (attackFrame == 2 && !attackHitRegistered) {  // frame 2 is example hit frame
+                if (attackFrame == 2 && !attackHitRegistered) {
                     Enemy enemy = (Enemy) getOneIntersectingObject(Enemy.class);
                     if (enemy != null) {
                         enemy.takeDamage();
@@ -233,6 +231,10 @@ public class Player extends Actor {
     private void scaleImage(GreenfootImage img, int targetWidth) {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
+    }
+    
+    public int getAttackId() {
+        return attackType;
     }
 
     public boolean isAttacking() {

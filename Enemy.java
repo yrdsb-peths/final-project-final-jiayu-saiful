@@ -1,13 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.Random;
+import greenfoot.Color;
 
 /**
  * Write a description of class Enemy here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Saiful Shaik 
+ * @version May, 28, 2025
  */
-
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -41,9 +41,10 @@ public class Enemy extends Base {
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
 
-    // Damage cooldown
-    private int damageCooldown = 0;
-    private final int DAMAGE_COOLDOWN_TIME = 20;
+    // Flash effect
+    private boolean isFlashing = false;
+    private int flashTimer = 0;
+    private final int FLASH_DURATION = 5;
 
     public Enemy() {
         int targetWidth = 150;
@@ -71,15 +72,17 @@ public class Enemy extends Base {
             return;
         }
 
-        if (damageCooldown > 0) {
-            damageCooldown--;
+        if (isFlashing) {
+            flashTimer--;
+            if (flashTimer <= 0) {
+                isFlashing = false;
+            }
         }
 
         moveRandomly();
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-        checkIfHitByPlayer();
     }
 
     private void moveRandomly() {
@@ -115,12 +118,23 @@ public class Enemy extends Base {
             animationFrame++;
         }
 
+        GreenfootImage currentImage;
         if (direction != 0) {
             animationFrame %= movingImagesRight.length;
-            setImage(facingRight ? movingImagesRight[animationFrame] : movingImagesLeft[animationFrame]);
+            currentImage = facingRight ? movingImagesRight[animationFrame] : movingImagesLeft[animationFrame];
         } else {
             animationFrame %= idleImagesRight.length;
-            setImage(facingRight ? idleImagesRight[animationFrame] : idleImagesLeft[animationFrame]);
+            currentImage = facingRight ? idleImagesRight[animationFrame] : idleImagesLeft[animationFrame];
+        }
+
+        if (isFlashing) {
+            GreenfootImage flashImage = new GreenfootImage(currentImage);
+            flashImage.setColor(new Color(255, 100, 100));
+            flashImage.fill();
+            flashImage.setTransparency(128);
+            setImage(flashImage);
+                } else {
+            setImage(currentImage);
         }
     }
 
@@ -176,7 +190,10 @@ public class Enemy extends Base {
     public void takeDamage() {
         if (isDead) return;
 
-        health--;
+        health --;
+        isFlashing = true;
+        flashTimer = FLASH_DURATION;
+
         System.out.println("Enemy hit! Health: " + health);
 
         if (health <= 0) {
@@ -196,19 +213,6 @@ public class Enemy extends Base {
                 deathFrame++;
             } else {
                 getWorld().removeObject(this);
-            }
-        }
-    }
-
-    private void checkIfHitByPlayer() {
-        World world = getWorld();
-        if (world instanceof Level1) {
-            Player player = ((Level1) world).getPlayer();
-            if (player != null && player.isAttacking() && damageCooldown == 0) {
-                if (this.intersects(player)) {
-                    takeDamage();
-                    damageCooldown = DAMAGE_COOLDOWN_TIME;
-                }
             }
         }
     }
