@@ -34,7 +34,7 @@ public class Enemy extends Base {
     private int MOVE_CHANGE_INTERVAL;
 
     private Random random = new Random();
-    private int health = 3;
+    private int health = 5;
 
     private boolean isDead = false;
     private int deathFrame = 0;
@@ -78,7 +78,6 @@ public class Enemy extends Base {
                 isFlashing = false;
             }
         }
-
         moveRandomly();
         applyGravity();
         checkGroundCollision();
@@ -133,7 +132,7 @@ public class Enemy extends Base {
             flashImage.fill();
             flashImage.setTransparency(128);
             setImage(flashImage);
-                } else {
+        } else {
             setImage(currentImage);
         }
     }
@@ -204,7 +203,7 @@ public class Enemy extends Base {
     }
 
     private void playDeathAnimation() {
-        deathTimer++;
+        deathTimer+=2;
         if (deathTimer >= DEATH_ANIMATION_SPEED) {
             deathTimer = 0;
             if (deathFrame < deathRight.length) {
