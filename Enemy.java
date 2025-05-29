@@ -9,17 +9,6 @@ import greenfoot.Color;
  * @version May, 28, 2025 (Updated May 29, 2025)
  */
 
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.Random;
-import greenfoot.Color;
-
-/**
- * Write a description of class Enemy here.
- * 
- * @author Saiful Shaik 
- * @version May, 28, 2025 (Updated May 29, 2025)
- */
-
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;

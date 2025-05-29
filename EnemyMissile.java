@@ -3,10 +3,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class EnemyMissile here.
  * 
- * @author (your name) 
+ * @author Saiful Shaik
  * @version (a version number or a date)
  */
-public class EnemyMissile extends Actor {
+public class EnemyMissile extends Base {
     private int speed;
 
     public EnemyMissile(boolean goingRight) {
