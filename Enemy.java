@@ -6,8 +6,9 @@ import greenfoot.Color;
  * Write a description of class Enemy here.
  * 
  * @author Saiful Shaik 
- * @version May, 28, 2025
+ * @version May, 28, 2025 (Updated May 29, 2025)
  */
+
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -17,52 +18,58 @@ public class Enemy extends Base {
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     private final int MOVE_SPEED = 2;
-    private final int PLAYER_BOTTOM_OFFSET = 34;
+    private final int PLAYER_BOTTOM_OFFSET = 40;
+
+    private final int DETECTION_RANGE = 200;
+    private final int ATTACK_RANGE = 200;
 
     private int vSpeed = 0;
     private boolean onGround = false;
     private boolean facingRight = true;
     private boolean isAttacking = false;
-    public boolean isHit = false;
+    private boolean missileFired = false;
+    private boolean isFlashing = false;
+    private boolean isDead = false;
+
+    private int direction = 1;
+    private int moveTimer = 0;
+    private int MOVE_CHANGE_INTERVAL;
+    private int health = 5;
+    private int flashTimer = 0;
+    private final int FLASH_DURATION = 5;
 
     private int animationFrame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
 
+<<<<<<< Updated upstream
     private int direction = 1;
     private int moveTimer = 0;
     private int MOVE_CHANGE_INTERVAL;
 
     private Random random = new Random();
-    private int health = 5;
+    private int health = 3;
 
     private boolean isDead = false;
+=======
+>>>>>>> Stashed changes
     private int deathFrame = 0;
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
-
-    // Flash effect
-    private boolean isFlashing = false;
-    private int flashTimer = 0;
-    private final int FLASH_DURATION = 5;
 
     public Enemy() {
         int targetWidth = 150;
 
         movingImagesRight = loadAnimation("idle", 8, targetWidth);
         movingImagesLeft = flipImagesHorizontally(movingImagesRight);
-
         idleImagesRight = loadAnimation("idle", 8, targetWidth);
         idleImagesLeft = flipImagesHorizontally(idleImagesRight);
-
         attackImagesRight = loadAnimation("attack", 7, targetWidth);
         attackImagesLeft = flipImagesHorizontally(attackImagesRight);
-
         deathRight = loadAnimation("death", 13, targetWidth);
         deathLeft = flipImagesHorizontally(deathRight);
 
         setImage(idleImagesRight[0]);
-
         MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
     }
 
@@ -74,14 +81,32 @@ public class Enemy extends Base {
 
         if (isFlashing) {
             flashTimer--;
-            if (flashTimer <= 0) {
-                isFlashing = false;
-            }
+            if (flashTimer <= 0) isFlashing = false;
         }
+
+<<<<<<< Updated upstream
         moveRandomly();
+=======
+        handleBehavior();
+>>>>>>> Stashed changes
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
+    }
+
+    private void handleBehavior() {
+        Player player = getPlayer();
+        if (player != null) {
+            int dx = player.getX() - getX();
+            int dy = player.getY() - getY();
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= DETECTION_RANGE) {
+                followPlayer(player);
+                return;
+            }
+        }
+        moveRandomly();
     }
 
     private void moveRandomly() {
@@ -94,19 +119,53 @@ public class Enemy extends Base {
 
         setLocation(getX() + direction * MOVE_SPEED, getY());
         facingRight = direction > 0;
+        isAttacking = false;  // Stop attacking if moving randomly
+    }
+
+    private void followPlayer(Player player) {
+        int dx = player.getX() - getX();
+        int dy = player.getY() - getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        direction = Integer.signum(dx);
+        facingRight = direction > 0;
+
+        if (distance > ATTACK_RANGE) {
+            // Move closer to player
+            setLocation(getX() + direction * MOVE_SPEED, getY());
+            isAttacking = false;  // not attacking while moving
+        } else {
+            // Within attack range, start attacking
+            if (!isAttacking) {
+                isAttacking = true;
+                missileFired = false;
+                animationFrame = 0;
+                animationTimer = 0;
+            }
+            // Do not move while attacking
+        }
     }
 
     private void updateAnimationState() {
         animationTimer++;
 
         if (isAttacking) {
+            GreenfootImage[] attackSet = facingRight ? attackImagesRight : attackImagesLeft;
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
-                GreenfootImage[] attackSet = facingRight ? attackImagesRight : attackImagesLeft;
-                setImage(attackSet[animationFrame]);
-                animationFrame++;
-                if (animationFrame >= attackSet.length) {
+                if (animationFrame < attackSet.length) {
+                    setImage(attackSet[animationFrame]);
+
+                    // Fire missile on a specific frame
+                    if (animationFrame == 2 && !missileFired) {
+                        launchMissile();
+                        missileFired = true;
+                    }
+
+                    animationFrame++;
+                } else {
                     isAttacking = false;
+                    animationFrame = 0;
                 }
             }
             return;
@@ -118,7 +177,7 @@ public class Enemy extends Base {
         }
 
         GreenfootImage currentImage;
-        if (direction != 0) {
+        if (!isAttacking && direction != 0) {
             animationFrame %= movingImagesRight.length;
             currentImage = facingRight ? movingImagesRight[animationFrame] : movingImagesLeft[animationFrame];
         } else {
@@ -132,9 +191,15 @@ public class Enemy extends Base {
             flashImage.fill();
             flashImage.setTransparency(128);
             setImage(flashImage);
-        } else {
+                } else {
             setImage(currentImage);
         }
+    }
+
+    private void launchMissile() {
+        int missileOffsetX = facingRight ? 40 : -40;
+        int missileOffsetY = 5;
+        getWorld().addObject(new EnemyMissile(facingRight), getX() + missileOffsetX, getY() + missileOffsetY);
     }
 
     private void applyGravity() {
@@ -158,6 +223,33 @@ public class Enemy extends Base {
             onGround = true;
         } else {
             onGround = false;
+        }
+    }
+
+    private void playDeathAnimation() {
+        deathTimer += 2;
+        if (deathTimer >= DEATH_ANIMATION_SPEED) {
+            deathTimer = 0;
+            if (deathFrame < deathRight.length) {
+                GreenfootImage[] deathSet = facingRight ? deathRight : deathLeft;
+                setImage(deathSet[deathFrame]);
+                deathFrame++;
+            } else {
+                getWorld().removeObject(this);
+            }
+        }
+    }
+
+    public void takeDamage() {
+        if (isDead) return;
+
+        health--;
+        isFlashing = true;
+        flashTimer = FLASH_DURATION;
+        if (health <= 0) {
+            isDead = true;
+            deathFrame = 0;
+            deathTimer = 0;
         }
     }
 
@@ -186,6 +278,7 @@ public class Enemy extends Base {
         img.scale(targetWidth, targetHeight);
     }
 
+<<<<<<< Updated upstream
     public void takeDamage() {
         if (isDead) return;
 
@@ -203,7 +296,7 @@ public class Enemy extends Base {
     }
 
     private void playDeathAnimation() {
-        deathTimer+=2;
+        deathTimer++;
         if (deathTimer >= DEATH_ANIMATION_SPEED) {
             deathTimer = 0;
             if (deathFrame < deathRight.length) {
@@ -213,6 +306,13 @@ public class Enemy extends Base {
             } else {
                 getWorld().removeObject(this);
             }
+=======
+    private Player getPlayer() {
+        World world = getWorld();
+        if (world instanceof Level1) {
+            return ((Level1) world).getPlayer();
+>>>>>>> Stashed changes
         }
+        return null;
     }
 }
