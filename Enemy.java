@@ -9,6 +9,17 @@ import greenfoot.Color;
  * @version May, 28, 2025 (Updated May 29, 2025)
  */
 
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.Random;
+import greenfoot.Color;
+
+/**
+ * Write a description of class Enemy here.
+ * 
+ * @author Saiful Shaik 
+ * @version May, 28, 2025 (Updated May 29, 2025)
+ */
+
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -42,17 +53,6 @@ public class Enemy extends Base {
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
 
-<<<<<<< Updated upstream
-    private int direction = 1;
-    private int moveTimer = 0;
-    private int MOVE_CHANGE_INTERVAL;
-
-    private Random random = new Random();
-    private int health = 3;
-
-    private boolean isDead = false;
-=======
->>>>>>> Stashed changes
     private int deathFrame = 0;
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
@@ -84,11 +84,7 @@ public class Enemy extends Base {
             if (flashTimer <= 0) isFlashing = false;
         }
 
-<<<<<<< Updated upstream
-        moveRandomly();
-=======
         handleBehavior();
->>>>>>> Stashed changes
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
@@ -191,7 +187,7 @@ public class Enemy extends Base {
             flashImage.fill();
             flashImage.setTransparency(128);
             setImage(flashImage);
-                } else {
+        } else {
             setImage(currentImage);
         }
     }
@@ -278,40 +274,10 @@ public class Enemy extends Base {
         img.scale(targetWidth, targetHeight);
     }
 
-<<<<<<< Updated upstream
-    public void takeDamage() {
-        if (isDead) return;
-
-        health --;
-        isFlashing = true;
-        flashTimer = FLASH_DURATION;
-
-        System.out.println("Enemy hit! Health: " + health);
-
-        if (health <= 0) {
-            isDead = true;
-            deathFrame = 0;
-            deathTimer = 0;
-        }
-    }
-
-    private void playDeathAnimation() {
-        deathTimer++;
-        if (deathTimer >= DEATH_ANIMATION_SPEED) {
-            deathTimer = 0;
-            if (deathFrame < deathRight.length) {
-                GreenfootImage[] deathSet = facingRight ? deathRight : deathLeft;
-                setImage(deathSet[deathFrame]);
-                deathFrame++;
-            } else {
-                getWorld().removeObject(this);
-            }
-=======
     private Player getPlayer() {
         World world = getWorld();
         if (world instanceof Level1) {
             return ((Level1) world).getPlayer();
->>>>>>> Stashed changes
         }
         return null;
     }
