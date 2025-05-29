@@ -7,6 +7,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version 05/26/25
  */
 public class Level1 extends World {
+    public static int screenWidth = 0;
+    public static int screenHeight = 0;
     private static final boolean BOUNDED = true;
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
@@ -16,15 +18,24 @@ public class Level1 extends World {
     private final int PLAYER_START_Y = 300;
 
     private Player player;
+    public UI ui;
 
     public Level1(int width, int height) {
         super(width, height, 1, BOUNDED);
+        
+        Level1.screenWidth = width;
+        Level1.screenHeight = height;
         groundY = getHeight() - 10;
 
         setBackground("images/level1bg.png");
         addStoneTiles();
         addEnemy();
         addPlayer();
+        
+        UIBackground UIbg = new UIBackground(this, screenWidth, 70);
+        addObject(UIbg, screenWidth / 2, 35);
+
+        ui = new UI(this);
     }
 
     private void addStoneTiles() {
