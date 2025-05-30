@@ -240,4 +240,11 @@ public class Player extends Actor {
     public boolean isAttacking() {
         return isAttacking && attackFrame < attackFrameCounts[attackType];
     }
+    
+    public void takeDamage() {
+        isHit = true;
+        isDefending = true;
+        animationFrame = 0;
+        //Greenfoot.playSound("playerHurt.mp3");
+    }
 }

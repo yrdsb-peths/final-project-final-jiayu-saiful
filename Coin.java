@@ -28,16 +28,23 @@ public class Coin extends Base {
 
     public void act() {
         animateCoin();
-
+    
         Player player = (Player) getOneIntersectingObject(Player.class);
         if (player != null && isCloseTo(player, interDist)) {
             World world = getWorld();
+    
             if (world instanceof Level0) {
                 Level0 level = (Level0) world;
                 if (level.ui != null) {
                     level.ui.incrementGoldCounter();
                 }
+            } else if (world instanceof Level1) {
+                Level1 level = (Level1) world;
+                if (level.ui != null) {
+                    level.ui.incrementGoldCounter();
+                }
             }
+    
             world.removeObject(this);
         }
     }
