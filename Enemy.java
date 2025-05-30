@@ -20,7 +20,7 @@ public class Enemy extends Base {
     private final int MOVE_SPEED = 2;
     private final int PLAYER_BOTTOM_OFFSET = 40;
 
-    private final int DETECTION_RANGE = 200;
+    private final int DETECTION_RANGE = 300;
     private final int ATTACK_RANGE = 200;
 
     private int vSpeed = 0;
@@ -30,6 +30,7 @@ public class Enemy extends Base {
     private boolean missileFired = false;
     private boolean isFlashing = false;
     private boolean isDead = false;
+    private boolean isTrackingPlayer = false;
 
     private int direction = 1;
     private int moveTimer = 0;
@@ -45,7 +46,12 @@ public class Enemy extends Base {
     private int deathFrame = 0;
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
-
+    
+    private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
+    private EnemyState enemyState = EnemyState.IDLE;
+    
+    private EnemyMissile missile;
+    
     public Enemy() {
         int targetWidth = 150;
 
@@ -72,28 +78,52 @@ public class Enemy extends Base {
             flashTimer--;
             if (flashTimer <= 0) isFlashing = false;
         }
+        
+        // Adjust enemy state
+        if (rangeToPlayer() < ATTACK_RANGE) {
+            enemyState = EnemyState.ATTACKING;
+        } else if (rangeToPlayer() < DETECTION_RANGE) {
+            enemyState = EnemyState.MOVING;
+        } else {
+            enemyState = EnemyState.IDLE;
+        }
+        
+        // Respond depending on enemy state
+        switch (enemyState) {
+            case IDLE:
+                moveRandomly();
+            case MOVING:
+                followPlayer();
+            case ATTACKING:
+                attackPlayer();
+        }
 
-        handleBehavior();
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
+
     }
 
-    private void handleBehavior() {
+    private double rangeToPlayer() {
         Player player = getPlayer();
+        double distance = 100000;
         if (player != null) {
             int dx = player.getX() - getX();
             int dy = player.getY() - getY();
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance <= DETECTION_RANGE) {
-                followPlayer(player);
-                return;
-            }
+             distance = Math.sqrt(dx * dx + dy * dy);
         }
-        moveRandomly();
+        return distance;
     }
 
+    private void attackPlayer() {
+        if(missile == null) {
+            missile = new EnemyMissile(true);
+            getWorld().addObject(missile, getX(), getY());
+        }
+    }
+    
+    
+    
     private void moveRandomly() {
         moveTimer++;
         if (moveTimer > MOVE_CHANGE_INTERVAL) {
@@ -107,7 +137,8 @@ public class Enemy extends Base {
         isAttacking = false;  // Stop attacking if moving randomly
     }
 
-    private void followPlayer(Player player) {
+    private void followPlayer() {
+        Player player = getPlayer();
         int dx = player.getX() - getX();
         int dy = player.getY() - getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
@@ -118,18 +149,10 @@ public class Enemy extends Base {
         if (distance > ATTACK_RANGE) {
             // Move closer to player
             setLocation(getX() + direction * MOVE_SPEED, getY());
-            isAttacking = false;  // not attacking while moving
-        } else {
-            // Within attack range, start attacking
-            if (!isAttacking) {
-                isAttacking = true;
-                missileFired = false;
-                animationFrame = 0;
-                animationTimer = 0;
-            }
-            // Do not move while attacking
         }
     }
+    
+
 
     private void updateAnimationState() {
         animationTimer++;

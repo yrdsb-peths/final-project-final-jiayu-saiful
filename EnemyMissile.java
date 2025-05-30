@@ -32,7 +32,6 @@ public class EnemyMissile extends Base {
     public void act() {
         animate();
         move();
-        checkCollision();
     }
 
     private void move() {
@@ -40,7 +39,14 @@ public class EnemyMissile extends Base {
         setLocation(getX() + dx, getY());
         if (isAtEdge()) {
             getWorld().removeObject(this);
+        } else {
+            Player player = (Player) getOneIntersectingObject(Player.class);
+            if (player != null) {
+                player.takeDamage();
+                getWorld().removeObject(this);
+            }
         }
+             
     }
 
     private void animate() {
@@ -52,11 +58,4 @@ public class EnemyMissile extends Base {
         }
     }
 
-    private void checkCollision() {
-        Player player = (Player) getOneIntersectingObject(Player.class);
-        if (player != null) {
-            player.takeDamage();
-            getWorld().removeObject(this);
-        }
-    }
 }
