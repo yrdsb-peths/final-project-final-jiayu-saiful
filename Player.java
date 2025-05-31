@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.Random;
+import java.awt.Rectangle;
 
 /**
  * Player character that scrolls the world and plays animations
@@ -12,6 +13,7 @@ public class Player extends Actor {
     private GreenfootImage[] jumpImagesRight, jumpImagesLeft;
     private GreenfootImage[][] attackImagesRight, attackImagesLeft;
     private GreenfootImage[] defendImagesRight, defendImagesLeft;
+    private GreenfootImage[] deathImagesRight, deathImagesLeft;
     private GreenfootImage currentImage;
 
     private final int GRAVITY = 1;
@@ -38,6 +40,9 @@ public class Player extends Actor {
     private final int[] attackFrameCounts = {5, 4, 5};
 
     private Random random = new Random();
+    
+    private boolean isDead = false;
+    private int deathFrame = 0;
 
     public Player() {
         int targetWidth = 150;
@@ -62,12 +67,20 @@ public class Player extends Actor {
 
         defendImagesRight = loadAnimation("defend", 5, targetWidth);
         defendImagesLeft = flipImagesHorizontally(defendImagesRight);
+        
+        deathImagesRight = loadAnimation("death", 11, targetWidth);
+        deathImagesLeft = flipImagesHorizontally(deathImagesRight);
 
         currentImage = idleImagesRight[0];
         setImage(currentImage);
     }
 
     public void act() {
+        if (isDead) {
+            playDeathAnimation();
+            return;
+        }
+    
         handleInput();
         applyGravity();
         checkGroundCollision();
@@ -208,7 +221,7 @@ public class Player extends Actor {
     private GreenfootImage[] loadAnimation(String folderName, int frameCount, int targetWidth) {
         GreenfootImage[] images = new GreenfootImage[frameCount];
         for (int i = 0; i < frameCount; i++) {
-            String path = "images/knight/knightAnimations/" + folderName + "/0" + i + ".png";
+            String path = "images/knight/knightAnimations/" + folderName + "/" + i + ".png";
             GreenfootImage img = new GreenfootImage(path);
             if (img == null) {
                 System.out.println("Missing image: " + path);
@@ -242,9 +255,44 @@ public class Player extends Actor {
     }
     
     public void takeDamage() {
-        isHit = true;
-        isDefending = true;
-        animationFrame = 0;
-        //Greenfoot.playSound("playerHurt.mp3");
+        if (UI.playerLives > 0 && !isDefending) {
+            ((Level1)getWorld()).ui.decreaseLife(getWorld());
+            isHit = true;
+            isDefending = true;
+            animationFrame = 0;
+    
+            if (UI.playerLives == 0) {
+                deathAnimation();
+                return;
+            }
+    
+            // Greenfoot.playSound("playerHurt.mp3");
+        }
+    }
+    
+    private void deathAnimation() {
+        isDead = true;
+        deathFrame = 0;
+        animationTimer = 0;
+    }
+    
+    private void playDeathAnimation() {
+        if (animationTimer >= ANIMATION_SPEED) {
+            animationTimer = 0;
+    
+            GreenfootImage[] deathSet = facingRight ? deathImagesRight : deathImagesLeft;
+            if (deathFrame < deathSet.length) {
+                setImage(deathSet[deathFrame]);
+                deathFrame++;
+            } else {
+                Greenfoot.stop();
+            }
+        } else {
+            animationTimer++;
+        }
+    }
+    
+    public Rectangle getHitbox() {
+        return new Rectangle(getX() - 20, getY() - 50, 60, 100); // Adjust values as needed
     }
 }

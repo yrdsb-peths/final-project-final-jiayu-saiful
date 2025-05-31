@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.awt.Rectangle;
 
 /**
  * Write a description of class EnemyMissile here.
@@ -14,6 +15,7 @@ public class EnemyMissile extends Base {
     private int frame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 4;
+    private boolean hasHit = false;
 
     public EnemyMissile(boolean facingRight) {
         this.facingRight = facingRight;
@@ -35,18 +37,25 @@ public class EnemyMissile extends Base {
     }
 
     private void move() {
+        if (hasHit) return;
+    
         int dx = facingRight ? speed : -speed;
         setLocation(getX() + dx, getY());
+    
         if (isAtEdge()) {
             getWorld().removeObject(this);
-        } else {
-            Player player = (Player) getOneIntersectingObject(Player.class);
-            if (player != null) {
+            return;
+        }
+    
+        Player player = (Player) getOneIntersectingObject(Player.class);
+        if (player != null) {
+            Rectangle missileBounds = new Rectangle(getX() - 10, getY() - 10, 20, 20);
+            if (missileBounds.intersects(player.getHitbox())) {
+                hasHit = true; // Prevent double hit
                 player.takeDamage();
                 getWorld().removeObject(this);
             }
         }
-             
     }
 
     private void animate() {

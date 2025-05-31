@@ -20,10 +20,9 @@ public class Titlescreen extends World {
     private Label playTitle = new Label("Play Game", fontSize);
     private Label optionTitle = new Label("Options", fontSize);
     private Label helpTitle = new Label("Help", fontSize);
-    private Label quitTitle = new Label("Quit", fontSize);
     
     private int buttonOffset = 65;
-    private int verticalOffset = -20;
+    private int verticalOffset = -50;
 
     public Titlescreen() {    
         super(screenWidth, screenHeight, 1);
@@ -37,8 +36,8 @@ public class Titlescreen extends World {
         styleTitleLabel(titleTop);
         styleTitleLabel(titleBottom);
 
-        addObject(titleTop, getWidth() / 2, 80);
-        addObject(titleBottom, getWidth() / 2, 80 + titleSize + titleSpacing);
+        addObject(titleTop, getWidth() / 2, 110);
+        addObject(titleBottom, getWidth() / 2, 110 + titleSize + titleSpacing);
 
         // Play Button
         addMenuButton(new PlayButton(), playTitle, 0);
@@ -49,8 +48,6 @@ public class Titlescreen extends World {
         // Help Button
         addMenuButton(new HelpButton(), helpTitle, 2);
         
-        // Quit Button
-        addMenuButton(new QuitButton(), quitTitle, 3);
     }
 
     private void styleTitleLabel(Label label) {

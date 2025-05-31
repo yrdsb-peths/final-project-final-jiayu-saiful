@@ -33,7 +33,7 @@ public class Speech extends Base {
             if (currentIndex < speechImages.length) {
                 setImage(speechImages[currentIndex]);
             } else {
-                Greenfoot.setWorld(new Level1(Level0.screenWidth, Level0.screenHeight));
+                Greenfoot.setWorld(new Level1(Level0.screenWidth, Level0.screenHeight, UI.getGoldCount()));
             }
         }
     }

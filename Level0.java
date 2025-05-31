@@ -59,6 +59,7 @@ public class Level0 extends World {
 
         // UI (hearts, gold, labels, etc.)
         ui = new UI(this);
+        ui.reset(this);
     }
 
     private void setupBackground(int width, int height) {

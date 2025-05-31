@@ -20,7 +20,7 @@ public class Level1 extends World {
     private Player player;
     public UI ui;
 
-    public Level1(int width, int height) {
+    public Level1(int width, int height, int goldCount) {
         super(width, height, 1, BOUNDED);
         
         Level1.screenWidth = width;
@@ -48,6 +48,7 @@ public class Level1 extends World {
         addObject(UIbg, screenWidth / 2, 35);
 
         ui = new UI(this);
+        ui.reset(this);
     }
     
     private void addStone() {

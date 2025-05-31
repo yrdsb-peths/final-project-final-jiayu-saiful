@@ -3,10 +3,10 @@ import java.util.Random;
 import greenfoot.Color;
 
 /**
- * Write a description of class Enemy here.
+ * Enemy character that moves, tracks the player, attacks, and dies with animations.
  * 
  * @author Saiful Shaik 
- * @version May, 28, 2025 (Updated May 29, 2025)
+ * @version Updated May 30, 2025
  */
 
 public class Enemy extends Base {
@@ -17,7 +17,7 @@ public class Enemy extends Base {
 
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
-    private final int MOVE_SPEED = 2;
+    private int moveSpeed;
     private final int PLAYER_BOTTOM_OFFSET = 40;
 
     private final int DETECTION_RANGE = 300;
@@ -30,7 +30,6 @@ public class Enemy extends Base {
     private boolean missileFired = false;
     private boolean isFlashing = false;
     private boolean isDead = false;
-    private boolean isTrackingPlayer = false;
 
     private int direction = 1;
     private int moveTimer = 0;
@@ -47,14 +46,18 @@ public class Enemy extends Base {
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
     
+    private int bulletSpawn = 2;
+    
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;
-    
-    private EnemyMissile missile;
-    
+
     public Enemy() {
         int targetWidth = 150;
-
+        
+        // Random speed for each enemy (4-8)
+        moveSpeed = 1 + Greenfoot.getRandomNumber(4);
+        System.out.println(moveSpeed);
+        
         movingImagesRight = loadAnimation("idle", 8, targetWidth);
         movingImagesLeft = flipImagesHorizontally(movingImagesRight);
         idleImagesRight = loadAnimation("idle", 8, targetWidth);
@@ -69,7 +72,7 @@ public class Enemy extends Base {
     }
 
     public void act() {
-        if (isDead) {
+        if (enemyState == EnemyState.DEAD) {
             playDeathAnimation();
             return;
         }
@@ -78,52 +81,60 @@ public class Enemy extends Base {
             flashTimer--;
             if (flashTimer <= 0) isFlashing = false;
         }
-        
-        // Adjust enemy state
-        if (rangeToPlayer() < ATTACK_RANGE) {
+
+        double distanceToPlayer = rangeToPlayer();
+        if (distanceToPlayer < ATTACK_RANGE) {
             enemyState = EnemyState.ATTACKING;
-        } else if (rangeToPlayer() < DETECTION_RANGE) {
+        } else if (distanceToPlayer < DETECTION_RANGE) {
             enemyState = EnemyState.MOVING;
         } else {
             enemyState = EnemyState.IDLE;
         }
-        
-        // Respond depending on enemy state
+
         switch (enemyState) {
             case IDLE:
                 moveRandomly();
+                break;
             case MOVING:
                 followPlayer();
+                break;
             case ATTACKING:
                 attackPlayer();
+                break;
+            default:
+                break;
         }
 
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-
     }
 
     private double rangeToPlayer() {
         Player player = getPlayer();
-        double distance = 100000;
         if (player != null) {
             int dx = player.getX() - getX();
             int dy = player.getY() - getY();
-             distance = Math.sqrt(dx * dx + dy * dy);
+            return Math.sqrt(dx * dx + dy * dy);
         }
-        return distance;
+        return Double.MAX_VALUE;
     }
 
     private void attackPlayer() {
-        if(missile == null) {
-            missile = new EnemyMissile(true);
-            getWorld().addObject(missile, getX(), getY());
+        if (!isAttacking) {
+            Player player = getPlayer();
+            if (player != null) {
+                int dx = player.getX() - getX();
+                facingRight = dx > 0;
+            }
+    
+            isAttacking = true;
+            animationFrame = 0;
+            animationTimer = 0;
+            missileFired = false;
         }
     }
-    
-    
-    
+
     private void moveRandomly() {
         moveTimer++;
         if (moveTimer > MOVE_CHANGE_INTERVAL) {
@@ -131,45 +142,59 @@ public class Enemy extends Base {
             MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
             moveTimer = 0;
         }
-
-        setLocation(getX() + direction * MOVE_SPEED, getY());
+    
+        int dx = direction * moveSpeed;
+    
+        // Look ahead to see if there's a wall in the way
+        Actor obstacle = getOneObjectAtOffset(direction * getImage().getWidth() / 2 + direction * 1, 0, Grass.class);
+        if (obstacle == null) {
+            obstacle = getOneObjectAtOffset(direction * getImage().getWidth() / 2 + direction * 1, 0, Stone.class);
+        }
+    
+        if (obstacle == null) {
+            setLocation(getX() + dx, getY());
+        } else {
+            direction *= -1; // Flip direction if wall ahead
+        }
+    
         facingRight = direction > 0;
-        isAttacking = false;  // Stop attacking if moving randomly
+        isAttacking = false;
     }
 
     private void followPlayer() {
         Player player = getPlayer();
+        if (player == null) return;
+        
         int dx = player.getX() - getX();
-        int dy = player.getY() - getY();
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
         direction = Integer.signum(dx);
         facingRight = direction > 0;
 
-        if (distance > ATTACK_RANGE) {
-            // Move closer to player
-            setLocation(getX() + direction * MOVE_SPEED, getY());
+        if (Math.abs(dx) > ATTACK_RANGE) {
+            setLocation(getX() + direction * moveSpeed, getY());
         }
     }
-    
-
 
     private void updateAnimationState() {
         animationTimer++;
 
         if (isAttacking) {
+            Player player = getPlayer();
+            if (player != null) {
+                facingRight = player.getX() > getX();
+            }
+        
             GreenfootImage[] attackSet = facingRight ? attackImagesRight : attackImagesLeft;
+        
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
                 if (animationFrame < attackSet.length) {
                     setImage(attackSet[animationFrame]);
-
-                    // Fire missile on a specific frame
-                    if (animationFrame == 2 && !missileFired) {
+        
+                    if (animationFrame == bulletSpawn && !missileFired) {
                         launchMissile();
                         missileFired = true;
                     }
-
+        
                     animationFrame++;
                 } else {
                     isAttacking = false;
@@ -185,7 +210,7 @@ public class Enemy extends Base {
         }
 
         GreenfootImage currentImage;
-        if (!isAttacking && direction != 0) {
+        if (direction != 0) {
             animationFrame %= movingImagesRight.length;
             currentImage = facingRight ? movingImagesRight[animationFrame] : movingImagesLeft[animationFrame];
         } else {
@@ -254,8 +279,10 @@ public class Enemy extends Base {
         health--;
         isFlashing = true;
         flashTimer = FLASH_DURATION;
+
         if (health <= 0) {
             isDead = true;
+            enemyState = EnemyState.DEAD;
             deathFrame = 0;
             deathTimer = 0;
         }
