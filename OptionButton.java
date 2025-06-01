@@ -36,6 +36,8 @@ public class OptionButton extends Actor {
 
         if (Greenfoot.mouseClicked(this)) {
             // Load Options Menu.
+            Titlescreen titlescreen = (Titlescreen) getWorld();
+            Greenfoot.setWorld(new OptionPage(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
         }
     }
 

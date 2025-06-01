@@ -36,6 +36,8 @@ public class HelpButton extends Actor {
 
         if (Greenfoot.mouseClicked(this)) {
             // Load Help Page
+            Titlescreen titlescreen = (Titlescreen) getWorld();
+            Greenfoot.setWorld(new HelpPage(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
         }
     }
 
