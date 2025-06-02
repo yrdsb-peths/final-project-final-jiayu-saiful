@@ -73,7 +73,7 @@ public class Level0 extends World {
     }
 
     private void addPlayer() {
-        player = new Player();
+        player = new Player(150);
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
 

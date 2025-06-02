@@ -8,9 +8,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Stone extends Base {
     private GreenfootImage baseImage;
-    private static final int targetWidth = 200;
+    private static int targetWidth;
 
-    public Stone() {
+    public Stone(int tWidth) {
+        targetWidth = tWidth;
         baseImage = new GreenfootImage("images/stoneTiles2.png");
 
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
