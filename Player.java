@@ -29,7 +29,7 @@ public class Player extends Actor {
     private boolean attackHitRegistered = false;
     private boolean isDefending = false;
     public boolean isHit = false;
-    
+
     private int animationFrame = 0;
     private int jumpAnimationFrame = 0;
     private int animationTimer = 0;
@@ -41,7 +41,7 @@ public class Player extends Actor {
 
     private Random random = new Random();
     
-    public boolean isDead = false;
+    private boolean isDead = false;
     private int deathFrame = 0;
 
     public Player() {

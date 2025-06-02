@@ -49,7 +49,6 @@ public class Level1 extends World {
 
         ui = new UI(this);
         ui.reset(this);
-
     }
     
     private void addStone() {
@@ -104,13 +103,5 @@ public class Level1 extends World {
 
     public Player getPlayer() {
         return player;
-    }
-    
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-    
-    public int getScreenHeight() {
-        return screenHeight;
     }
 }
