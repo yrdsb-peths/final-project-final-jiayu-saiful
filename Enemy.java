@@ -48,6 +48,8 @@ public class Enemy extends Base {
     
     private int bulletSpawn = 2;
     
+    public int defeated = 0;
+    
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;
 
@@ -73,6 +75,7 @@ public class Enemy extends Base {
     public void act() {
         if (enemyState == EnemyState.DEAD) {
             playDeathAnimation();
+            defeated++;
             return;
         }
 
