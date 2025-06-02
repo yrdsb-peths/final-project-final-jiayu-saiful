@@ -21,7 +21,7 @@ public class Enemy extends Base {
     private final int PLAYER_BOTTOM_OFFSET = 40;
 
     private final int DETECTION_RANGE = 100;
-    private final int ATTACK_RANGE = 150;
+    private final int ATTACK_RANGE = 100;
 
     private int vSpeed = 0;
     private boolean onGround = false;
@@ -56,7 +56,6 @@ public class Enemy extends Base {
         
         // Random speed for each enemy (4-8)
         moveSpeed = 1 + Greenfoot.getRandomNumber(4);
-        System.out.println(moveSpeed);
         
         movingImagesRight = loadAnimation("idle", 8, targetWidth);
         movingImagesLeft = flipImagesHorizontally(movingImagesRight);

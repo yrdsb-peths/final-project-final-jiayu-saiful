@@ -76,6 +76,7 @@ public class UI extends Actor {
         goldCoinsCounter++;
         goldCounter.setValue(goldCoinsCounter);
     }
+    
     public static int getGoldCount() {
         return goldCoinsCounter;
     }
@@ -103,8 +104,8 @@ public class UI extends Actor {
     
     public void reset(World world) {
         // Reset gold
-        goldCoinsCounter = 0;
-        goldCounter.setValue(goldCoinsCounter);
+        //goldCoinsCounter = 0;
+        //goldCounter.setValue(goldCoinsCounter);
     
         // Reset player lives
         playerLives = 5;

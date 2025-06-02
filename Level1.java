@@ -51,7 +51,7 @@ public class Level1 extends World {
         addObject(UIbg, screenWidth / 2, 35);
 
         ui = new UI(this);
-        ui.reset(this);
+        //ui.reset(this);
     }
     
     private void addStone() {
