@@ -56,7 +56,6 @@ public class Enemy extends Base {
         
         // Random speed for each enemy (4-8)
         moveSpeed = 1 + Greenfoot.getRandomNumber(4);
-        System.out.println(moveSpeed);
         
         movingImagesRight = loadAnimation("idle", 8, targetWidth);
         movingImagesLeft = flipImagesHorizontally(movingImagesRight);
