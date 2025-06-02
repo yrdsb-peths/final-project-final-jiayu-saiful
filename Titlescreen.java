@@ -63,7 +63,7 @@ public class Titlescreen extends World {
         label.setShadowColor(new Color(0, 0, 0, 150));
         label.setShadowOffset(3, 3);
     }
-
+    
     private void addMenuButton(Actor button, Label label, int index) {
         int y = (getHeight() / 2) - verticalOffset + (buttonOffset * index);
         addObject(button, getWidth() / 2, y);
