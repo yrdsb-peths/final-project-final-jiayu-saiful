@@ -104,4 +104,12 @@ public class Level1 extends World {
     public Player getPlayer() {
         return player;
     }
+    
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+    
+    public int getScreenHeight() {
+        return screenHeight;
+    }
 }
