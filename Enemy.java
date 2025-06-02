@@ -20,8 +20,8 @@ public class Enemy extends Base {
     private int moveSpeed;
     private final int PLAYER_BOTTOM_OFFSET = 40;
 
-    private final int DETECTION_RANGE = 300;
-    private final int ATTACK_RANGE = 200;
+    private final int DETECTION_RANGE = 100;
+    private final int ATTACK_RANGE = 150;
 
     private int vSpeed = 0;
     private boolean onGround = false;
@@ -51,8 +51,8 @@ public class Enemy extends Base {
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;
 
-    public Enemy() {
-        int targetWidth = 150;
+    public Enemy(int tWidth) {
+        int targetWidth = tWidth;
         
         // Random speed for each enemy (4-8)
         moveSpeed = 1 + Greenfoot.getRandomNumber(4);
@@ -145,16 +145,17 @@ public class Enemy extends Base {
     
         int dx = direction * moveSpeed;
     
-        // Look ahead to see if there's a wall in the way
-        Actor obstacle = getOneObjectAtOffset(direction * getImage().getWidth() / 2 + direction * 1, 0, Grass.class);
+        Actor obstacle = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Grass.class);
         if (obstacle == null) {
-            obstacle = getOneObjectAtOffset(direction * getImage().getWidth() / 2 + direction * 1, 0, Stone.class);
+            obstacle = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Stone.class);
         }
     
         if (obstacle == null) {
             setLocation(getX() + dx, getY());
         } else {
-            direction *= -1; // Flip direction if wall ahead
+            direction *= -1;
+            moveTimer = 0;
+            MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
         }
     
         facingRight = direction > 0;

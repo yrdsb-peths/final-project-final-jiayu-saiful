@@ -44,8 +44,8 @@ public class Player extends Actor {
     private boolean isDead = false;
     private int deathFrame = 0;
 
-    public Player() {
-        int targetWidth = 150;
+    public Player(int tWidth) {
+        int targetWidth = tWidth;
 
         walkImagesRight = loadAnimation("walk", 7, targetWidth);
         walkImagesLeft = flipImagesHorizontally(walkImagesRight);

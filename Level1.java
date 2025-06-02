@@ -16,6 +16,8 @@ public class Level1 extends World {
     private final int groundY;
     private final int PLAYER_START_X = 450;
     private final int PLAYER_START_Y = 300;
+    
+    private final int targetWidth = 120;
 
     private Player player;
     public UI ui;
@@ -37,6 +39,7 @@ public class Level1 extends World {
         // add coins
         addCoins(20, 13, 70, 530);
         
+        
         // add enemies
         addEnemy();
         addEnemy();
@@ -52,19 +55,24 @@ public class Level1 extends World {
     }
     
     private void addStone() {
-        Stone platform = new Stone();
-        addObject(new Stone(), 540, 330);
-        addObject(new Stone(), 350, 330);
-        addObject(new Stone(), 220, 330);
-        addObject(new Stone(), 740, 220);
-        addObject(new Stone(), 990, 120);
-        addObject(new Stone(), 0, 200);
-        addObject(new Stone(), 230, 100);
-        addObject(new Stone(), 420, 100);
+        int[][] positions = {
+            {540, 430},
+            {420, 430},
+            {350, 430},
+            {730, 380},
+            {990, 120},
+            {0, 200},
+            {230, 100},
+            {420, 100}
+        };
+    
+        for (int[] pos : positions) {
+            addObject(new Stone(targetWidth), pos[0], pos[1]);
+        }
     }
     
     private void addStoneTiles() {
-        Stone sampleStone = new Stone();
+        Stone sampleStone = new Stone(targetWidth);
         int targetWidth = sampleStone.getTargetWidth();
         int tileWidth = targetWidth > IMAGE_OVERLAP ? targetWidth - IMAGE_OVERLAP : targetWidth;
 
@@ -77,12 +85,12 @@ public class Level1 extends World {
 
         for (int i = 0; i < tileCount; i++) {
             int x = STARTING_X + i * tileWidth;
-            addObject(new Stone(), x, groundY);
+            addObject(new Stone(targetWidth), x, groundY);
         }
     }
     
     private void addCoins(int startX, int count, int spacing, int groundY) {
-        int stoneHeight = new Stone().getImage().getHeight();
+        int stoneHeight = new Stone(targetWidth).getImage().getHeight();
         int coinY = groundY - (stoneHeight / 2) - (new Coin().getImage().getHeight() / 2);
 
         for (int i = 0; i < count; i++) {
@@ -92,12 +100,12 @@ public class Level1 extends World {
     }
     
     private void addPlayer() {
-        player = new Player();
+        player = new Player(targetWidth);
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
 
     private void addEnemy() {
-        Enemy enemy = new Enemy();
+        Enemy enemy = new Enemy(targetWidth);
         addObject(enemy, PLAYER_START_X + 200, PLAYER_START_Y);
     }
 
