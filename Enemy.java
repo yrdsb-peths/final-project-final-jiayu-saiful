@@ -46,15 +46,12 @@ public class Enemy extends Base {
     private final int DEATH_ANIMATION_SPEED = 6;
     
     private int bulletSpawn = 2;
-<<<<<<< Updated upstream
-=======
-
+    
     // Attack cooldown
     private int attackCooldown = 0;
     private final int ATTACK_DELAY = 120; // 1 second delay
 
     public int defeated = 0;
->>>>>>> Stashed changes
     
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;

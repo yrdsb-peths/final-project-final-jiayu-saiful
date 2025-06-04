@@ -293,7 +293,7 @@ public class Player extends Actor {
     }
     
     public Rectangle getHitbox() {
-        return new Rectangle(getX() - 35, getY() - 40, 60, 70); // Adjust values as needed
+        return new Rectangle(getX() - 35, getY() - 35, 60, 70); // Adjust values as needed
     }
     
     private void drawHitbox() {
