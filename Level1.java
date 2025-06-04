@@ -18,6 +18,8 @@ public class Level1 extends World {
     private final int PLAYER_START_Y = 300;
     
     private final int targetWidth = 120;
+    
+    int[][] positions;
 
     private Player player;
     public UI ui;
@@ -43,6 +45,7 @@ public class Level1 extends World {
         // add enemies
         addEnemy();
         addEnemy();
+        addEnemy();
         
         // add player
         addPlayer();
@@ -61,9 +64,10 @@ public class Level1 extends World {
             {350, 430},
             {730, 380},
             {990, 120},
-            {0, 200},
-            {230, 100},
-            {420, 100}
+            {150, 400},
+            {50, 400},
+            {230, 300},
+            {300, 300}
         };
     
         for (int[] pos : positions) {

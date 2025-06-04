@@ -8,7 +8,6 @@ import greenfoot.Color;
  * @author Saiful Shaik 
  * @version Updated May 30, 2025
  */
-
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -47,14 +46,18 @@ public class Enemy extends Base {
     private final int DEATH_ANIMATION_SPEED = 6;
     
     private int bulletSpawn = 2;
+
+    // Attack cooldown
+    private int attackCooldown = 0;
+    private final int ATTACK_DELAY = 120; // 1 second delay
+
+    public int defeated = 0;
     
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;
 
     public Enemy(int tWidth) {
         int targetWidth = tWidth;
-        
-        // Random speed for each enemy (4-8)
         moveSpeed = 1 + Greenfoot.getRandomNumber(4);
         System.out.println(moveSpeed);
         
@@ -80,6 +83,10 @@ public class Enemy extends Base {
         if (isFlashing) {
             flashTimer--;
             if (flashTimer <= 0) isFlashing = false;
+        }
+
+        if (attackCooldown > 0) {
+            attackCooldown--;
         }
 
         double distanceToPlayer = rangeToPlayer();
@@ -121,17 +128,19 @@ public class Enemy extends Base {
     }
 
     private void attackPlayer() {
-        if (!isAttacking) {
+        if (!isAttacking && attackCooldown == 0) {
             Player player = getPlayer();
             if (player != null) {
                 int dx = player.getX() - getX();
                 facingRight = dx > 0;
             }
-    
+
             isAttacking = true;
             animationFrame = 0;
             animationTimer = 0;
             missileFired = false;
+
+            attackCooldown = ATTACK_DELAY; // Set cooldown here
         }
     }
 
@@ -150,7 +159,16 @@ public class Enemy extends Base {
             obstacle = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Stone.class);
         }
     
-        if (obstacle == null) {
+        boolean groundAhead = true;
+        if (getY() < 430) {  // Only do ledge check if above Y=430
+            int checkX = getX() + direction * (getImage().getWidth() / 2);
+            int checkY = getY() + getImage().getHeight() / 2 + 5;
+    
+            groundAhead = !getWorld().getObjectsAt(checkX, checkY, Stone.class).isEmpty()
+                       || !getWorld().getObjectsAt(checkX, checkY, Grass.class).isEmpty();
+        }
+    
+        if (obstacle == null && groundAhead) {
             setLocation(getX() + dx, getY());
         } else {
             direction *= -1;
@@ -183,19 +201,19 @@ public class Enemy extends Base {
             if (player != null) {
                 facingRight = player.getX() > getX();
             }
-        
+
             GreenfootImage[] attackSet = facingRight ? attackImagesRight : attackImagesLeft;
-        
+
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
                 if (animationFrame < attackSet.length) {
                     setImage(attackSet[animationFrame]);
-        
+
                     if (animationFrame == bulletSpawn && !missileFired) {
                         launchMissile();
                         missileFired = true;
                     }
-        
+
                     animationFrame++;
                 } else {
                     isAttacking = false;

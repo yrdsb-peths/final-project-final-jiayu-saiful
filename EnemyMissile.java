@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 
 public class EnemyMissile extends Base {
     private boolean facingRight;
-    private int speed = 5;
+    private int speed = 3;
     private GreenfootImage[] images;
     private int frame = 0;
     private int animationTimer = 0;

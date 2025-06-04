@@ -85,11 +85,11 @@ public class Player extends Actor {
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
+        drawHitbox();
     }
 
     private void handleInput() {
         World world = getWorld();
-
         if ((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && world instanceof Level0) {
             ((Level0) world).scrollWorld(-MOVE_SPEED);
             facingRight = true;
@@ -293,6 +293,19 @@ public class Player extends Actor {
     }
     
     public Rectangle getHitbox() {
-        return new Rectangle(getX() - 20, getY() - 50, 60, 100); // Adjust values as needed
+        return new Rectangle(getX() - 35, getY() - 40, 60, 70); // Adjust values as needed
+    }
+    
+    private void drawHitbox() {
+        GreenfootImage img = new GreenfootImage(getImage());
+        Rectangle hitbox = getHitbox();
+        
+        int relX = hitbox.x - (getX() - img.getWidth() / 2);
+        int relY = hitbox.y - (getY() - img.getHeight() / 2);
+    
+        img.setColor(Color.RED);
+        img.drawRect(relX, relY, hitbox.width, hitbox.height);
+        
+        setImage(img);
     }
 }
