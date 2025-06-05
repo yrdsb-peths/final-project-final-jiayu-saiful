@@ -39,22 +39,37 @@ public class EnemyMissile extends Base {
     private void move() {
         if (hasHit) return;
     
-        int dx = facingRight ? speed : -speed;
-        setLocation(getX() + dx, getY());
+        Player player = (Player) getWorld().getObjects(Player.class).get(0);
+        if (player == null) return;
+    
+        // Calculate direction to player
+        int dx = player.getX() - getX();
+        int dy = player.getY() - getY();
+    
+        // Calculate angle in degrees
+        double angle = Math.toDegrees(Math.atan2(dy, dx));
+        // Adjust rotation if your sprite faces left by default
+        setRotation((int)(angle + 180)); 
+    
+        // Normalize direction vector
+        double length = Math.sqrt(dx * dx + dy * dy);
+        double moveX = speed * dx / length;
+        double moveY = speed * dy / length;
+    
+        // Move missile
+        setLocation((int)(getX() + moveX), (int)(getY() + moveY));
     
         if (isAtEdge()) {
             getWorld().removeObject(this);
             return;
         }
     
-        Player player = (Player) getOneIntersectingObject(Player.class);
-        if (player != null) {
-            Rectangle missileBounds = new Rectangle(getX() - 10, getY() - 10, 20, 20);
-            if (missileBounds.intersects(player.getHitbox())) {
-                hasHit = true; // Prevent double hit
-                player.takeDamage();
-                getWorld().removeObject(this);
-            }
+        // Check collision with player
+        Rectangle missileBounds = new Rectangle(getX() - 10, getY() - 10, 20, 20);
+        if (missileBounds.intersects(player.getHitbox())) {
+            hasHit = true;
+            player.takeDamage();
+            getWorld().removeObject(this);
         }
     }
 
