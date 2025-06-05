@@ -249,9 +249,15 @@ public class Enemy extends Base {
     }
 
     private void launchMissile() {
+        Player player = getPlayer();
         int missileOffsetX = facingRight ? 40 : -40;
         int missileOffsetY = 5;
-        getWorld().addObject(new EnemyMissile(facingRight), getX() + missileOffsetX, getY() + missileOffsetY);
+    
+        EnemyMissile em = new EnemyMissile(facingRight);
+        getWorld().addObject(em, getX() + missileOffsetX, getY() + missileOffsetY);
+    
+        // Now that it's in the world, you can safely get its position
+        em.setRotation((int) Math.toDegrees(Math.atan2(player.getY() - em.getY(), player.getX() - em.getX())));
     }
 
     private void applyGravity() {
