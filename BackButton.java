@@ -12,6 +12,7 @@ public class BackButton extends Actor
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 5;
+    Titlescreen titlescreen = new Titlescreen();
     
     public BackButton() {
         baseImage = new GreenfootImage("images/backButton.png");
@@ -23,8 +24,7 @@ public class BackButton extends Actor
         setImage(new GreenfootImage(baseImage));
     }
     
-    public void act()
-    {
+    public void act() {
         boolean mouseOver = isMouseOverAccurate();
 
         if (mouseOver && fadeLevel < maxFade) {
@@ -38,7 +38,6 @@ public class BackButton extends Actor
 
         if (Greenfoot.mouseClicked(this)) {
             // Go back to Titlescreen
-            Titlescreen titlescreen = new Titlescreen();
             Greenfoot.setWorld(titlescreen);
         }
     }
