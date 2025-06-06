@@ -20,6 +20,8 @@ public class HelpPage extends World
         GreenfootImage bg = new GreenfootImage("images/menu.png");
         setBackground(bg);
         
+        addObject(new BackButton(), 100, 100);
+        
         addLabel(controls, 100);
         addLabel(label1, 200);
         addLabel(label2, 300);
