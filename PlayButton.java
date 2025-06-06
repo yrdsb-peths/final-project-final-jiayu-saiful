@@ -7,6 +7,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version May 20, 2025.
  */
 public class PlayButton extends Actor {
+    public GreenfootSound buttonSound = new GreenfootSound("start.mp3");
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
@@ -35,6 +36,7 @@ public class PlayButton extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
+            buttonSound.play();
             Titlescreen titlescreen = (Titlescreen) getWorld();
             Greenfoot.setWorld(new Level0(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));
         }

@@ -15,7 +15,9 @@ public class Player extends Actor {
     private GreenfootImage[] defendImagesRight, defendImagesLeft;
     private GreenfootImage[] deathImagesRight, deathImagesLeft;
     private GreenfootImage currentImage;
-
+    private GreenfootSound deathSound = new GreenfootSound("death.mp3");
+    private GreenfootSound attackSound = new GreenfootSound("attack.mp3");
+    
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     private final int MOVE_SPEED = 3;
@@ -78,6 +80,7 @@ public class Player extends Actor {
     public void act() {
         if (isDead) {
             playDeathAnimation();
+            deathSound.play();
             return;
         }
     
@@ -107,6 +110,7 @@ public class Player extends Actor {
         }
 
         if (Greenfoot.isKeyDown("v") && !isAttacking) {
+            attackSound.play();
             isAttacking = true;
             attackHitRegistered = false;
             attackType = random.nextInt(3);
@@ -265,8 +269,6 @@ public class Player extends Actor {
                 deathAnimation();
                 return;
             }
-    
-            // Greenfoot.playSound("playerHurt.mp3");
         }
     }
     

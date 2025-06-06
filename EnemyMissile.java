@@ -9,6 +9,7 @@ import java.awt.Rectangle;
  */
 
 public class EnemyMissile extends Base {
+    private GreenfootSound missileSound = new GreenfootSound("rock.mp3");
     private boolean facingRight;
     private int speed = 3;
     private GreenfootImage[] images;
@@ -32,6 +33,7 @@ public class EnemyMissile extends Base {
     }
 
     public void act() {
+        missileSound.play();
         animate();
         move();
     }

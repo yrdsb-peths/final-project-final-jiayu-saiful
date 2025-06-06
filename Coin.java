@@ -10,6 +10,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 public class Coin extends Base {
     private GreenfootImage[] coinAnimation = new GreenfootImage[4];
+    private GreenfootSound coinSound = new GreenfootSound("coin.mp3");
     private int animationFrame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
@@ -44,8 +45,9 @@ public class Coin extends Base {
                     level.ui.incrementGoldCounter();
                 }
             }
-    
+            coinSound.play();
             world.removeObject(this);
+            
         }
     }
 
