@@ -16,7 +16,7 @@ public class BackButton extends Actor
     public BackButton() {
         baseImage = new GreenfootImage("images/backButton.png");
 
-        int targetWidth = 150;
+        int targetWidth = 80;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
