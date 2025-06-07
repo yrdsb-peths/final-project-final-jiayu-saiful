@@ -48,10 +48,13 @@ public class EnemyMissile extends Base {
         int dx = player.getX() - getX();
         int dy = player.getY() - getY();
     
-        // Calculate angle in degrees
+        // Calculate angle in degrees (facing right by default)
         double angle = Math.toDegrees(Math.atan2(dy, dx));
-        // Adjust rotation if your sprite faces left by default
-        setRotation((int)(angle + 180)); 
+        if (facingRight) {
+            setRotation((int) angle);
+        } else {
+            setRotation((int) (angle + 180));
+        }
     
         // Normalize direction vector
         double length = Math.sqrt(dx * dx + dy * dy);
@@ -59,7 +62,7 @@ public class EnemyMissile extends Base {
         double moveY = speed * dy / length;
     
         // Move missile
-        setLocation((int)(getX() + moveX), (int)(getY() + moveY));
+        setLocation((int) (getX() + moveX), (int) (getY() + moveY));
     
         if (isAtEdge()) {
             getWorld().removeObject(this);

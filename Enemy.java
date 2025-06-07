@@ -4,9 +4,10 @@ import greenfoot.Color;
 
 /**
  * Enemy character that moves, tracks the player, attacks, and dies with animations.
+ * Handles image offset to account for transparent spacing.
  * 
  * @author Saiful Shaik 
- * @version Updated May 30, 2025
+ * @version Updated June 7, 2025
  */
 public class Enemy extends Base {
     private GreenfootImage[] movingImagesRight, movingImagesLeft;
@@ -17,8 +18,7 @@ public class Enemy extends Base {
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     private int moveSpeed;
-    private final int PLAYER_BOTTOM_OFFSET = 40;
-
+    private final int PLAYER_BOTTOM_OFFSET = 0;
     private final int DETECTION_RANGE = 100;
     private final int ATTACK_RANGE = 150;
 
@@ -44,39 +44,38 @@ public class Enemy extends Base {
     private int deathFrame = 0;
     private int deathTimer = 0;
     private final int DEATH_ANIMATION_SPEED = 6;
-    
+
     private int bulletSpawn = 2;
-    
-    // Attack cooldown
     private int attackCooldown = 0;
-    private final int ATTACK_DELAY = 120; // 1 second delay
+    private final int ATTACK_DELAY = 120;
 
     public int defeated = 0;
-    
+    private int imageOffsetX = -20;
+    private int imageOffsetY = -30;
+
     private enum EnemyState { MOVING, ATTACKING, IDLE, DEAD }
     private EnemyState enemyState = EnemyState.IDLE;
 
     public Enemy(int tWidth) {
-        int targetWidth = tWidth;
-        moveSpeed = 1 + Greenfoot.getRandomNumber(4);
-        System.out.println(moveSpeed);
-        
-        movingImagesRight = loadAnimation("idle", 8, targetWidth);
+        moveSpeed = 1 + Greenfoot.getRandomNumber(3);
+
+        movingImagesRight = loadAnimation("idle", 8, tWidth);
         movingImagesLeft = flipImagesHorizontally(movingImagesRight);
-        idleImagesRight = loadAnimation("idle", 8, targetWidth);
+        idleImagesRight = loadAnimation("idle", 8, tWidth);
         idleImagesLeft = flipImagesHorizontally(idleImagesRight);
-        attackImagesRight = loadAnimation("attack", 7, targetWidth);
+        attackImagesRight = loadAnimation("attack", 7, tWidth);
         attackImagesLeft = flipImagesHorizontally(attackImagesRight);
-        deathRight = loadAnimation("death", 13, targetWidth);
+        deathRight = loadAnimation("death", 13, tWidth);
         deathLeft = flipImagesHorizontally(deathRight);
 
-        setImage(idleImagesRight[0]);
+        setAdjustedImage(idleImagesRight[0]);
         MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
     }
 
     public void act() {
         if (enemyState == EnemyState.DEAD) {
             playDeathAnimation();
+            drawHitbox();
             return;
         }
 
@@ -99,22 +98,23 @@ public class Enemy extends Base {
         }
 
         switch (enemyState) {
-            case IDLE:
-                moveRandomly();
-                break;
-            case MOVING:
-                followPlayer();
-                break;
-            case ATTACKING:
-                attackPlayer();
-                break;
-            default:
-                break;
+            case IDLE: moveRandomly(); break;
+            case MOVING: followPlayer(); break;
+            case ATTACKING: attackPlayer(); break;
         }
 
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
+        drawHitbox();
+    }
+
+    private void drawHitbox() {
+        GreenfootImage base = getImage();
+        GreenfootImage img = new GreenfootImage(base);
+        img.setColor(Color.RED);
+        img.drawRect(0, 0, img.getWidth() - 1, img.getHeight() - 1);
+        setImage(img);
     }
 
     private double rangeToPlayer() {
@@ -134,13 +134,11 @@ public class Enemy extends Base {
                 int dx = player.getX() - getX();
                 facingRight = dx > 0;
             }
-
             isAttacking = true;
             animationFrame = 0;
             animationTimer = 0;
             missileFired = false;
-
-            attackCooldown = ATTACK_DELAY; // Set cooldown here
+            attackCooldown = ATTACK_DELAY;
         }
     }
 
@@ -151,31 +149,20 @@ public class Enemy extends Base {
             MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
             moveTimer = 0;
         }
-    
+
         int dx = direction * moveSpeed;
-    
-        Actor obstacle = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Grass.class);
-        if (obstacle == null) {
-            obstacle = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Stone.class);
+        int verticalCheckRange = getImage().getHeight() / 2;
+        int horizontalCheckDistance = (getImage().getWidth() / 2) + 1;
+
+        for (int dy = -verticalCheckRange; dy <= verticalCheckRange; dy += 5) {
+            Actor barrier = getOneObjectAtOffset(direction * horizontalCheckDistance, dy, Barrier.class);
+            if (barrier != null) {
+                direction *= -1;
+                return;
+            }
         }
-    
-        boolean groundAhead = true;
-        if (getY() < 430) {  // Only do ledge check if above Y=430
-            int checkX = getX() + direction * (getImage().getWidth() / 2);
-            int checkY = getY() + getImage().getHeight() / 2 + 5;
-    
-            groundAhead = !getWorld().getObjectsAt(checkX, checkY, Stone.class).isEmpty()
-                       || !getWorld().getObjectsAt(checkX, checkY, Grass.class).isEmpty();
-        }
-    
-        if (obstacle == null && groundAhead) {
-            setLocation(getX() + dx, getY());
-        } else {
-            direction *= -1;
-            moveTimer = 0;
-            MOVE_CHANGE_INTERVAL = 60 + Greenfoot.getRandomNumber(120);
-        }
-    
+
+        setLocation(getX() + dx, getY());
         facingRight = direction > 0;
         isAttacking = false;
     }
@@ -183,13 +170,16 @@ public class Enemy extends Base {
     private void followPlayer() {
         Player player = getPlayer();
         if (player == null) return;
-        
+
         int dx = player.getX() - getX();
         direction = Integer.signum(dx);
         facingRight = direction > 0;
 
         if (Math.abs(dx) > ATTACK_RANGE) {
-            setLocation(getX() + direction * moveSpeed, getY());
+            Actor barrier = getOneObjectAtOffset(direction * (getImage().getWidth() / 2 + 1), 0, Barrier.class);
+            if (barrier == null) {
+                setLocation(getX() + direction * moveSpeed, getY());
+            }
         }
     }
 
@@ -197,23 +187,15 @@ public class Enemy extends Base {
         animationTimer++;
 
         if (isAttacking) {
-            Player player = getPlayer();
-            if (player != null) {
-                facingRight = player.getX() > getX();
-            }
-
             GreenfootImage[] attackSet = facingRight ? attackImagesRight : attackImagesLeft;
-
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
                 if (animationFrame < attackSet.length) {
-                    setImage(attackSet[animationFrame]);
-
                     if (animationFrame == bulletSpawn && !missileFired) {
                         launchMissile();
                         missileFired = true;
                     }
-
+                    setAdjustedImage(attackSet[animationFrame]);
                     animationFrame++;
                 } else {
                     isAttacking = false;
@@ -242,21 +224,32 @@ public class Enemy extends Base {
             flashImage.setColor(new Color(255, 100, 100));
             flashImage.fill();
             flashImage.setTransparency(128);
-            setImage(flashImage);
+            setAdjustedImage(flashImage);
         } else {
-            setImage(currentImage);
+            setAdjustedImage(currentImage);
         }
+    }
+
+    private void setAdjustedImage(GreenfootImage img) {
+        int offsetX = imageOffsetX;
+        int offsetY = imageOffsetY;
+    
+        int newWidth = img.getWidth() + offsetX * 2;
+        int newHeight = img.getHeight() + offsetY * 2;
+    
+        GreenfootImage adjusted = new GreenfootImage(newWidth, newHeight);
+        adjusted.drawImage(img, offsetX, offsetY);
+    
+        setImage(adjusted);
     }
 
     private void launchMissile() {
         Player player = getPlayer();
         int missileOffsetX = facingRight ? 40 : -40;
         int missileOffsetY = 5;
-    
+
         EnemyMissile em = new EnemyMissile(facingRight);
         getWorld().addObject(em, getX() + missileOffsetX, getY() + missileOffsetY);
-    
-        // Now that it's in the world, you can safely get its position
         em.setRotation((int) Math.toDegrees(Math.atan2(player.getY() - em.getY(), player.getX() - em.getX())));
     }
 
@@ -268,15 +261,24 @@ public class Enemy extends Base {
     }
 
     private void checkGroundCollision() {
-        Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
+        // Calculate offset where enemy’s feet actually are relative to center (getY)
+        int feetOffsetY = getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET;
+    
+        // Check for ground objects below the feet position
+        Actor ground = getOneObjectAtOffset(0, feetOffsetY, Grass.class);
         if (ground == null) {
-            ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Stone.class);
+            ground = getOneObjectAtOffset(0, feetOffsetY, Stone.class);
         }
-
+    
         if (ground != null && vSpeed >= 0) {
-            int groundY = ground.getY() - ground.getImage().getHeight() / 2;
-            int enemyHeight = getImage().getHeight();
-            setLocation(getX(), groundY - enemyHeight / 2 + PLAYER_BOTTOM_OFFSET);
+            // Get top Y of ground (ground center Y - half its height)
+            int groundTopY = ground.getY() - ground.getImage().getHeight() / 2;
+    
+            // Position enemy so feet sit exactly on ground top
+            int newEnemyY = groundTopY - (getImage().getHeight() / 2) + PLAYER_BOTTOM_OFFSET;
+    
+            setLocation(getX(), newEnemyY);
+    
             vSpeed = 0;
             onGround = true;
         } else {
@@ -290,7 +292,7 @@ public class Enemy extends Base {
             deathTimer = 0;
             if (deathFrame < deathRight.length) {
                 GreenfootImage[] deathSet = facingRight ? deathRight : deathLeft;
-                setImage(deathSet[deathFrame]);
+                setAdjustedImage(deathSet[deathFrame]);
                 deathFrame++;
             } else {
                 getWorld().removeObject(this);
