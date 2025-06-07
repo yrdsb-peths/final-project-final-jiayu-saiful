@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Trophy extends Actor
 {
     private GreenfootImage[] trophyAnimation = new GreenfootImage[8];
-    private GreenfootSound trophySound = new GreenfootSound("coin.mp3");
+    private GreenfootSound trophySound = new GreenfootSound("win.mp3");
     private int animationFrame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
@@ -28,6 +28,7 @@ public class Trophy extends Actor
 
     public void act() {
         animateTrophy();
+        trophySound.play();
     }
 
     private void animateTrophy() {
