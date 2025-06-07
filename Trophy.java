@@ -13,7 +13,7 @@ public class Trophy extends Actor
     private int animationFrame = 0;
     private int animationTimer = 0;
     private final int ANIMATION_SPEED = 6;
-    private final int TARGET_WIDTH = 23;
+    private final int TARGET_WIDTH = 130;
     
     private final int interDist = 35;
 
