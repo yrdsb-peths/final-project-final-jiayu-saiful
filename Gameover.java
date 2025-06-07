@@ -13,8 +13,10 @@ public class Gameover extends World
     {    
         super(900, 540, 1);
         
-        GreenfootImage bg = new GreenfootImage("images/gameover.png");
+        GreenfootImage bg = new GreenfootImage("images/end.png");
         bg.drawImage(bg, 0, 0);
         setBackground(bg);
+        
+        addObject(new Trophy(), 600, 270);
     }
 }
