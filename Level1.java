@@ -19,6 +19,9 @@ public class Level1 extends World {
     
     private final int targetWidth = 120;
     
+    // when boss is dead, load Gameover screen
+    private boolean isBossDead = false;
+    
     int[][] positions;
 
     private Player player;
