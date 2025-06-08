@@ -109,7 +109,7 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown("v") && !isAttacking) {
+        if (Greenfoot.isKeyDown(KeyBindButton.input) && !isAttacking) {
             attackSound.play();
             isAttacking = true;
             attackHitRegistered = false;
