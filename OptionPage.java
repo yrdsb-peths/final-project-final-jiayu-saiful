@@ -18,6 +18,8 @@ public class OptionPage extends World
         setBackground(bg);
         
         addLabel(sound, 200);
+        addObject(new BackButton(), 100, 100);
+        addObject(new KeyBindButton(), 300, 300);
     }
     
     private void styleText(Label label) {
