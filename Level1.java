@@ -20,6 +20,7 @@ public class Level1 extends World {
     private final int targetWidth = 120;
     
     // when boss is dead, load Gameover screen
+    private int numberOfEnemies = 10;
     private boolean isBossDead = false;
     
     int[][] positions;
@@ -54,12 +55,20 @@ public class Level1 extends World {
             {540, 430},
             {420, 430},
             {350, 430},
+            
             {730, 380},
-            {990, 120},
+            
+            {850, 340},
+            
             {150, 400},
             {50, 400},
+            
             {230, 300},
-            {300, 300}
+            {300, 300},
+            
+            {550, 250},
+            {580, 250},
+            {610, 250}
         };
     
         // Sort positions for easier block detection
@@ -128,11 +137,9 @@ public class Level1 extends World {
     }
 
     private void addEnemies() {
-        int numberOfEnemies = 2;
-    
         for (int i = 0; i < numberOfEnemies; i++) {
             int x = Greenfoot.getRandomNumber(getWidth() - 100) + 50;
-            int y = PLAYER_START_Y;
+            int y = 100;
     
             Enemy enemy = new Enemy(targetWidth);
             addObject(enemy, x, y);

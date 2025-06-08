@@ -19,9 +19,8 @@ public class Enemy extends Base {
     private final int MAX_FALL_SPEED = 10;
     private int moveSpeed;
     private final int PLAYER_BOTTOM_OFFSET = 0;
-    private final int DETECTION_RANGE = 100;
-    private final int ATTACK_RANGE = 150;
-
+    private final int DETECTION_RANGE = 50;
+    private final int ATTACK_RANGE = 50;
     private int vSpeed = 0;
     private boolean onGround = false;
     private boolean facingRight = true;
@@ -75,7 +74,7 @@ public class Enemy extends Base {
     public void act() {
         if (enemyState == EnemyState.DEAD) {
             playDeathAnimation();
-            drawHitbox();
+            //drawHitbox();
             return;
         }
 
@@ -106,7 +105,7 @@ public class Enemy extends Base {
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-        drawHitbox();
+        //drawHitbox();
     }
 
     private void drawHitbox() {
@@ -261,24 +260,23 @@ public class Enemy extends Base {
     }
 
     private void checkGroundCollision() {
-        // Calculate offset where enemy’s feet actually are relative to center (getY)
-        int feetOffsetY = getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET;
+        int footY = getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET;
+        int checkDistance = getImage().getWidth() / 2 - 50;
     
-        // Check for ground objects below the feet position
-        Actor ground = getOneObjectAtOffset(0, feetOffsetY, Grass.class);
+        Actor groundLeft = getOneObjectAtOffset(-checkDistance, footY, Grass.class);
+        Actor groundRight = getOneObjectAtOffset(checkDistance, footY, Grass.class);
+        Actor ground = (groundLeft != null) ? groundLeft : groundRight;
+    
         if (ground == null) {
-            ground = getOneObjectAtOffset(0, feetOffsetY, Stone.class);
+            groundLeft = getOneObjectAtOffset(-checkDistance, footY, Stone.class);
+            groundRight = getOneObjectAtOffset(checkDistance, footY, Stone.class);
+            ground = (groundLeft != null) ? groundLeft : groundRight;
         }
     
         if (ground != null && vSpeed >= 0) {
-            // Get top Y of ground (ground center Y - half its height)
             int groundTopY = ground.getY() - ground.getImage().getHeight() / 2;
-    
-            // Position enemy so feet sit exactly on ground top
-            int newEnemyY = groundTopY - (getImage().getHeight() / 2) + PLAYER_BOTTOM_OFFSET;
-    
-            setLocation(getX(), newEnemyY);
-    
+            int playerHeight = getImage().getHeight();
+            setLocation(getX(), groundTopY - playerHeight / 2 + PLAYER_BOTTOM_OFFSET);
             vSpeed = 0;
             onGround = true;
         } else {
@@ -295,7 +293,7 @@ public class Enemy extends Base {
                 setAdjustedImage(deathSet[deathFrame]);
                 deathFrame++;
             } else {
-                getWorld().removeObject(this);
+                //getWorld().removeObject(this);
             }
         }
     }
@@ -346,5 +344,9 @@ public class Enemy extends Base {
             return ((Level1) world).getPlayer();
         }
         return null;
+    }
+    
+    public boolean getIsDead() {
+        return isDead;
     }
 }

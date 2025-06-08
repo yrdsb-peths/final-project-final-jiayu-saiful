@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.Random;
+import java.util.List;
 import java.awt.Rectangle;
 
 /**
@@ -88,7 +89,7 @@ public class Player extends Actor {
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-        drawHitbox();
+        //drawHitbox();
     }
 
     private void handleInput() {
@@ -141,10 +142,15 @@ public class Player extends Actor {
                 setImage(attackSet[attackFrame]);
 
                 if (attackFrame == 2 && !attackHitRegistered) {
-                    Enemy enemy = (Enemy) getOneIntersectingObject(Enemy.class);
-                    if (enemy != null) {
-                        enemy.takeDamage();
-                        attackHitRegistered = true;
+                    int attackRange = 30;  // Adjust based on your game balance
+                    List<Enemy> enemies = getObjectsInRange(attackRange, Enemy.class);
+
+                    for (Enemy enemy : enemies) {
+                        if (enemy != null && !enemy.getIsDead()) {
+                            enemy.takeDamage();
+                            attackHitRegistered = true;
+                            break;
+                        }
                     }
                 }
 
@@ -206,15 +212,23 @@ public class Player extends Actor {
     }
 
     private void checkGroundCollision() {
-        Actor ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Grass.class);
+        int footY = getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET;
+        int checkDistance = getImage().getWidth() / 2 - 50;
+    
+        Actor groundLeft = getOneObjectAtOffset(-checkDistance, footY, Grass.class);
+        Actor groundRight = getOneObjectAtOffset(checkDistance, footY, Grass.class);
+        Actor ground = (groundLeft != null) ? groundLeft : groundRight;
+    
         if (ground == null) {
-            ground = getOneObjectAtOffset(0, getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET, Stone.class);
+            groundLeft = getOneObjectAtOffset(-checkDistance, footY, Stone.class);
+            groundRight = getOneObjectAtOffset(checkDistance, footY, Stone.class);
+            ground = (groundLeft != null) ? groundLeft : groundRight;
         }
-
+    
         if (ground != null && vSpeed >= 0) {
-            int groundY = ground.getY() - ground.getImage().getHeight() / 2;
+            int groundTopY = ground.getY() - ground.getImage().getHeight() / 2;
             int playerHeight = getImage().getHeight();
-            setLocation(getX(), groundY - playerHeight / 2 + PLAYER_BOTTOM_OFFSET);
+            setLocation(getX(), groundTopY - playerHeight / 2 + PLAYER_BOTTOM_OFFSET);
             vSpeed = 0;
             onGround = true;
         } else {
@@ -287,6 +301,9 @@ public class Player extends Actor {
                 setImage(deathSet[deathFrame]);
                 deathFrame++;
             } else {
+                Level0 level0 = new Level0(900, 540);
+                UI ui = new UI(level0);
+                ui.reset(level0);
                 Greenfoot.stop();
             }
         } else {
@@ -295,7 +312,7 @@ public class Player extends Actor {
     }
     
     public Rectangle getHitbox() {
-        return new Rectangle(getX() - 35, getY() - 35, 60, 70); // Adjust values as needed
+        return new Rectangle(getX() - 35, getY() - 35, 60, 70);
     }
     
     private void drawHitbox() {
