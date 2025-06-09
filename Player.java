@@ -118,7 +118,7 @@ public class Player extends Actor {
             attackFrame = 0;
         }
 
-        if (Greenfoot.isKeyDown("c")) {
+        if (Greenfoot.isKeyDown(KeyBindButton2.input)) {
             isDefending = true;
             animationFrame = 0;
         } else {

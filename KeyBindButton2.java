@@ -1,21 +1,21 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class KeyBindButton here.
+ * Write a description of class KeyBindButton2 here.
  * 
  * @author (your name) Jiayu
  * @version (a version number or a date) 6/7/25
  */
-public class KeyBindButton extends Actor
+public class KeyBindButton2 extends Actor
 {
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 5;
     
-    public static String input = "v";
+    public static String input = "c";
     
-    public KeyBindButton() {
+    public KeyBindButton2() {
         baseImage = new GreenfootImage("images/button1.png");
         
         int targetWidth = 210;
@@ -39,7 +39,7 @@ public class KeyBindButton extends Actor
         updateImageWithFade(fadeLevel);
         
         if (Greenfoot.mouseClicked(this)) {
-            input = Greenfoot.ask("Please input a new attack keybind: ");
+            input = Greenfoot.ask("Please input a new defend keybind: ");
         }
     }
     

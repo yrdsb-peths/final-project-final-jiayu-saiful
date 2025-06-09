@@ -8,7 +8,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class OptionPage extends World
 {
-    private Label sound = new Label("Options:", 60);
+    private Label title = new Label("Options", 60);
+    private Label change1 = new Label("V > _", 40);
+    private Label change2 = new Label("C > _", 40);
+    private Label text1 = new Label("Click to change the attack keybind:", 35);
+    private Label text2 = new Label("Click to change the defend keybind:", 35);
     
     public OptionPage(int width, int height)
     {    
@@ -17,9 +21,14 @@ public class OptionPage extends World
         GreenfootImage bg = new GreenfootImage("images/menu.png");
         setBackground(bg);
         
-        addLabel(sound, 200);
         addObject(new BackButton(), 100, 100);
-        addObject(new KeyBindButton(), 300, 300);
+        addObject(new KeyBindButton(), 700, 200);
+        addObject(new KeyBindButton(), 700, 400);
+        addLabel(title, 450, 100);
+        addLabel(change1, 700, 190);
+        addLabel(change2, 700, 390);
+        addLabel(text1, 300, 200);
+        addLabel(text2, 300, 400);
     }
     
     private void styleText(Label label) {
@@ -29,8 +38,8 @@ public class OptionPage extends World
         label.setShadowOffset(4, 4);
     }
     
-    private void addLabel(Label label, int y) {
+    private void addLabel(Label label, int x, int y) {
         styleText(label);
-        addObject(label, 450, y);
+        addObject(label, x, y);
     }
 }
