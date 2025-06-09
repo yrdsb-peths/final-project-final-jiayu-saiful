@@ -10,7 +10,7 @@ public class OptionButton extends Actor {
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
-    private final int fadeSpeed = 5;
+    private final int fadeSpeed = 3;
 
     public OptionButton() {
         baseImage = new GreenfootImage("images/buttonImages/button0.png");
