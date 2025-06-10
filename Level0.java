@@ -133,7 +133,7 @@ public class Level0 extends World {
     }
     
     private void addNPC2(String fileName, int npcSize, int x, String facing) {
-        NPC npc = new NPC(fileName, npcSize, facing);
+        NPC2 npc = new NPC2(fileName, npcSize, facing);
         npcY = getYAboveGrass(npc.getImage().getHeight());
         addObject(npc, x, npcY);
     }
