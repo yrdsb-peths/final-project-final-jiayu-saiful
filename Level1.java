@@ -20,10 +20,10 @@ public class Level1 extends World {
     private final int targetWidth = 120;
     
     // when boss is dead, load Gameover screen
-    private int numberOfEnemies = 10;
+    private int numberOfEnemies = 2;
     private boolean isBossDead = false;
     
-    int[][] positions;
+    //int[][] positions;
 
     private Player player;
     public UI ui;
@@ -66,9 +66,9 @@ public class Level1 extends World {
             {230, 300},
             {300, 300},
             
-            {550, 250},
-            {580, 250},
-            {610, 250}
+            {500, 250},
+            {525, 250},
+            {550, 250}
         };
     
         // Sort positions for easier block detection
@@ -144,6 +144,18 @@ public class Level1 extends World {
             Enemy enemy = new Enemy(targetWidth);
             addObject(enemy, x, y);
         }
+    }
+    
+    public void enemyDied() {
+        numberOfEnemies--;
+        if (numberOfEnemies <= 0) {
+            spawnPortal();
+        }
+    }
+    
+    private void spawnPortal() {
+        Portal portal = new Portal();
+        addObject(portal, screenWidth / 2, groundY - 50);
     }
 
     public Player getPlayer() {

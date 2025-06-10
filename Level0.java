@@ -22,8 +22,12 @@ public class Level0 extends World {
     public final int npcX = 950;
     public int npcY;
 
+    public static int setting = 0;
+    
     private Player player;
     public UI ui;
+
+    private static boolean uiInitialized = false;
 
     public Level0(int width, int height) {
         super(width, height, 1, BOUNDED);
@@ -48,7 +52,14 @@ public class Level0 extends World {
         
         // NPC and Speech
         addNPC("00.png", 100, npcX, "left");
-        addSpeech();
+        
+        if(setting == 0) {
+            addLevel1Speech();
+        } else if(setting == 1) {
+            addBoss1Speech();
+        } else if(setting == 2) {
+            addLevel2Speech();
+        }
 
         // Player
         addPlayer();
@@ -59,7 +70,14 @@ public class Level0 extends World {
 
         // UI (hearts, gold, labels, etc.)
         ui = new UI(this);
-        ui.reset(this);
+        if (!uiInitialized) {
+            ui.reset(this);
+            uiInitialized = true;
+        }
+    }
+
+    public static void resetUIState() {
+        uiInitialized = false;
     }
 
     private void setupBackground(int width, int height) {
@@ -126,9 +144,17 @@ public class Level0 extends World {
         addObject(house, x, houseY);
     }
 
-    private void addSpeech() {
+    private void addLevel1Speech() {
         Speech speech = new Speech();
         addObject(speech, npcX + 80, npcY - 80);
+    }
+    
+    private void addBoss1Speech() {
+    
+    }
+    
+    private void addLevel2Speech() {
+    
     }
 
     public void scrollWorld(int dx) {

@@ -310,6 +310,11 @@ public class Enemy extends Base {
             enemyState = EnemyState.DEAD;
             deathFrame = 0;
             deathTimer = 0;
+        
+            // Call a method in the world to notify the enemy has died
+            if (getWorld() instanceof Level1) {
+                ((Level1) getWorld()).enemyDied();
+            }
         }
     }
 

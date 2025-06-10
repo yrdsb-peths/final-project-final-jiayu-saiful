@@ -142,7 +142,7 @@ public class Player extends Actor {
                 setImage(attackSet[attackFrame]);
 
                 if (attackFrame == 2 && !attackHitRegistered) {
-                    int attackRange = 30;  // Adjust based on your game balance
+                    int attackRange = 50;
                     List<Enemy> enemies = getObjectsInRange(attackRange, Enemy.class);
 
                     for (Enemy enemy : enemies) {
@@ -301,9 +301,8 @@ public class Player extends Actor {
                 setImage(deathSet[deathFrame]);
                 deathFrame++;
             } else {
-                Level0 level0 = new Level0(900, 540);
-                UI ui = new UI(level0);
-                ui.reset(level0);
+                Level0.resetUIState();
+                Greenfoot.setWorld(new Level0(900, 540));
                 Greenfoot.stop();
             }
         } else {
