@@ -59,7 +59,7 @@ public class Level0 extends World {
 
         // NPC and Speech
         addNPC("00.png", 100, npcX, "left");
-
+        addNPC2("0.png", 100, 1200, "left");
         switch (setting) {
             case 0 -> addLevel1Speech();
             case 1 -> addBoss1Speech();
@@ -128,6 +128,12 @@ public class Level0 extends World {
 
     private void addNPC(String fileName, int npcSize, int x, String facing) {
         NPC npc = new NPC("images/npc/" + fileName, npcSize, facing);
+        npcY = getYAboveGrass(npc.getImage().getHeight());
+        addObject(npc, x, npcY);
+    }
+    
+    private void addNPC2(String fileName, int npcSize, int x, String facing) {
+        NPC npc = new NPC(fileName, npcSize, facing);
         npcY = getYAboveGrass(npc.getImage().getHeight());
         addObject(npc, x, npcY);
     }
