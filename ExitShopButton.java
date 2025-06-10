@@ -37,8 +37,8 @@ public class ExitShopButton extends Actor
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
-            // Go back to L0
-            Greenfoot.setWorld(l); // can change to L2 after
+            // Go to boss level after
+            Greenfoot.setWorld(l); 
         }
     }
     
