@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * @author Saiful Shaik
  * @version May 25, 2025
  */
-
 public class UI extends Actor {
     private Label goldLabel;
     private Label lifeLabel;
@@ -21,7 +20,7 @@ public class UI extends Actor {
     private final int goldImgSize = 30;
 
     private static int goldCoinsCounter = 0;
-    public static int playerLives;
+    public static int playerLives = 5;
     private int bossLives = 10;
 
     private ArrayList<Heart> playerHearts = new ArrayList<>();
@@ -40,20 +39,9 @@ public class UI extends Actor {
         world.addObject(goldCounter, 65, fixedUILabelHeight + 30);
         world.addObject(goldIcon, 35, fixedUILabelHeight + 30);
         world.addObject(lifeLabel, 250, fixedUILabelHeight);
-        playerLives = 5;
 
-        // Player hearts
-        int heartStartX = 200;
-        int heartY = fixedUILabelHeight + 30;
-        int spacing = 25;
+        setupPlayerHearts(world);
 
-        for (int i = 0; i < playerLives; i++) {
-            Heart heart = new Heart();
-            playerHearts.add(heart);
-            world.addObject(heart, heartStartX + i * spacing, heartY);
-        }
-
-        // Boss label and hearts
         int screenWidth = world.getWidth();
         int labelWidth = bossLabel.getImage().getWidth();
         int bossLabelX = screenWidth - labelWidth / 2 - 15;
@@ -72,15 +60,27 @@ public class UI extends Actor {
         }
     }
 
+    private void setupPlayerHearts(World world) {
+        playerHearts.clear();
+        int heartStartX = 200;
+        int heartY = fixedUILabelHeight + 30;
+        int spacing = 25;
+
+        for (int i = 0; i < playerLives; i++) {
+            Heart heart = new Heart();
+            playerHearts.add(heart);
+            world.addObject(heart, heartStartX + i * spacing, heartY);
+        }
+    }
+
     public void incrementGoldCounter() {
         goldCoinsCounter++;
         goldCounter.setValue(goldCoinsCounter);
     }
-    
+
     public static int getGoldCount() {
         return goldCoinsCounter;
     }
-    
 
     public void decreaseLife(World world) {
         if (playerLives > 0) {
@@ -101,30 +101,15 @@ public class UI extends Actor {
             }
         }
     }
-    
+
     public void reset(World world) {
-        // Reset gold
         goldCoinsCounter = 0;
         goldCounter.setValue(goldCoinsCounter);
-    
-        // Reset player lives
         playerLives = 5;
-    
-        // Remove existing hearts from world
+
         for (Heart heart : playerHearts) {
             world.removeObject(heart);
         }
-        playerHearts.clear();
-    
-        // Re-add player hearts
-        int heartStartX = 200;
-        int heartY = fixedUILabelHeight + 30;
-        int spacing = 25;
-    
-        for (int i = 0; i < playerLives; i++) {
-            Heart heart = new Heart();
-            playerHearts.add(heart);
-            world.addObject(heart, heartStartX + i * spacing, heartY);
-        }
+        setupPlayerHearts(world);
     }
 }

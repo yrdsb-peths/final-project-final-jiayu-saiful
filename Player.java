@@ -142,7 +142,7 @@ public class Player extends Actor {
                 setImage(attackSet[attackFrame]);
 
                 if (attackFrame == 2 && !attackHitRegistered) {
-                    int attackRange = 50;
+                    int attackRange = 100;
                     List<Enemy> enemies = getObjectsInRange(attackRange, Enemy.class);
 
                     for (Enemy enemy : enemies) {
