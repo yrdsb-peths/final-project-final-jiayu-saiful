@@ -40,6 +40,13 @@ public class NPC2 extends Base
             animationFrame = (animationFrame + 1) % npcAnimation.length;
             setImage(npcAnimation[animationFrame]);
         }
+        
+        // Just for testing, remove later
+        if (Greenfoot.mouseClicked(this)) {
+            // Load Shop
+            Shop shop = new Shop();
+            Greenfoot.setWorld(shop);
+        }
     }
     
     private void scaleImage(GreenfootImage img, int targetWidth) {
