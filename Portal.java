@@ -10,9 +10,15 @@ public class Portal extends Base
 {
     public Portal() {
         GreenfootImage img = new GreenfootImage("images/portal.png");
-        img.scale(img.getWidth() / 2, img.getHeight() / 2);
+        img.scale(img.getWidth() / 4, img.getHeight() / 4);
+
+        // Draw a red rectangle hitbox on the image
+        img.setColor(Color.RED);
+        img.drawRect(0, 0, img.getWidth() - 1, img.getHeight() - 1);
+
         setImage(img);
     }
+
     public void act()
     {
         if (isTouching(Player.class)) {

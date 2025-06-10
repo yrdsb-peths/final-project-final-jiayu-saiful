@@ -22,8 +22,6 @@ public class Level1 extends World {
     // when boss is dead, load Gameover screen
     private int numberOfEnemies = 2;
     private boolean isBossDead = false;
-    
-    //int[][] positions;
 
     private Player player;
     public UI ui;
