@@ -17,16 +17,23 @@ public class Level0 extends World {
     private static final int PLAYER_START_Y = 300;
     private static final int NUM_BACKGROUND_LAYERS = 4;
 
-    private final int groundY = getHeight() - 10;
+    private static final int TREE_SIZE = 250;
+    private static final int HOUSE_SIZE = 350;
+    private static final int COIN_SPACING = 70;
+    private static final int COIN_COUNT = 7;
+    private static final int COIN_START_X = 485;
 
+    private static final int GRASS_HEIGHT = new Grass().getImage().getHeight();
+    private static final int COIN_HEIGHT = new Coin().getImage().getHeight();
+
+    private final int groundY = getHeight() - 10;
     public final int npcX = 950;
     public int npcY;
 
     public static int setting = 0;
-    
+
     private Player player;
     public UI ui;
-
     private static boolean uiInitialized = false;
 
     public Level0(int width, int height) {
@@ -42,23 +49,21 @@ public class Level0 extends World {
         addGroundTiles();
 
         // Trees
-        addTrees("03.png", 250, getWidth() / 6);
-        
+        addTrees("03.png", TREE_SIZE, getWidth() / 6);
+
         // House
-        addHouse("house.png", 350, 700);
-        
+        addHouse("house.png", HOUSE_SIZE, 700);
+
         // Coins
-        addCoinsOnGround(485, 7, 70);
-        
+        addCoinsOnGround(COIN_START_X, COIN_COUNT, COIN_SPACING);
+
         // NPC and Speech
         addNPC("00.png", 100, npcX, "left");
-        
-        if(setting == 0) {
-            addLevel1Speech();
-        } else if(setting == 1) {
-            addBoss1Speech();
-        } else if(setting == 2) {
-            addLevel2Speech();
+
+        switch (setting) {
+            case 0 -> addLevel1Speech();
+            case 1 -> addBoss1Speech();
+            case 2 -> addLevel2Speech();
         }
 
         // Player
@@ -109,38 +114,33 @@ public class Level0 extends World {
 
     private void addTrees(String fileName, int treeSize, int x) {
         Trees tree = new Trees("images/trees/" + fileName, treeSize);
-        int treeHeight = tree.getImage().getHeight();
-        int grassHeight = new Grass().getImage().getHeight();
-        int grassTopY = groundY - (grassHeight / 2);
-        int treeY = grassTopY - (treeHeight / 2);
+        int treeY = getYAboveGrass(tree.getImage().getHeight());
         addObject(tree, x, treeY);
     }
 
     private void addCoinsOnGround(int startX, int count, int spacing) {
-        int grassHeight = new Grass().getImage().getHeight();
-        int coinY = groundY - (grassHeight / 2) - (new Coin().getImage().getHeight() / 2);
-
+        int coinY = getYAboveGrass(COIN_HEIGHT) - 4;
         for (int i = 0; i < count; i++) {
             int coinX = startX + i * spacing;
-            addObject(new Coin(), coinX, coinY - 4);
+            addObject(new Coin(), coinX, coinY);
         }
     }
 
     private void addNPC(String fileName, int npcSize, int x, String facing) {
         NPC npc = new NPC("images/npc/" + fileName, npcSize, facing);
-        int npcHeight = npc.getImage().getHeight();
-        int grassHeight = new Grass().getImage().getHeight();
-        int grassTopY = groundY - (grassHeight / 2);
-        npcY = grassTopY - (npcHeight / 2);
+        npcY = getYAboveGrass(npc.getImage().getHeight());
         addObject(npc, x, npcY);
     }
 
     private void addHouse(String fileName, int houseSize, int x) {
         House house = new House(fileName, houseSize);
-        int houseHeight = house.getImage().getHeight() + 30;
-        int grassHeight = new Grass().getImage().getHeight();
-        int grassTopY = groundY - (grassHeight / 2);
-        int houseY = grassTopY - (houseHeight / 3);
+        
+        // Scale image properly
+        GreenfootImage img = house.getImage();
+        int scaledHeight = houseSize * img.getHeight() / img.getWidth();
+        img.scale(houseSize, scaledHeight);
+
+        int houseY = getYAboveGrass(img.getHeight());
         addObject(house, x, houseY);
     }
 
@@ -148,13 +148,17 @@ public class Level0 extends World {
         Speech speech = new Speech();
         addObject(speech, npcX + 80, npcY - 80);
     }
-    
+
     private void addBoss1Speech() {
-    
+        // Add speech for boss level here
     }
-    
+
     private void addLevel2Speech() {
-    
+        // Add speech for level 2 here
+    }
+
+    private int getYAboveGrass(int objectHeight) {
+        return groundY - GRASS_HEIGHT / 2 - objectHeight / 2;
     }
 
     public void scrollWorld(int dx) {

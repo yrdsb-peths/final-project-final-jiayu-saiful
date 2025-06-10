@@ -153,7 +153,7 @@ public class Level1 extends World {
     
     private void spawnPortal() {
         Portal portal = new Portal();
-        addObject(portal, screenWidth / 2, groundY - 50);
+        addObject(portal, screenWidth - 20, groundY - 60);
     }
 
     public Player getPlayer() {

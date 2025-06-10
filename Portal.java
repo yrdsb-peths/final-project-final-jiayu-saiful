@@ -12,9 +12,9 @@ public class Portal extends Base
         GreenfootImage img = new GreenfootImage("images/portal.png");
         img.scale(img.getWidth() / 4, img.getHeight() / 4);
 
-        // Draw a red rectangle hitbox on the image
-        img.setColor(Color.RED);
-        img.drawRect(0, 0, img.getWidth() - 1, img.getHeight() - 1);
+        // Hitbox
+        //img.setColor(Color.RED);
+        //img.drawRect(0, 0, img.getWidth() - 1, img.getHeight() - 1);
 
         setImage(img);
     }

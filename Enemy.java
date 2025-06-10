@@ -19,8 +19,8 @@ public class Enemy extends Base {
     private final int MAX_FALL_SPEED = 10;
     private int moveSpeed;
     private final int PLAYER_BOTTOM_OFFSET = 0;
-    private final int DETECTION_RANGE = 50;
-    private final int ATTACK_RANGE = 50;
+    private final int DETECTION_RANGE = 100;
+    private final int ATTACK_RANGE = 100;
     private int vSpeed = 0;
     private boolean onGround = false;
     private boolean facingRight = true;
