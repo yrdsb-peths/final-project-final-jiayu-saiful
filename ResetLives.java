@@ -38,6 +38,8 @@ public class ResetLives extends Actor
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 15) {
             getWorld().removeObject(this);
             UI.playerLives = 5;
+            Shop shop = new Shop();
+            UI.reset(shop);
         }
     }
 

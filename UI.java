@@ -11,19 +11,19 @@ public class UI extends Actor {
     private Label goldLabel;
     private Label lifeLabel;
     private Label bossLabel;
-    private Label goldCounter;
+    private static Label goldCounter;
 
     private UIimage goldIcon;
 
-    private final int fixedUILabelSize = 23;
-    private final int fixedUILabelHeight = 18;
+    private static int fixedUILabelSize = 23;
+    private static int fixedUILabelHeight = 18;
     private final int goldImgSize = 30;
 
     public static int goldCoinsCounter = 0;
     public static int playerLives = 5;
     private int bossLives = 10;
 
-    private ArrayList<Heart> playerHearts = new ArrayList<>();
+    private static ArrayList<Heart> playerHearts = new ArrayList<>();
 
     public UI(World world) {
         goldLabel = new Label("-- GOLD --", fixedUILabelSize);
@@ -60,7 +60,7 @@ public class UI extends Actor {
         }
     }
 
-    private void setupPlayerHearts(World world) {
+    private static void setupPlayerHearts(World world) {
         playerHearts.clear();
         int heartStartX = 200;
         int heartY = fixedUILabelHeight + 30;
@@ -89,7 +89,7 @@ public class UI extends Actor {
         }
     }
 
-    private void updateHearts(World world) {
+    private static void updateHearts(World world) {
         for (int i = 0; i < playerHearts.size(); i++) {
             Heart heart = playerHearts.get(i);
             if (i < playerLives) {
@@ -102,7 +102,7 @@ public class UI extends Actor {
         }
     }
 
-    public void reset(World world) {
+    public static void reset(World world) {
         goldCoinsCounter = 0;
         goldCounter.setValue(goldCoinsCounter);
         playerLives = 5;
