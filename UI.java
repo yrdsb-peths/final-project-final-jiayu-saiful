@@ -19,7 +19,7 @@ public class UI extends Actor {
     private final int fixedUILabelHeight = 18;
     private final int goldImgSize = 30;
 
-    private static int goldCoinsCounter = 0;
+    public static int goldCoinsCounter = 0;
     public static int playerLives = 5;
     private int bossLives = 10;
 
