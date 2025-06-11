@@ -10,7 +10,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Barrier extends Actor {
     public Barrier(int width, int height) {
         GreenfootImage img = new GreenfootImage(width, height);
-        img.setColor(new Color(255, 0, 0, 100));
+        img.setColor(new Color(255, 0, 0, 0));
         img.fill();
         setImage(img);
     }

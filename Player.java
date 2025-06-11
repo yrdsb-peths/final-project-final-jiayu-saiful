@@ -90,7 +90,7 @@ public class Player extends Actor {
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-        drawHitbox();
+        //drawHitbox();
     }
 
     private void handleInput() {

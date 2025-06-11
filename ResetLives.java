@@ -12,6 +12,8 @@ public class ResetLives extends Actor
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 3;
+    
+    private final int cost = 15;
 
     public ResetLives() {
         baseImage = new GreenfootImage("images/reset_hearts.png");
@@ -35,11 +37,10 @@ public class ResetLives extends Actor
         fadeLevel = Math.max(0, Math.min(maxFade, fadeLevel));
         updateImageWithFade(fadeLevel);
 
-        if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 15) {
+        if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= cost) {
             getWorld().removeObject(this);
             UI.playerLives = 5;
-            //Shop shop = new Shop();
-            //UI.reset(shop);
+            UI.goldCoinsCounter -= cost;
         }
     }
 
