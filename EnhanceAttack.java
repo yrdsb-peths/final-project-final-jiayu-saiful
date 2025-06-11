@@ -9,7 +9,7 @@ public class EnhanceAttack extends Actor {
     public EnhanceAttack() {
         baseImage = new GreenfootImage("images/attack_range.png");
 
-        int targetWidth = 280;
+        int targetWidth = 175;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 

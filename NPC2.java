@@ -32,12 +32,12 @@ public class NPC2 extends Base {
 
     public void act() {
         animate();
-
-        if (!shopOpened && Greenfoot.mouseClicked(this)) {
+    
+        if (!ShopManager.shopOpen && Greenfoot.mouseClicked(this)) {
             World currentWorld = getWorld();
             shopManager = new ShopManager(currentWorld);
             shopManager.initializeShop();
-            shopOpened = true;
+            ShopManager.shopOpen = true;
         }
     }
 

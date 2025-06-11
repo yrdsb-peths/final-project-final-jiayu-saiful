@@ -17,7 +17,7 @@ public class ResetLives extends Actor {
 
     public ResetLives() {
         baseImage = new GreenfootImage("images/reset_hearts.png");
-        int targetWidth = 280;
+        int targetWidth = 175;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
         setImage(new GreenfootImage(baseImage));

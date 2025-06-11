@@ -6,17 +6,17 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Speech extends Base {
+public class Speech1 extends Base {
     private GreenfootImage[] speechImages;
     private int currentIndex = 0;
 
-    public Speech() {
+    public Speech1() {
         loadSpeechImages();
         setImage(speechImages[currentIndex]);
     }
 
     private void loadSpeechImages() {
-        int numImages = 4;
+        int numImages = 5;
         speechImages = new GreenfootImage[numImages];
         for (int i = 0; i < numImages; i++) {
             GreenfootImage img = new GreenfootImage("images/speech/0" + i + ".png");

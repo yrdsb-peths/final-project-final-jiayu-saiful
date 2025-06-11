@@ -16,7 +16,7 @@ public class EnhanceSpeed extends Actor
     public EnhanceSpeed() {
         baseImage = new GreenfootImage("images/speed.png");
 
-        int targetWidth = 280;
+        int targetWidth = 175;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 

@@ -11,7 +11,7 @@ public class ExitShopButton extends Actor {
         this.shopManager = shopManager;
 
         baseImage = new GreenfootImage("images/exit.png");
-        int targetWidth = 100;
+        int targetWidth = 60;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
         setImage(new GreenfootImage(baseImage));
