@@ -99,6 +99,7 @@ public class Level0 extends World {
     }
 
     private void addPlayer() {
+        addObject(new WorldText(), PLAYER_START_X, PLAYER_START_Y + 120);
         player = new Player(150);
         addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
@@ -107,11 +108,11 @@ public class Level0 extends World {
         Grass sampleGrass = new Grass();
         int tileWidth = sampleGrass.getTargetWidth() - IMAGE_OVERLAP;
         int worldWidth = getWidth();
-        int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2;
+        int tileCount = (worldWidth - STARTING_X) * 2 / tileWidth + 2 + 100;
 
         for (int i = 0; i < tileCount; i++) {
             int x = STARTING_X + i * tileWidth;
-            addObject(new Grass(), x, groundY);
+            addObject(new Grass(), x-1000, groundY);
         }
     }
 
