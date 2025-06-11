@@ -19,18 +19,22 @@ public class ExitShopButton extends Actor {
 
     public void act() {
         boolean mouseOver = isMouseOverAccurate();
-
+    
         if (mouseOver && fadeLevel < maxFade) {
             fadeLevel += fadeSpeed;
         } else if (!mouseOver && fadeLevel > 0) {
             fadeLevel -= fadeSpeed;
         }
-
+    
         fadeLevel = Math.max(0, Math.min(maxFade, fadeLevel));
         updateImageWithFade(fadeLevel);
-
+    
         if (Greenfoot.mouseClicked(this)) {
-            shopManager.closeShopUI(); // just remove UI, don't reset level
+            World world = getWorld();
+            if (world != null) {
+                shopManager.closeShopUI();
+                UI.reset(world);
+            }
         }
     }
 

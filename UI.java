@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * @author Saiful Shaik
  * @version May 25, 2025
  */
+import greenfoot.*;  
+import java.util.ArrayList;
+
 public class UI extends Actor {
     private Label goldLabel;
     private Label lifeLabel;
@@ -25,7 +28,14 @@ public class UI extends Actor {
 
     private static ArrayList<Heart> playerHearts = new ArrayList<>();
 
+    private static GreenfootImage baseImage = new GreenfootImage("images/UIbg.jpg");
+
     public UI(World world) {
+        GreenfootImage bg = new GreenfootImage(baseImage);
+        bg.scale(900, 70);
+        setImage(bg);
+        world.addObject(this, 450, 35);
+
         goldLabel = new Label("-- GOLD --", fixedUILabelSize);
         lifeLabel = new Label("-- LIFE --", fixedUILabelSize);
         bossLabel = new Label("-- BOSS --", fixedUILabelSize);
@@ -110,6 +120,7 @@ public class UI extends Actor {
         for (Heart heart : playerHearts) {
             world.removeObject(heart);
         }
+
         setupPlayerHearts(world);
     }
 }

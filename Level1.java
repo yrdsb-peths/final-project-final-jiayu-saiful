@@ -20,7 +20,7 @@ public class Level1 extends World {
     private final int targetWidth = 120;
     
     // when boss is dead, load Gameover screen
-    private int numberOfEnemies = 10;
+    private int numberOfEnemies = 1;
 
     private Player player;
     public UI ui;
@@ -40,9 +40,6 @@ public class Level1 extends World {
         addEnemies();
         
         addPlayer();
-    
-        UIBackground UIbg = new UIBackground(this, screenWidth, 70);
-        addObject(UIbg, screenWidth / 2, 35);
     
         ui = new UI(this);
     }
