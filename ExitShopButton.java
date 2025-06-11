@@ -33,7 +33,7 @@ public class ExitShopButton extends Actor {
             World world = getWorld();
             if (world != null) {
                 shopManager.closeShopUI();
-                UI.reset(world);
+                UI ui = new UI(world);
             }
         }
     }

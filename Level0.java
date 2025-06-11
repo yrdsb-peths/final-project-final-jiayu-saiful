@@ -157,7 +157,7 @@ public class Level0 extends World {
     }
 
     private void addBoss1Speech() {
-        // Add speech for boss level here
+        
     }
 
     private void addLevel2Speech() {

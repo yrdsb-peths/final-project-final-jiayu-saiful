@@ -7,9 +7,6 @@ import java.util.ArrayList;
  * @author Saiful Shaik
  * @version May 25, 2025
  */
-import greenfoot.*;  
-import java.util.ArrayList;
-
 public class UI extends Actor {
     private Label goldLabel;
     private Label lifeLabel;
@@ -99,7 +96,7 @@ public class UI extends Actor {
         }
     }
 
-    private static void updateHearts(World world) {
+    public static void updateHearts(World world) {
         for (int i = 0; i < playerHearts.size(); i++) {
             Heart heart = playerHearts.get(i);
             if (i < playerLives) {
@@ -123,4 +120,11 @@ public class UI extends Actor {
 
         setupPlayerHearts(world);
     }
+    
+    public static void fillToFullHearts(World world) {
+        playerLives = 5;
+        setupPlayerHearts(world);
+        goldCounter.setValue(goldCoinsCounter);
+    }
+    
 }
