@@ -30,7 +30,6 @@ public class Titlescreen extends World {
         GreenfootImage bg = new GreenfootImage("images/titlescreen.png");
         bg.drawImage(bg, 0, 0);
         setBackground(bg);
-        
 
         // Style and place the main title
         styleTitleLabel(titleTop);
@@ -47,7 +46,6 @@ public class Titlescreen extends World {
         
         // Help Button
         addMenuButton(new HelpButton(), helpTitle, 2);
-        
     }
 
     private void styleTitleLabel(Label label) {
@@ -77,5 +75,9 @@ public class Titlescreen extends World {
     
     public int getScreenHeight() {
         return screenHeight;
+    }
+    
+    public void started() {
+        MusicManager.playMusic();
     }
 }
