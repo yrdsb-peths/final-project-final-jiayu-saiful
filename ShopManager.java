@@ -31,7 +31,7 @@ public class ShopManager {
     public ShopManager(World world) {
         this.world = world;
 
-        ShopManager.shopOpen = true; // <<< Mark shop as open
+        ShopManager.shopOpen = true;
 
         // Create background layer
         backgroundImage = new Actor() {};

@@ -21,7 +21,7 @@ public class UI extends Actor {
 
     public static int goldCoinsCounter = 0;
     public static int playerLives = 5;
-    private int bossLives = 10;
+    private int bossLives = 15;
 
     private static ArrayList<Heart> playerHearts = new ArrayList<>();
 

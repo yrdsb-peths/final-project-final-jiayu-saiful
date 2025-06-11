@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
 import java.awt.Rectangle;
 
 /**
@@ -41,36 +42,33 @@ public class EnemyMissile extends Base {
 
     private void move() {
         if (hasHit) return;
-    
-        Player player = (Player) getWorld().getObjects(Player.class).get(0);
-        if (player == null) return;
-    
-        // Calculate direction to player
+
+        List<Player> players = getWorld().getObjects(Player.class);
+        if (players.isEmpty()) return;
+
+        Player player = players.get(0);
+
         int dx = player.getX() - getX();
         int dy = player.getY() - getY();
-    
-        // Calculate angle in degrees (facing right by default)
+
         double angle = Math.toDegrees(Math.atan2(dy, dx));
         if (facingRight) {
             setRotation((int) angle);
         } else {
             setRotation((int) (angle + 180));
         }
-    
-        // Normalize direction vector
+
         double length = Math.sqrt(dx * dx + dy * dy);
         double moveX = speed * dx / length;
         double moveY = speed * dy / length;
-    
-        // Move missile
+
         setLocation((int) (getX() + moveX), (int) (getY() + moveY));
-    
+
         if (isAtEdge()) {
             getWorld().removeObject(this);
             return;
         }
-    
-        // Check collision with player
+
         Rectangle missileBounds = new Rectangle(getX() - 10, getY() - 10, 20, 20);
         if (missileBounds.intersects(player.getHitbox())) {
             hasHit = true;
@@ -87,5 +85,4 @@ public class EnemyMissile extends Base {
             setImage(images[frame]);
         }
     }
-
 }

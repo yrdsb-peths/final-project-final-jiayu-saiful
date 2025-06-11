@@ -6,8 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Level2 extends World
-{
+public class Level2 extends World {
     public static int screenWidth = 50;
     public static int screenHeight = 50;
     private static final boolean BOUNDED = true;
@@ -23,14 +22,14 @@ public class Level2 extends World
     private Player player;
     public UI ui;
 
-    public Level2()
-    {    
-        // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
+    public Level2() {    
         super(900, 540, 1, false); 
+        
         groundY = getHeight() - 10;
         
-        //addBoss();
+        setBackground("images/level1bg.png");
         
+        addBoss();
         addStoneTiles();
         
         UIBackground UIbg = new UIBackground(this, screenWidth, 70);
@@ -55,5 +54,12 @@ public class Level2 extends World
             int x = STARTING_X + i * tileWidth;
             addObject(new Stone(targetWidth), x, groundY);
         }
+    }
+    
+    private void addBoss() {
+        Boss boss = new Boss();
+        int bossX = getWidth() - 150;
+        int bossY = groundY - 100;
+        addObject(boss, bossX, bossY);
     }
 }
