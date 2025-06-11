@@ -3,12 +3,9 @@ import greenfoot.*;
 public class MusicManager {
     private static GreenfootSound bgMusic = new GreenfootSound("sounds/backgroundMusic.mp3");
     private static boolean isPlaying = false;
-    private static int masterVolume = 100;
+    private static int masterVolume = 200;
     private static int backgroundVolume = 50;
-    private static int sfxVolume = 60;
-    
-    // ======== SFX =========
-    private static GreenfootSound coinSound = new GreenfootSound("sounds/coin.mp3");
+    private static int sfxVolume = 40;
     
 
     public static void playMusic() {
@@ -75,11 +72,8 @@ public class MusicManager {
         return Math.min(Math.max(value, min), max);
     }
     
-    
-    
     // ======================== SFX ========================
-    public static void playCoinSound() {
-        coinSound.setVolume(sfxVolume);
-        coinSound.play();
+    public static void setSFXVolume(GreenfootSound sfx) {
+        sfx.setVolume(sfxVolume);
     }
 }

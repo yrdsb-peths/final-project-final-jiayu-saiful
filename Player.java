@@ -81,6 +81,7 @@ public class Player extends Actor {
     public void act() {
         if (isDead) {
             playDeathAnimation();
+            MusicManager.setSFXVolume(deathSound);
             deathSound.play();
             return;
         }
@@ -111,6 +112,7 @@ public class Player extends Actor {
         }
 
         if (Greenfoot.isKeyDown(KeybindManager.getAttackKey()) && !isAttacking) {
+            MusicManager.setSFXVolume(attackSound);
             attackSound.play();
             isAttacking = true;
             attackHitRegistered = false;

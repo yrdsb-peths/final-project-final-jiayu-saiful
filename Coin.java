@@ -45,7 +45,8 @@ public class Coin extends Base {
                     level.ui.incrementGoldCounter();
                 }
             }
-            MusicManager.playCoinSound();
+            MusicManager.setSFXVolume(coinSound);
+            coinSound.play();
             world.removeObject(this);
             
         }

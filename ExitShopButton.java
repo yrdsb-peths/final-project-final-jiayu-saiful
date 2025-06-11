@@ -1,29 +1,22 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
-/**
- * Write a description of class ExitShopButton here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
-public class ExitShopButton extends Actor
-{
+public class ExitShopButton extends Actor {
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 5;
-    Level0 l = new Level0(900, 540);
-    
-    public ExitShopButton() {
-        baseImage = new GreenfootImage("images/exit.png");
+    private ShopManager shopManager;
 
+    public ExitShopButton(ShopManager shopManager) {
+        this.shopManager = shopManager;
+
+        baseImage = new GreenfootImage("images/exit.png");
         int targetWidth = 100;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
-
         setImage(new GreenfootImage(baseImage));
     }
-    
+
     public void act() {
         boolean mouseOver = isMouseOverAccurate();
 
@@ -37,11 +30,10 @@ public class ExitShopButton extends Actor
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
-            // Go to boss level after
-            Greenfoot.setWorld(l); 
+            shopManager.closeShopUI(); // just remove UI, don't reset level
         }
     }
-    
+
     private void updateImageWithFade(int alpha) {
         GreenfootImage img = new GreenfootImage(baseImage);
         if (alpha > 0) {
