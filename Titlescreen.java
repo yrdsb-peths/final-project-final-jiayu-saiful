@@ -46,6 +46,8 @@ public class Titlescreen extends World {
         
         // Help Button
         addMenuButton(new HelpButton(), helpTitle, 2);
+        
+        Level0.setting = 0;
     }
 
     private void styleTitleLabel(Label label) {

@@ -33,7 +33,7 @@ public class EnhanceAttack extends Actor {
             UI.goldCoinsCounter -= 10;  // Deduct cost
 
             // TODO: Add your code here to increase the attack hitbox or whatever effect
-
+            
             World world = getWorld();
             if (world != null) {
                 world.removeObject(this);

@@ -37,6 +37,7 @@ public class EnhanceSpeed extends Actor
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
             MusicManager.buttonClicked();
+            UI.goldCoinsCounter -= 10;
             getWorld().removeObject(this);
             Player.MOVE_SPEED = 5;
         }
