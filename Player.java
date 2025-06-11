@@ -1,13 +1,8 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;  // (World, Actor, GreenfootImage, GreenfootSound, etc.)
 import java.util.Random;
 import java.util.List;
 import java.awt.Rectangle;
 
-/**
- * Player character that scrolls the world and plays animations
- * @author By Saiful Shaik
- * @version May 28, 2025
- */
 public class Player extends Actor {
     private GreenfootImage[] walkImagesRight, walkImagesLeft;
     private GreenfootImage[] idleImagesRight, idleImagesLeft;
@@ -18,7 +13,7 @@ public class Player extends Actor {
     private GreenfootImage currentImage;
     private GreenfootSound deathSound = new GreenfootSound("death.mp3");
     private GreenfootSound attackSound = new GreenfootSound("attack.mp3");
-    
+
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     public static int MOVE_SPEED = 3;
@@ -43,7 +38,7 @@ public class Player extends Actor {
     private final int[] attackFrameCounts = {5, 4, 5};
 
     private Random random = new Random();
-    
+
     private boolean isDead = false;
     private int deathFrame = 0;
 
@@ -70,7 +65,7 @@ public class Player extends Actor {
 
         defendImagesRight = loadAnimation("defend", 5, targetWidth);
         defendImagesLeft = flipImagesHorizontally(defendImagesRight);
-        
+
         deathImagesRight = loadAnimation("death", 11, targetWidth);
         deathImagesLeft = flipImagesHorizontally(deathImagesRight);
 
@@ -85,9 +80,15 @@ public class Player extends Actor {
             deathSound.play();
             return;
         }
-    
+
         handleInput();
         applyGravity();
+
+        // Only check barriers in Level0
+        if (getWorld() instanceof Level0) {
+            // Removed checkBarrierCollision() because we do blocking in handleInput already
+        }
+
         checkGroundCollision();
         updateAnimationState();
         //drawHitbox();
@@ -95,19 +96,24 @@ public class Player extends Actor {
 
     private void handleInput() {
         World world = getWorld();
-        if ((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && world instanceof Level0) {
-            ((Level0) world).scrollWorld(-MOVE_SPEED);
-            facingRight = true;
-        } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
-            setLocation(getX() + MOVE_SPEED, getY());
+        boolean canMoveRight = !isBarrierAhead(MOVE_SPEED);
+        boolean canMoveLeft = !isBarrierAhead(-MOVE_SPEED);
+
+        if ((Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) && canMoveRight) {
+            if (world instanceof Level0) {
+                ((Level0) world).scrollWorld(-MOVE_SPEED);
+            } else {
+                setLocation(getX() + MOVE_SPEED, getY());
+            }
             facingRight = true;
         }
 
-        if ((Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) && world instanceof Level0) {
-            ((Level0) world).scrollWorld(MOVE_SPEED);
-            facingRight = false;
-        } else if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
-            setLocation(getX() - MOVE_SPEED, getY());
+        if ((Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) && canMoveLeft) {
+            if (world instanceof Level0) {
+                ((Level0) world).scrollWorld(MOVE_SPEED);
+            } else {
+                setLocation(getX() - MOVE_SPEED, getY());
+            }
             facingRight = false;
         }
 
@@ -119,7 +125,7 @@ public class Player extends Actor {
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
-        
+
         if (Greenfoot.isKeyDown(KeybindManager.getDefendKey())) {
             isDefending = true;
             animationFrame = 0;
@@ -131,6 +137,16 @@ public class Player extends Actor {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
         }
+    }
+
+    // Returns true if there is a Barrier directly dx pixels ahead (only if in Level0)
+    private boolean isBarrierAhead(int dx) {
+        if (!(getWorld() instanceof Level0)) {
+            return false;  // no blocking outside Level0
+        }
+        int direction = dx > 0 ? 1 : -1;
+        Actor barrier = getOneObjectAtOffset(direction * Math.abs(dx), 0, Barrier.class);
+        return barrier != null;
     }
 
     private void updateAnimationState() {
@@ -216,17 +232,17 @@ public class Player extends Actor {
     private void checkGroundCollision() {
         int footY = getImage().getHeight() / 2 - PLAYER_BOTTOM_OFFSET;
         int checkDistance = getImage().getWidth() / 2 - 50;
-    
+
         Actor groundLeft = getOneObjectAtOffset(-checkDistance, footY, Grass.class);
         Actor groundRight = getOneObjectAtOffset(checkDistance, footY, Grass.class);
         Actor ground = (groundLeft != null) ? groundLeft : groundRight;
-    
+
         if (ground == null) {
             groundLeft = getOneObjectAtOffset(-checkDistance, footY, Stone.class);
             groundRight = getOneObjectAtOffset(checkDistance, footY, Stone.class);
             ground = (groundLeft != null) ? groundLeft : groundRight;
         }
-    
+
         if (ground != null && vSpeed >= 0) {
             int groundTopY = ground.getY() - ground.getImage().getHeight() / 2;
             int playerHeight = getImage().getHeight();
@@ -243,9 +259,6 @@ public class Player extends Actor {
         for (int i = 0; i < frameCount; i++) {
             String path = "images/knight/knightAnimations/" + folderName + "/" + i + ".png";
             GreenfootImage img = new GreenfootImage(path);
-            if (img == null) {
-                System.out.println("Missing image: " + path);
-            }
             scaleImage(img, targetWidth);
             images[i] = img;
         }
@@ -265,7 +278,7 @@ public class Player extends Actor {
         int targetHeight = (int)(img.getHeight() * ((double) targetWidth / img.getWidth()));
         img.scale(targetWidth, targetHeight);
     }
-    
+
     public int getAttackId() {
         return attackType;
     }
@@ -273,31 +286,30 @@ public class Player extends Actor {
     public boolean isAttacking() {
         return isAttacking && attackFrame < attackFrameCounts[attackType];
     }
-    
+
     public void takeDamage() {
         if (UI.playerLives > 0 && !isDefending) {
             ((Level1)getWorld()).ui.decreaseLife(getWorld());
             isHit = true;
             isDefending = true;
             animationFrame = 0;
-    
+
             if (UI.playerLives == 0) {
                 deathAnimation();
-                return;
             }
         }
     }
-    
+
     private void deathAnimation() {
         isDead = true;
         deathFrame = 0;
         animationTimer = 0;
     }
-    
+
     private void playDeathAnimation() {
         if (animationTimer >= ANIMATION_SPEED) {
             animationTimer = 0;
-    
+
             GreenfootImage[] deathSet = facingRight ? deathImagesRight : deathImagesLeft;
             if (deathFrame < deathSet.length) {
                 setImage(deathSet[deathFrame]);
@@ -311,21 +323,21 @@ public class Player extends Actor {
             animationTimer++;
         }
     }
-    
+
     public Rectangle getHitbox() {
         return new Rectangle(getX() - 35, getY() - 35, 60, 70);
     }
-    
+
     private void drawHitbox() {
         GreenfootImage img = new GreenfootImage(getImage());
         Rectangle hitbox = getHitbox();
-        
+
         int relX = hitbox.x - (getX() - img.getWidth() / 2);
         int relY = hitbox.y - (getY() - img.getHeight() / 2);
-    
+
         img.setColor(Color.RED);
         img.drawRect(relX, relY, hitbox.width, hitbox.height);
-        
+
         setImage(img);
     }
 }

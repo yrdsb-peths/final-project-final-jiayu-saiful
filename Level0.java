@@ -69,6 +69,8 @@ public class Level0 extends World {
 
         // Player
         addPlayer();
+        
+        addBarriers();
 
         // UI Background
         UIBackground UIbg = new UIBackground(this, screenWidth, 70);
@@ -151,6 +153,14 @@ public class Level0 extends World {
         addObject(house, x, houseY);
     }
 
+    private void addBarriers() {
+        Barrier leftBarrier = new Barrier(10, screenHeight);
+        addObject(leftBarrier, 50, screenHeight / 2);
+    
+        Barrier rightBarrier = new Barrier(10, screenHeight);
+        addObject(rightBarrier, 1600, screenHeight / 2);
+    }
+    
     private void addLevel1Speech() {
         Speech speech = new Speech();
         addObject(speech, npcX + 80, npcY - 80);
