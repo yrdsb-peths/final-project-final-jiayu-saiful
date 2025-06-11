@@ -1,13 +1,6 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
-/**
- * Write a description of class EnhanceAttack here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
-public class EnhanceAttack extends Actor
-{
+public class EnhanceAttack extends Actor {
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
@@ -36,9 +29,14 @@ public class EnhanceAttack extends Actor
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
-            // increase attack hitbox
-            Shop shop = new Shop();
-            shop.removeObject(this);
+            UI.goldCoinsCounter -= 10;  // Deduct cost
+
+            // TODO: Add your code here to increase the attack hitbox or whatever effect
+
+            World world = getWorld();
+            if (world != null) {
+                world.removeObject(this);
+            }
         }
     }
 
