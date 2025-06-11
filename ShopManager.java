@@ -7,7 +7,7 @@ public class ShopManager {
     private List<Actor> uiElements = new ArrayList<>();
     private Actor backgroundImage;
     private Actor foregroundImage;
-
+    
     // Global shop state
     public static boolean shopOpen = false;
 
@@ -57,10 +57,15 @@ public class ShopManager {
         addToUI(UIbg, worldWidth / 2, UI_HEADER_Y);
 
         UI ui = new UI(world);
-
-        addToUI(new EnhanceAttack(), worldWidth / 2 - SHOP_ITEM_SPACING, SHOP_ITEM_Y);
-        addToUI(new EnhanceSpeed(),  worldWidth / 2, SHOP_ITEM_Y);
-        addToUI(new ResetLives(),    worldWidth / 2 + SHOP_ITEM_SPACING, SHOP_ITEM_Y);
+        if (!EnhanceAttack.isBought) {
+            addToUI(new EnhanceAttack(), worldWidth / 2 - SHOP_ITEM_SPACING, SHOP_ITEM_Y);
+        }
+        if (!EnhanceSpeed.isBought) {
+            addToUI(new EnhanceSpeed(),  worldWidth / 2, SHOP_ITEM_Y);
+        }
+        if(!ResetLives.isBought) {
+            addToUI(new ResetLives(),    worldWidth / 2 + SHOP_ITEM_SPACING, SHOP_ITEM_Y);
+        }
 
         ExitShopButton exitButton = new ExitShopButton(this);
         addToUI(exitButton, worldWidth - EXIT_BUTTON_X_OFFSET - 65, EXIT_BUTTON_Y + 80);

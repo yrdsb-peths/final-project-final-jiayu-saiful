@@ -6,6 +6,8 @@ public class EnhanceAttack extends Actor {
     private final int maxFade = 80;
     private final int fadeSpeed = 3;
 
+    public static boolean isBought = false;
+
     public EnhanceAttack() {
         baseImage = new GreenfootImage("images/attack_range.png");
 
@@ -13,10 +15,19 @@ public class EnhanceAttack extends Actor {
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
-        setImage(new GreenfootImage(baseImage));
+        if (isBought) {
+            GreenfootImage boughtImage = new GreenfootImage(baseImage);
+            boughtImage.setColor(new Color(0, 0, 0, 150));
+            boughtImage.fillRect(0, 0, boughtImage.getWidth(), boughtImage.getHeight());
+            setImage(boughtImage);
+        } else {
+            setImage(new GreenfootImage(baseImage));
+        }
     }
 
     public void act() {
+        if (isBought) return;
+
         boolean mouseOver = isMouseOverAccurate();
 
         if (mouseOver && fadeLevel < maxFade) {
@@ -30,9 +41,8 @@ public class EnhanceAttack extends Actor {
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
             MusicManager.buttonClicked();
-            UI.goldCoinsCounter -= 10;  // Deduct cost
-
-            // TODO: Add your code here to increase the attack hitbox or whatever effect
+            UI.goldCoinsCounter -= 10;
+            isBought = true;
 
             World world = getWorld();
             if (world != null) {

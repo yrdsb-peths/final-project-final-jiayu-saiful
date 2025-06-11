@@ -83,12 +83,6 @@ public class Player extends Actor {
 
         handleInput();
         applyGravity();
-
-        // Only check barriers in Level0
-        if (getWorld() instanceof Level0) {
-            // Removed checkBarrierCollision() because we do blocking in handleInput already
-        }
-
         checkGroundCollision();
         updateAnimationState();
         //drawHitbox();

@@ -1,17 +1,12 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
-/**
- * Write a description of class EnhanceSpeed here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
-public class EnhanceSpeed extends Actor
-{
-    public GreenfootImage baseImage;
+public class EnhanceSpeed extends Actor {
+    private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 3;
+
+    public static boolean isBought = false;
 
     public EnhanceSpeed() {
         baseImage = new GreenfootImage("images/speed.png");
@@ -20,10 +15,19 @@ public class EnhanceSpeed extends Actor
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
 
-        setImage(new GreenfootImage(baseImage));
+        if (isBought) {
+            GreenfootImage boughtImage = new GreenfootImage(baseImage);
+            boughtImage.setColor(new Color(0, 0, 0, 150));
+            boughtImage.fillRect(0, 0, boughtImage.getWidth(), boughtImage.getHeight());
+            setImage(boughtImage);
+        } else {
+            setImage(new GreenfootImage(baseImage));
+        }
     }
 
     public void act() {
+        if (isBought) return;
+
         boolean mouseOver = isMouseOverAccurate();
 
         if (mouseOver && fadeLevel < maxFade) {
@@ -37,8 +41,14 @@ public class EnhanceSpeed extends Actor
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
             MusicManager.buttonClicked();
-            getWorld().removeObject(this);
+            UI.goldCoinsCounter -= 10;
             Player.MOVE_SPEED = 5;
+            isBought = true;
+
+            World world = getWorld();
+            if (world != null) {
+                world.removeObject(this);
+            }
         }
     }
 
