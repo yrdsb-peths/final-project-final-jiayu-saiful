@@ -100,10 +100,13 @@ public class OptionPage extends World {
                 int my = mouse.getY();
 
                 if (isPointInActor(mx, my, volumeButton)) {
+                    MusicManager.buttonClicked();
                     setOptionChoice(0);
                 } else if (isPointInActor(mx, my, graphicsButton)) {
+                    MusicManager.buttonClicked();
                     setOptionChoice(1);
                 } else if (isPointInActor(mx, my, keybindButton)) {
+                    MusicManager.buttonClicked();
                     setOptionChoice(2);
                 }
             }

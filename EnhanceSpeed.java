@@ -36,6 +36,7 @@ public class EnhanceSpeed extends Actor
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
+            MusicManager.buttonClicked();
             getWorld().removeObject(this);
             Player.MOVE_SPEED = 5;
         }

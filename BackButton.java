@@ -37,6 +37,7 @@ public class BackButton extends Actor
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
+            MusicManager.buttonClicked();
             // Go back to Titlescreen
             Greenfoot.setWorld(titlescreen);
         }

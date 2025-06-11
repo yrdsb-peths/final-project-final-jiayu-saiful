@@ -29,6 +29,7 @@ public class EnhanceAttack extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
+            MusicManager.buttonClicked();
             UI.goldCoinsCounter -= 10;  // Deduct cost
 
             // TODO: Add your code here to increase the attack hitbox or whatever effect

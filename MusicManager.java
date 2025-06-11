@@ -4,7 +4,7 @@ public class MusicManager {
     private static GreenfootSound bgMusic = new GreenfootSound("sounds/backgroundMusic.mp3");
     private static boolean isPlaying = false;
     private static int masterVolume = 100;
-    private static int backgroundVolume = 50;
+    private static int backgroundVolume = 40;
     private static int sfxVolume = 40;
     
 
@@ -75,5 +75,11 @@ public class MusicManager {
     // ======================== SFX ========================
     public static void setSFXVolume(GreenfootSound sfx) {
         sfx.setVolume(sfxVolume);
+    }
+    
+    public static void buttonClicked() {
+        GreenfootSound button = new GreenfootSound("sounds/buttonClick.mp3");
+        button.setVolume(sfxVolume);
+        button.play();
     }
 }

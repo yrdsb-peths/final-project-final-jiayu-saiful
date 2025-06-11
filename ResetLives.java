@@ -31,6 +31,7 @@ public class ResetLives extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= cost) {
+            MusicManager.buttonClicked();
             getWorld().removeObject(this);
             UI.goldCoinsCounter -= cost;
             UI.playerLives = 5;

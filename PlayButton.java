@@ -36,6 +36,7 @@ public class PlayButton extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
+            MusicManager.setSFXVolume(buttonSound);
             buttonSound.play();
             Titlescreen titlescreen = (Titlescreen) getWorld();
             Greenfoot.setWorld(new Level0(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));

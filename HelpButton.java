@@ -35,6 +35,7 @@ public class HelpButton extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(this)) {
+            MusicManager.buttonClicked();
             // Load Help Page
             Titlescreen titlescreen = (Titlescreen) getWorld();
             Greenfoot.setWorld(new HelpPage(titlescreen.getScreenWidth(), titlescreen.getScreenHeight()));

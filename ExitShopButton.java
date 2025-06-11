@@ -32,6 +32,7 @@ public class ExitShopButton extends Actor {
         if (Greenfoot.mouseClicked(this)) {
             World world = getWorld();
             if (world != null) {
+                MusicManager.buttonClicked();
                 shopManager.closeShopUI();
                 UI ui = new UI(world);
             }
