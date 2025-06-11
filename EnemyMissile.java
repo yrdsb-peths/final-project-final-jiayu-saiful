@@ -33,6 +33,7 @@ public class EnemyMissile extends Base {
     }
 
     public void act() {
+        MusicManager.setSFXVolume(missileSound);
         missileSound.play();
         animate();
         move();
