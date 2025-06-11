@@ -40,6 +40,10 @@ public class Level2 extends World
         addObject(UIbg, screenWidth / 2, 35);
     
         ui = new UI(this);
+        
+        if (isBossDead) {
+            //getWorld();
+        }
     }
     
     private void addStoneTiles() {
