@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class HelpPage extends World
 {
     private Label controls = new Label("Player Controls", 60);
-    private Label label3 = new Label("Use C to Defend and D to Attack", 40);
+    private Label label3 = new Label("Use C to Defend and V to Attack", 40);
     private Label label2 = new Label("Use \u2191 or space to Jump", 40);
     private Label label1 = new Label("Use \u2190 and \u2192 or A and D to Move", 40);
     

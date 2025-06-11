@@ -60,6 +60,7 @@ public class Level0 extends World {
         // NPC and Speech
         addNPC("00.png", 100, npcX, "left");
         addNPC2("0.png", 100, 1200, "left");
+        addObject(new ShopSpeech(150), 1300, 380);
         switch (setting) {
             case 0 -> addLevel1Speech();
             case 1 -> addBoss1Speech();
