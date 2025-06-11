@@ -20,7 +20,7 @@ public class Level1 extends World {
     private final int targetWidth = 120;
     
     // when boss is dead, load Gameover screen
-    private int numberOfEnemies = 10;
+    private int numberOfEnemies = 1;
 
     private Player player;
     public UI ui;
