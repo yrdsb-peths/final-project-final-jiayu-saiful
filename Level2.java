@@ -8,8 +8,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Level2 extends World
 {
-    public static int screenWidth = 0;
-    public static int screenHeight = 0;
+    public static int screenWidth = 50;
+    public static int screenHeight = 50;
     private static final boolean BOUNDED = true;
     private static final int IMAGE_OVERLAP = 30;
     private static final int STARTING_X = -30;
@@ -19,9 +19,6 @@ public class Level2 extends World
     private final int PLAYER_START_Y = 300;
     
     private final int targetWidth = 120;
-    
-    // when player is dead, load Gameover screen
-    private boolean isBossDead = false;
 
     private Player player;
     public UI ui;
