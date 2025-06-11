@@ -110,15 +110,15 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown(KeyBindButton.input) && !isAttacking) {
+        if (Greenfoot.isKeyDown(KeybindManager.getAttackKey()) && !isAttacking) {
             attackSound.play();
             isAttacking = true;
             attackHitRegistered = false;
             attackType = random.nextInt(3);
             attackFrame = 0;
         }
-
-        if (Greenfoot.isKeyDown(KeyBindButton2.input)) {
+        
+        if (Greenfoot.isKeyDown(KeybindManager.getDefendKey())) {
             isDefending = true;
             animationFrame = 0;
         } else {

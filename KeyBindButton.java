@@ -1,32 +1,30 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 
-/**
- * Write a description of class KeyBindButton here.
- * 
- * @author (your name) Jiayu
- * @version (a version number or a date) 6/7/25
- */
-public class KeyBindButton extends Actor
-{
+public class KeyBindButton extends Actor {
     private GreenfootImage baseImage;
     private int fadeLevel = 0;
     private final int maxFade = 80;
     private final int fadeSpeed = 5;
-    
-    public static String input = "v";
-    
-    public KeyBindButton() {
-        baseImage = new GreenfootImage("images/button1.png");
-        
+
+    private boolean keyButton;
+
+    private final int hitboxX = 20;
+    private final int hitboxY = 10;
+    private final int hitboxWidth = 170;
+    private final int hitboxHeight = 40;
+
+    public KeyBindButton(boolean keyButton) {
+        this.keyButton = keyButton;
+
+        baseImage = new GreenfootImage("images/button0.png");
         int targetWidth = 210;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
         baseImage.scale(targetWidth, targetHeight);
-        
+
         setImage(new GreenfootImage(baseImage));
     }
-    
-    public void act()
-    {
+
+    public void act() {
         boolean mouseOver = isMouseOverAccurate();
 
         if (mouseOver && fadeLevel < maxFade) {
@@ -37,12 +35,33 @@ public class KeyBindButton extends Actor
 
         fadeLevel = Math.max(0, Math.min(maxFade, fadeLevel));
         updateImageWithFade(fadeLevel);
-        
-        if (Greenfoot.mouseClicked(this)) {
-            input = Greenfoot.ask("Please input a new attack keybind: ");
+
+        if (Greenfoot.mouseClicked(null) && isClickedInHitbox()) {
+            String prompt = keyButton ? "Enter new ATTACK key:" : "Enter new DEFEND key:";
+            String input = Greenfoot.ask(prompt);
+
+            if (input != null && input.length() > 0) {
+                input = input.toLowerCase();
+
+                String currentAttack = KeybindManager.getAttackKey();
+                String currentDefend = KeybindManager.getDefendKey();
+
+                // Check for duplicates
+                if ((keyButton && input.equals(currentDefend)) ||
+                    (!keyButton && input.equals(currentAttack))) {
+                    Greenfoot.ask("Key '" + input + "' is already used. Press OK to continue.");
+                    return;
+                }
+
+                if (keyButton) {
+                    KeybindManager.setAttackKey(input);
+                } else {
+                    KeybindManager.setDefendKey(input);
+                }
+            }
         }
     }
-    
+
     private void updateImageWithFade(int alpha) {
         GreenfootImage img = new GreenfootImage(baseImage);
         if (alpha > 0) {
@@ -65,5 +84,19 @@ public class KeyBindButton extends Actor
 
         return (mx >= x - halfW && mx <= x + halfW &&
                 my >= y - halfH && my <= y + halfH);
+    }
+
+    private boolean isClickedInHitbox() {
+        MouseInfo mouse = Greenfoot.getMouseInfo();
+        if (mouse == null) return false;
+
+        int imgX = getX() - getImage().getWidth() / 2;
+        int imgY = getY() - getImage().getHeight() / 2;
+
+        int mouseX = mouse.getX();
+        int mouseY = mouse.getY();
+
+        return (mouseX >= imgX + hitboxX && mouseX <= imgX + hitboxX + hitboxWidth &&
+                mouseY >= imgY + hitboxY && mouseY <= imgY + hitboxY + hitboxHeight);
     }
 }
