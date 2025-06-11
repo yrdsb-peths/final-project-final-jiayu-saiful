@@ -43,7 +43,6 @@ public class EnhanceAttack extends Actor {
             MusicManager.buttonClicked();
             UI.goldCoinsCounter -= 10;
             isBought = true;
-
             World world = getWorld();
             if (world != null) {
                 world.removeObject(this);
