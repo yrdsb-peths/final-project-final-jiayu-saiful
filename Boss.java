@@ -8,12 +8,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Boss extends Base
 {
-    /**
-     * Act - do whatever the Boss wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    // when boss is dead, load Gameover screen
+    public static boolean isBossDead = false;
+    
     public void act()
     {
-        // Add your action code here.
+        if (isBossDead) {
+            Gameover gameover = new Gameover();
+            Greenfoot.setWorld(gameover);
+        }
     }
 }
