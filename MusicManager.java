@@ -6,6 +6,10 @@ public class MusicManager {
     private static int masterVolume = 100;
     private static int backgroundVolume = 50;
     private static int sfxVolume = 60;
+    
+    // ======== SFX =========
+    private static GreenfootSound coinSound = new GreenfootSound("sounds/coin.mp3");
+    
 
     public static void playMusic() {
         if (!isPlaying) {
@@ -69,5 +73,13 @@ public class MusicManager {
 
     private static int clamp(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
+    }
+    
+    
+    
+    // ======================== SFX ========================
+    public static void playCoinSound() {
+        coinSound.setVolume(sfxVolume);
+        coinSound.play();
     }
 }
