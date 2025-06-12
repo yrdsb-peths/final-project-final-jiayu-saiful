@@ -1,4 +1,4 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, GreenfootSound, etc.)
+import greenfoot.*;  
 import java.util.Random;
 import java.util.List;
 import java.awt.Rectangle;
@@ -85,7 +85,6 @@ public class Player extends Actor {
         applyGravity();
         checkGroundCollision();
         updateAnimationState();
-        //drawHitbox();
     }
 
     private void handleInput() {
@@ -133,10 +132,9 @@ public class Player extends Actor {
         }
     }
 
-    // Returns true if there is a Barrier directly dx pixels ahead (only if in Level0)
     private boolean isBarrierAhead(int dx) {
         if (!(getWorld() instanceof Level0)) {
-            return false;  // no blocking outside Level0
+            return false;
         }
         int direction = dx > 0 ? 1 : -1;
         Actor barrier = getOneObjectAtOffset(direction * Math.abs(dx), 0, Barrier.class);
@@ -147,26 +145,44 @@ public class Player extends Actor {
         boolean moving = Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("d");
         animationTimer++;
 
+        // Inside updateAnimationState(), under: if (isAttacking)
         if (isAttacking) {
             if (animationTimer >= ANIMATION_SPEED) {
                 animationTimer = 0;
+                
                 GreenfootImage[] attackSet = facingRight ? attackImagesRight[attackType] : attackImagesLeft[attackType];
                 setImage(attackSet[attackFrame]);
-
+        
+                // Apply attack hit on the specific "hit frame" (usually frame 2)
                 if (attackFrame == 2 && !attackHitRegistered) {
                     int attackRange = 100;
+        
+                    // Check Enemies in range and deal damage to the first valid one
                     List<Enemy> enemies = getObjectsInRange(attackRange, Enemy.class);
-
                     for (Enemy enemy : enemies) {
-                        if (enemy != null && !enemy.getIsDead()) {
+                        if (enemy != null && !enemy.isDead()) {
                             enemy.takeDamage();
                             attackHitRegistered = true;
                             break;
                         }
                     }
+        
+                    // If no enemy was hit, check Bosses in range
+                    if (!attackHitRegistered) {
+                        List<Boss> bosses = getObjectsInRange(attackRange, Boss.class);
+                        for (Boss boss : bosses) {
+                            if (boss != null && !Boss.isBossDead) {
+                                boss.receiveDamage(1);
+                                attackHitRegistered = true;
+                                break;
+                            }
+                        }
+                    }
                 }
-
+        
                 attackFrame++;
+        
+                // End the attack animation and reset flags once all frames are done
                 if (attackFrame >= attackSet.length) {
                     isAttacking = false;
                     attackHitRegistered = false;
@@ -283,11 +299,20 @@ public class Player extends Actor {
 
     public void takeDamage() {
         if (UI.playerLives > 0 && !isDefending) {
-            ((Level1)getWorld()).ui.decreaseLife(getWorld());
+            World world = getWorld();
+            
+            if (world instanceof Level1) {
+                Level1 level1 = (Level1) world;
+                level1.ui.decreaseLife(world);
+            } else if (world instanceof Level2) {
+                Level2 level2 = (Level2) world;
+                level2.ui.decreaseLife(world);
+            }
+            
             isHit = true;
             isDefending = true;
             animationFrame = 0;
-
+    
             if (UI.playerLives == 0) {
                 deathAnimation();
             }
@@ -320,18 +345,5 @@ public class Player extends Actor {
 
     public Rectangle getHitbox() {
         return new Rectangle(getX() - 35, getY() - 35, 60, 70);
-    }
-
-    private void drawHitbox() {
-        GreenfootImage img = new GreenfootImage(getImage());
-        Rectangle hitbox = getHitbox();
-
-        int relX = hitbox.x - (getX() - img.getWidth() / 2);
-        int relY = hitbox.y - (getY() - img.getHeight() / 2);
-
-        img.setColor(Color.RED);
-        img.drawRect(relX, relY, hitbox.width, hitbox.height);
-
-        setImage(img);
     }
 }

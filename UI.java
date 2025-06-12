@@ -1,8 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * UI displays gold, life, and boss labels with counters and icons.
+ * 
+ * Handles updating player hearts and boss hearts dynamically.
  * 
  * @author Saiful Shaik
  * @version May 25, 2025
@@ -15,8 +18,8 @@ public class UI extends Actor {
 
     private UIimage goldIcon;
 
-    private static int fixedUILabelSize = 23;
-    private static int fixedUILabelHeight = 18;
+    private static final int fixedUILabelSize = 23;
+    private static final int fixedUILabelHeight = 18;
     private final int goldImgSize = 30;
 
     public static int goldCoinsCounter = 0;
@@ -24,6 +27,7 @@ public class UI extends Actor {
     private int bossLives = 15;
 
     private static ArrayList<Heart> playerHearts = new ArrayList<>();
+    private List<Heart> bossHearts = new ArrayList<>();
 
     private static GreenfootImage baseImage = new GreenfootImage("images/UIbg.jpg");
 
@@ -42,13 +46,16 @@ public class UI extends Actor {
         goldImg.scale(goldImgSize, goldImgSize);
         goldIcon = new UIimage(goldImg);
 
+        // Add gold UI elements
         world.addObject(goldLabel, 80, fixedUILabelHeight);
         world.addObject(goldCounter, 65, fixedUILabelHeight + 30);
         world.addObject(goldIcon, 35, fixedUILabelHeight + 30);
-        world.addObject(lifeLabel, 250, fixedUILabelHeight);
 
+        // Add life label and hearts
+        world.addObject(lifeLabel, 250, fixedUILabelHeight);
         setupPlayerHearts(world);
 
+        // Add boss label and hearts
         int screenWidth = world.getWidth();
         int labelWidth = bossLabel.getImage().getWidth();
         int bossLabelX = screenWidth - labelWidth / 2 - 15;
@@ -56,15 +63,7 @@ public class UI extends Actor {
 
         world.addObject(bossLabel, bossLabelX, fixedUILabelHeight);
 
-        int spacingBoss = 25;
-        int bossTotalWidth = (bossLives - 1) * spacingBoss;
-        int bossHeartStartX = Math.min(bossLabelX - bossTotalWidth / 2, screenWidth - bossTotalWidth - 10);
-        bossHeartStartX = Math.max(bossHeartStartX, bossLives) - 10;
-
-        for (int i = 0; i < bossLives; i++) {
-            Heart heart = new Heart();
-            world.addObject(heart, bossHeartStartX + i * spacingBoss, bossHeartsY);
-        }
+        setupBossHearts(world, bossLabelX, bossHeartsY);
     }
 
     private static void setupPlayerHearts(World world) {
@@ -77,6 +76,20 @@ public class UI extends Actor {
             Heart heart = new Heart();
             playerHearts.add(heart);
             world.addObject(heart, heartStartX + i * spacing, heartY);
+        }
+    }
+
+    private void setupBossHearts(World world, int bossLabelX, int bossHeartsY) {
+        bossHearts.clear();
+        int spacingBoss = 25;
+        int bossTotalWidth = (bossLives - 1) * spacingBoss;
+        int bossHeartStartX = Math.min(bossLabelX - bossTotalWidth / 2, world.getWidth() - bossTotalWidth - 10);
+        bossHeartStartX = Math.max(bossHeartStartX, bossLives) - 10;
+
+        for (int i = 0; i < bossLives; i++) {
+            Heart heart = new Heart();
+            bossHearts.add(heart);
+            world.addObject(heart, bossHeartStartX + i * spacingBoss, bossHeartsY);
         }
     }
 
@@ -120,11 +133,28 @@ public class UI extends Actor {
 
         setupPlayerHearts(world);
     }
-    
+
     public static void fillToFullHearts(World world) {
         playerLives = 5;
         setupPlayerHearts(world);
         goldCounter.setValue(goldCoinsCounter);
     }
-    
+
+    /**
+     * Updates boss hearts display based on current boss health.
+     * Removes hearts beyond currentHealth.
+     */
+    public void updateBossHearts(int currentHealth) {
+        World world = getWorld();
+        if (world == null) return;
+
+        // Remove hearts beyond currentHealth
+        for (int i = bossHearts.size() - 1; i >= currentHealth; i--) {
+            Heart heart = bossHearts.get(i);
+            if (heart != null) {
+                world.removeObject(heart);
+                bossHearts.set(i, null);
+            }
+        }
+    }
 }

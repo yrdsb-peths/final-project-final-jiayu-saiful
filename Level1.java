@@ -25,7 +25,7 @@ public class Level1 extends World {
     private Player player;
     public UI ui;
 
-    public Level1(int width, int height, int goldCount) {
+    public Level1(int width, int height) {
         super(width, height, 1, BOUNDED);
         Level1.screenWidth = width;
         Level1.screenHeight = height;

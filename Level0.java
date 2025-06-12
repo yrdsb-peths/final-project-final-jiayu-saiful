@@ -168,7 +168,8 @@ public class Level0 extends World {
     }
 
     private void addBoss1Speech() {
-        
+        Speech1 speech = new Speech1();
+        addObject(speech, npcX+80, npcY-80);
     }
 
     private void addLevel2Speech() {

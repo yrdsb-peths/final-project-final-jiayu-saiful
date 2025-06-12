@@ -351,7 +351,7 @@ public class Enemy extends Base {
         return null;
     }
     
-    public boolean getIsDead() {
+    public boolean isDead() {
         return isDead;
     }
 }

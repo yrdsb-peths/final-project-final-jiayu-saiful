@@ -23,7 +23,7 @@ public class Level2 extends World {
     public UI ui;
 
     public Level2() {    
-        super(900, 540, 1, false); 
+        super(900, 540, 1, BOUNDED); 
         
         groundY = getHeight() - 10;
         
@@ -31,6 +31,8 @@ public class Level2 extends World {
         
         addBoss();
         addStoneTiles();
+        
+        addPlayer();
         
         UIBackground UIbg = new UIBackground(this, screenWidth, 70);
         addObject(UIbg, screenWidth / 2, 35);
@@ -61,5 +63,10 @@ public class Level2 extends World {
         int bossX = getWidth() - 150;
         int bossY = groundY - 100;
         addObject(boss, bossX, bossY);
+    }
+    
+    private void addPlayer() {
+        player = new Player(targetWidth);
+        addObject(player, PLAYER_START_X, PLAYER_START_Y);
     }
 }
