@@ -88,6 +88,8 @@ public class Titlescreen extends World {
     }
     
     public void resetWorld() {
+        UI.goldCoinsCounter = 0;
+        UI.playerLives = 5;
         Level0.setting = 0;
         Player.MOVE_SPEED = 3;
         Player.ATTACK_RANGE = 100;

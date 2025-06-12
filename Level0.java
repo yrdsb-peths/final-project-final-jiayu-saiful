@@ -38,7 +38,7 @@ public class Level0 extends World {
 
     public Level0(int width, int height) {
         super(width, height, 1, BOUNDED);
-
+        
         Level0.screenWidth = width;
         Level0.screenHeight = height;
 

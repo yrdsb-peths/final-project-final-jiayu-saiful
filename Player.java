@@ -336,7 +336,6 @@ public class Player extends Actor {
             } else {
                 Level0.resetUIState();
                 Greenfoot.setWorld(new Level0(900, 540));
-                Greenfoot.stop();
             }
         } else {
             animationTimer++;
