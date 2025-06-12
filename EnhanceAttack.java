@@ -42,6 +42,7 @@ public class EnhanceAttack extends Actor {
         if (Greenfoot.mouseClicked(this) && UI.goldCoinsCounter >= 10) {
             MusicManager.buttonClicked();
             UI.goldCoinsCounter -= 10;
+            Player.ATTACK_RANGE = 200;
             isBought = true;
             World world = getWorld();
             if (world != null) {

@@ -36,11 +36,10 @@ public class Gameover extends World
         addCoins(80, 12, 70);
         
         addPlayer();
-        
-        UIBackground UIbg = new UIBackground(this, 900, 70);
-        addObject(UIbg, 900 / 2, 35);
 
         ui = new UI(this);
+        
+        UI.goldCoinsCounter += 1000;
     }
     
     private void addCoins(int startX, int count, int spacing) {
