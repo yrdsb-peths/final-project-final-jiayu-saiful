@@ -111,7 +111,7 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown(KeybindManager.getKey(KeybindManager.Action.ATTACK)) && !isAttacking) {
+        if (Greenfoot.isKeyDown(KeybindManager.getKey(KeybindManager.Action.ATTACK)) && !isAttacking && !isDefending) {
             MusicManager.setSFXVolume(attackSound);
             attackSound.play();
             isAttacking = true;
