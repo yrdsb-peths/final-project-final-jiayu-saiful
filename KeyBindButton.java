@@ -1,4 +1,5 @@
 import greenfoot.*;
+import greenfoot.Color;
 
 public class KeyBindButton extends Actor {
     private GreenfootImage baseImage;
@@ -6,20 +7,20 @@ public class KeyBindButton extends Actor {
     private final int maxFade = 80;
     private final int fadeSpeed = 5;
 
-    private boolean keyButton;
+    private final KeybindManager.Action action;
 
     private final int hitboxX = 20;
     private final int hitboxY = 10;
     private final int hitboxWidth = 170;
     private final int hitboxHeight = 40;
 
-    public KeyBindButton(boolean keyButton) {
-        this.keyButton = keyButton;
+    public KeyBindButton(KeybindManager.Action action) {
+        this.action = action;
 
         baseImage = new GreenfootImage("images/button0.png");
         int targetWidth = 210;
         int targetHeight = (int)(baseImage.getHeight() * ((double) targetWidth / baseImage.getWidth()));
-        baseImage.scale(targetWidth, targetHeight);
+        baseImage.scale(targetWidth, targetHeight - 20);
 
         setImage(new GreenfootImage(baseImage));
     }
@@ -37,27 +38,28 @@ public class KeyBindButton extends Actor {
         updateImageWithFade(fadeLevel);
 
         if (Greenfoot.mouseClicked(null) && isClickedInHitbox()) {
-            String prompt = keyButton ? "Enter new ATTACK key:" : "Enter new DEFEND key:";
+            String prompt = "Enter new " + action.name() + " key:";
             String input = Greenfoot.ask(prompt);
 
-            if (input != null && input.length() > 0) {
+            if (input != null && !input.isEmpty()) {
                 input = input.toLowerCase();
 
-                String currentAttack = KeybindManager.getAttackKey();
-                String currentDefend = KeybindManager.getDefendKey();
+                String atk = KeybindManager.getKey(KeybindManager.Action.ATTACK);
+                String def = KeybindManager.getKey(KeybindManager.Action.DEFEND);
+                String jmp = KeybindManager.getKey(KeybindManager.Action.JUMP);
 
-                // Check for duplicates
-                if ((keyButton && input.equals(currentDefend)) ||
-                    (!keyButton && input.equals(currentAttack))) {
+                boolean duplicate = switch (action) {
+                    case ATTACK -> input.equals(def) || input.equals(jmp);
+                    case DEFEND -> input.equals(atk) || input.equals(jmp);
+                    case JUMP   -> input.equals(atk) || input.equals(def);
+                };
+
+                if (duplicate) {
                     Greenfoot.ask("Key '" + input + "' is already used. Press OK to continue.");
                     return;
                 }
 
-                if (keyButton) {
-                    KeybindManager.setAttackKey(input);
-                } else {
-                    KeybindManager.setDefendKey(input);
-                }
+                KeybindManager.setKey(action, input);
             }
         }
     }

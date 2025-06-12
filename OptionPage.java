@@ -1,4 +1,4 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;  
 import greenfoot.Color;
 
 public class OptionPage extends World {
@@ -16,9 +16,14 @@ public class OptionPage extends World {
 
     private static final int TITLE_Y = 80 + VERTICAL_PADDING;
     private static final int ATTACK_Y = 220 + VERTICAL_PADDING;
-    private static final int VERTICAL_SPACING = 100;
+    
+    //  --> Spacing for buttons <--
+    private static final int VERTICAL_SPACING = 70;
+    
     private static final int DEFEND_Y = ATTACK_Y + VERTICAL_SPACING;
+    private static final int JUMP_Y = DEFEND_Y + VERTICAL_SPACING;
 
+    
     // === Font Sizes ===
     private static final int TITLE_FONT_SIZE = 60;
     private static final int LABEL_FONT_SIZE = 25;
@@ -28,10 +33,15 @@ public class OptionPage extends World {
     private Label title = new Label("Options", TITLE_FONT_SIZE);
     private Label attackText = new Label("Attack Key:", LABEL_FONT_SIZE);
     private Label defendText = new Label("Defend Key:", LABEL_FONT_SIZE);
+    private Label jumpText = new Label("Jump Key:", LABEL_FONT_SIZE);
+
     private Label attackKeyLabel;
     private Label defendKeyLabel;
+    private Label jumpKeyLabel;
+
     private KeyBindButton attackButton;
     private KeyBindButton defendButton;
+    private KeyBindButton jumpButton;
 
     // === Clickable buttons ===
     private Actor volumeButton;
@@ -47,7 +57,7 @@ public class OptionPage extends World {
     private final int buttonWidth = 180;
     private final int buttonHeight = 60;
     private final int buttonY = 140;
-    private final int spacing = 50;
+    private final int spacing = 30;
     private final int totalWidth = buttonWidth * 3 + spacing * 2;
     private final int startX = (WORLD_WIDTH - totalWidth) / 2 + buttonWidth / 2;
     private final int labelY = buttonY + buttonHeight / 2 - 25;
@@ -161,18 +171,25 @@ public class OptionPage extends World {
     }
 
     private void addKeybindsMenu() {
-        attackButton = new KeyBindButton(true);
-        defendButton = new KeyBindButton(false);
+        attackButton = new KeyBindButton(KeybindManager.Action.ATTACK);
+        defendButton = new KeyBindButton(KeybindManager.Action.DEFEND);
+        jumpButton = new KeyBindButton(KeybindManager.Action.JUMP);
+
         attackKeyLabel = new Label("", KEY_LABEL_FONT_SIZE);
         defendKeyLabel = new Label("", KEY_LABEL_FONT_SIZE);
+        jumpKeyLabel = new Label("", KEY_LABEL_FONT_SIZE);
 
         addObject(attackButton, CENTER_X, ATTACK_Y);
         addObject(defendButton, CENTER_X, DEFEND_Y);
+        addObject(jumpButton, CENTER_X, JUMP_Y);
+
         addObject(attackKeyLabel, CENTER_X, ATTACK_Y);
         addObject(defendKeyLabel, CENTER_X, DEFEND_Y);
+        addObject(jumpKeyLabel, CENTER_X, JUMP_Y);
 
         addLabel(attackText, LABEL_LEFT_X, ATTACK_Y);
         addLabel(defendText, LABEL_LEFT_X, DEFEND_Y);
+        addLabel(jumpText, LABEL_LEFT_X, JUMP_Y);
 
         updateKeybindLabels();
     }
@@ -186,11 +203,17 @@ public class OptionPage extends World {
     }
 
     private void updateKeybindLabels() {
-        if (attackKeyLabel != null && defendKeyLabel != null) {
-            attackKeyLabel.setValue("[" + KeybindManager.getAttackKey().toUpperCase() + "]");
-            defendKeyLabel.setValue("[" + KeybindManager.getDefendKey().toUpperCase() + "]");
+        if (attackKeyLabel != null) {
+            attackKeyLabel.setValue("[" + KeybindManager.getKey(KeybindManager.Action.ATTACK).toUpperCase() + "]");
             styleText(attackKeyLabel);
+        }
+        if (defendKeyLabel != null) {
+            defendKeyLabel.setValue("[" + KeybindManager.getKey(KeybindManager.Action.DEFEND).toUpperCase() + "]");
             styleText(defendKeyLabel);
+        }
+        if (jumpKeyLabel != null) {
+            jumpKeyLabel.setValue("[" + KeybindManager.getKey(KeybindManager.Action.JUMP).toUpperCase() + "]");
+            styleText(jumpKeyLabel);
         }
     }
 

@@ -111,7 +111,7 @@ public class Player extends Actor {
             facingRight = false;
         }
 
-        if (Greenfoot.isKeyDown(KeybindManager.getAttackKey()) && !isAttacking) {
+        if (Greenfoot.isKeyDown(KeybindManager.getKey(KeybindManager.Action.ATTACK)) && !isAttacking) {
             MusicManager.setSFXVolume(attackSound);
             attackSound.play();
             isAttacking = true;
@@ -120,14 +120,14 @@ public class Player extends Actor {
             attackFrame = 0;
         }
 
-        if (Greenfoot.isKeyDown(KeybindManager.getDefendKey())) {
+        if (Greenfoot.isKeyDown(KeybindManager.getKey(KeybindManager.Action.DEFEND))) {
             isDefending = true;
             animationFrame = 0;
         } else {
             isDefending = false;
         }
 
-        if (onGround && (Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("space"))) {
+        if (onGround && (Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown(KeybindManager.getKey(KeybindManager.Action.JUMP)))) {
             vSpeed = JUMP_STRENGTH;
             onGround = false;
         }
