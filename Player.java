@@ -17,6 +17,7 @@ public class Player extends Actor {
     private final int GRAVITY = 1;
     private final int MAX_FALL_SPEED = 10;
     public static int MOVE_SPEED = 3;
+    public static int ATTACK_RANGE = 100;
     private final int JUMP_STRENGTH = -15;
     private final int PLAYER_BOTTOM_OFFSET = 34;
 
@@ -155,10 +156,9 @@ public class Player extends Actor {
         
                 // Apply attack hit on the specific "hit frame" (usually frame 2)
                 if (attackFrame == 2 && !attackHitRegistered) {
-                    int attackRange = 100;
         
                     // Check Enemies in range and deal damage to the first valid one
-                    List<Enemy> enemies = getObjectsInRange(attackRange, Enemy.class);
+                    List<Enemy> enemies = getObjectsInRange(ATTACK_RANGE, Enemy.class);
                     for (Enemy enemy : enemies) {
                         if (enemy != null && !enemy.isDead()) {
                             enemy.takeDamage();
@@ -169,7 +169,7 @@ public class Player extends Actor {
         
                     // If no enemy was hit, check Bosses in range
                     if (!attackHitRegistered) {
-                        List<Boss> bosses = getObjectsInRange(attackRange, Boss.class);
+                        List<Boss> bosses = getObjectsInRange(ATTACK_RANGE, Boss.class);
                         for (Boss boss : bosses) {
                             if (boss != null && !Boss.isBossDead) {
                                 boss.receiveDamage(1);

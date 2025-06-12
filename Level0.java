@@ -27,7 +27,7 @@ public class Level0 extends World {
     private static final int COIN_HEIGHT = new Coin().getImage().getHeight();
 
     private final int groundY = getHeight() - 10;
-    public final int npcX = 950;
+    public final int npcX = 1050;
     public int npcY;
 
     public static int setting = 0;
@@ -49,7 +49,12 @@ public class Level0 extends World {
         addGroundTiles();
 
         // Trees
-        addTrees("03.png", TREE_SIZE, getWidth() / 6);
+        addTrees("02.png", TREE_SIZE, getWidth() / 6 + 200);
+        addTrees("02.png", TREE_SIZE, getWidth() / 6 - 150);
+        addTrees("03.png", TREE_SIZE, getWidth() / 6 - 300);
+        addTrees("04.png", TREE_SIZE, getWidth() / 6 + 75);
+        addTrees("05.png", TREE_SIZE, getWidth() / 6 + 1000);
+        addTrees("06.png", TREE_SIZE, getWidth() / 6 + 800);
 
         // House
         addHouse("house.png", HOUSE_SIZE, 700);

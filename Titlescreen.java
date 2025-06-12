@@ -27,6 +27,8 @@ public class Titlescreen extends World {
     public Titlescreen() {    
         super(screenWidth, screenHeight, 1);
         
+        resetWorld();
+        
         GreenfootImage bg = new GreenfootImage("images/titlescreen.png");
         bg.drawImage(bg, 0, 0);
         setBackground(bg);
@@ -46,8 +48,6 @@ public class Titlescreen extends World {
         
         // Help Button
         addMenuButton(new HelpButton(), helpTitle, 2);
-        
-        Level0.setting = 0;
     }
 
     private void styleTitleLabel(Label label) {
@@ -81,5 +81,15 @@ public class Titlescreen extends World {
     
     public void started() {
         MusicManager.playMusic();
+    }
+    
+    public void stopped() {
+        MusicManager.stopMusic();
+    }
+    
+    public void resetWorld() {
+        Level0.setting = 0;
+        Player.MOVE_SPEED = 3;
+        Player.ATTACK_RANGE = 100;
     }
 }

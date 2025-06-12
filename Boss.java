@@ -17,7 +17,7 @@ public class Boss extends Base {
 
     // Cooldown for taking damage to avoid multiple hits during attack animation
     private int damageCooldown = 0;
-    private static final int DAMAGE_COOLDOWN_TIME = 30;  // cooldown duration in act cycles
+    private static final int DAMAGE_COOLDOWN_TIME = 60;  // cooldown duration in act cycles
 
     public Boss() {
         GreenfootImage bossImage = new GreenfootImage("images/golem/idle/0.png");
@@ -53,7 +53,7 @@ public class Boss extends Base {
     }
 
     private void checkHitByPlayer() {
-        if (damageCooldown > 0) return;  // Still in cooldown, don't take damage again yet
+        if (damageCooldown > 0) return;
 
         World world = getWorld();
         if (world == null) return;
@@ -77,10 +77,12 @@ public class Boss extends Base {
     private void handleMovement() {
         moveTimer++;
         if (moveTimer >= 60) {
-            direction = rand.nextInt(4);
+            // Weighted direction: [0, 1, 1, 1, 2, 3] => 50% down, 16.7% up, 33.3% horizontal
+            int[] biasedDirections = {0, 1, 1, 1, 2, 3};
+            direction = biasedDirections[rand.nextInt(biasedDirections.length)];
             moveTimer = 0;
         }
-
+    
         int dx = 0, dy = 0;
         switch (direction) {
             case 0: dy = -2; break;
@@ -88,8 +90,14 @@ public class Boss extends Base {
             case 2: dx = -2; break;
             case 3: dx = 2; break;
         }
-
-        setLocation(getX() + dx, getY() + dy);
+    
+        int newX = getX() + dx;
+        int newY = getY() + dy;
+    
+        // Prevent moving above Y=350
+        if (newY < 350) newY = 350;
+    
+        setLocation(newX, newY);
     }
 
     private void handleAttack() {

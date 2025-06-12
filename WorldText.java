@@ -7,14 +7,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class WorldText extends Base {
     private int alpha = 0;
     private int fadeSpeed = 6;
-    private int visibleTime = 100;
+    private int visibleTime = 140;
     private int timer = 0;
     private boolean fadingIn = true;
     private boolean fadingOut = false;
     private GreenfootImage finalImage;
 
     public WorldText() {
-        String message = "Walk forward and begin your quest";
+        String message = "Walk forward, collect Coins, and begin your Journey";
         Font font = new Font("Arial", true, false, 28);
 
         GreenfootImage text = new GreenfootImage(message, 28, new Color(255, 215, 0), new Color(0, 0, 0, 0));
