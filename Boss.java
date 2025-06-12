@@ -47,31 +47,8 @@ public class Boss extends Base {
             return;
         }
 
-        checkHitByPlayer();
         handleMovement();
         handleAttack();
-    }
-
-    private void checkHitByPlayer() {
-        if (damageCooldown > 0) return;
-
-        World world = getWorld();
-        if (world == null) return;
-
-        Player player = (Player) world.getObjects(Player.class).stream().findFirst().orElse(null);
-        if (player == null) return;
-
-        if (player.isAttacking()) {
-            int attackRange = 100;
-            int dx = getX() - player.getX();
-            int dy = getY() - player.getY();
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance <= attackRange) {
-                receiveDamage(1);
-                damageCooldown = DAMAGE_COOLDOWN_TIME;  // start cooldown
-            }
-        }
     }
 
     private void handleMovement() {
