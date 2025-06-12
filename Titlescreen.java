@@ -91,5 +91,8 @@ public class Titlescreen extends World {
         Level0.setting = 0;
         Player.MOVE_SPEED = 3;
         Player.ATTACK_RANGE = 100;
+        EnhanceSpeed.isBought = false;
+        EnhanceAttack.isBought = false;
+        ResetLives.isBought = false;
     }
 }
