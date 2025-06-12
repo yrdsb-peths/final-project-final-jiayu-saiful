@@ -33,7 +33,7 @@ public class Gameover extends World
         //addGroundTiles();
         addStoneTiles();
         
-        addCoins(80, 12, 70);
+        // addCoins(80, 12, 70);
         
         addPlayer();
 
