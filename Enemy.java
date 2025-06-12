@@ -46,7 +46,7 @@ public class Enemy extends Base {
 
     private int bulletSpawn = 2;
     private int attackCooldown = 0;
-    private final int ATTACK_DELAY = 120;
+    private final int ATTACK_DELAY = 240;
 
     public int defeated = 0;
     private int imageOffsetX = -20;

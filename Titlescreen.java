@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.awt.Font;
 
 /**
  * Write a description of class Titlescreen here.
@@ -14,6 +15,7 @@ public class Titlescreen extends World {
     private static int titleSize = 80;
     private static int titleSpacing = 10;
     private Label version = new Label("V 0.0.1", 20);
+    private Font versionFont = new Font("Retro", 1, 20);
 
     private Label titleTop = new Label("The Hollow", titleSize);
     private Label titleBottom = new Label("Quest", titleSize);
@@ -95,6 +97,7 @@ public class Titlescreen extends World {
     }
     
     public void resetWorld() {
+        KeybindManager.resetToDefaults();
         UI.goldCoinsCounter = 0;
         UI.playerLives = 5;
         Level0.setting = 0;
