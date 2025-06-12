@@ -69,7 +69,6 @@ public class Level0 extends World {
         switch (setting) {
             case 0 -> addLevel1Speech();
             case 1 -> addBoss1Speech();
-            case 2 -> addLevel2Speech();
         }
 
         // Player
@@ -175,10 +174,6 @@ public class Level0 extends World {
     private void addBoss1Speech() {
         Speech1 speech = new Speech1();
         addObject(speech, npcX+80, npcY-80);
-    }
-
-    private void addLevel2Speech() {
-        // Add speech for level 2 here
     }
 
     private int getYAboveGrass(int objectHeight) {
