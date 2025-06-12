@@ -13,6 +13,7 @@ public class Titlescreen extends World {
     private static int fontSize = 20;
     private static int titleSize = 80;
     private static int titleSpacing = 10;
+    private Label version = new Label("V 0.0.1", 20);
 
     private Label titleTop = new Label("The Hollow", titleSize);
     private Label titleBottom = new Label("Quest", titleSize);
@@ -48,6 +49,12 @@ public class Titlescreen extends World {
         
         // Help Button
         addMenuButton(new HelpButton(), helpTitle, 2);
+        
+        
+        // Version 0.0.1
+        version.setFillColor(new Color(255, 255, 255));
+        version.setLineColor(new Color(255, 255, 255, 0));
+        addObject(version, 40, getHeight() - 15);
     }
 
     private void styleTitleLabel(Label label) {
